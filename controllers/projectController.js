@@ -15,7 +15,7 @@ exports.viewProject = async (req, res) => {
 
     const [memberCount] = await db.execute('SELECT p.*, CASE WHEN t.MemberCount IS NULL THEN 0 ELSE t.MemberCount END AS MemberCount, u.FirstName AS CreatedByFirstName, u.LastName AS CreatedByLastName, u.UserID FROM Project p INNER JOIN User u on p.ProjectCreatedBy = u.UserID LEFT JOIN (SELECT ProjectID, COUNT(*) as MemberCount FROM Team WHERE TeamStatus = "Verified" GROUP BY ProjectID) t ON t.ProjectID = p.ProjectID WHERE p.ProjectID = ? AND p.ProjectStatus = "Enabled"', [projectId]);
 
-    const [memberRows] = await db.query('select CONCAT(u.FirstName, " ", u.LastName) AS UserName, t.TeamRole, u.UserID from Team t INNER JOIN project p ON p.ProjectID = t.ProjectID INNER JOIN User u ON u.UserID = t.UserID WHERE p.ProjectID = ? AND t.TeamStatus = "Verified" AND p.ProjectStatus = "Enabled" ORDER BY t.TeamRole ASC', [projectId]);
+    const [memberRows] = await db.query('select CONCAT(u.FirstName, " ", u.LastName) AS UserName, t.TeamRole, u.UserID from Team t INNER JOIN Project p ON p.ProjectID = t.ProjectID INNER JOIN User u ON u.UserID = t.UserID WHERE p.ProjectID = ? AND t.TeamStatus = "Verified" AND p.ProjectStatus = "Enabled" ORDER BY t.TeamRole ASC', [projectId]);
     
     const [teamMember] = await db.query('SELECT COUNT(*) FROM Team WHERE ProjectID = ? AND UserID = ? AND TeamStatus = "Verified"', [projectId, currentUser]);
     const teamMemberCount = teamMember[0]['COUNT(*)'];
@@ -237,7 +237,7 @@ exports.getNotifications = async (req, res) => {
 
     const [joinTeamNotifications] = await db.query('SELECT u.UserID, p.ProjectID, CONCAT(u.FirstName, " ", u.LastName) AS UserName, p.ProjectName, t.TeamStatus FROM Team t LEFT JOIN Project p ON p.ProjectID = t.ProjectID LEFT JOIN User u ON u.UserID = t.UserID WHERE t.ProjectID IN (SELECT DISTINCT ProjectID from Team t WHERE UserID = ? AND TeamStatus = "Verified") AND t.TeamStatus = "Requested"', [UserId]);
 
-    const [reviewNotifications] = await db.query('SELECT r.ReviewID, r.ReceiverID, r.ReviewerID, u.FirstName, u.LastName, CONCAT(u.FirstName, " ", u.LastName) as ReviewerName, pr.ProjectID, p.ProjectName, r.ReviewStatus FROM Review r INNER JOIN ProjectReview pr ON r.ReviewID = pr.ReviewID INNER JOIN User u ON u.UserID = r.ReviewerID LEFT JOIN project p ON p.ProjectID = pr.ProjectID WHERE r.ReceiverID = ? AND r.ReviewStatus = "Created"', [UserId]);
+    const [reviewNotifications] = await db.query('SELECT r.ReviewID, r.ReceiverID, r.ReviewerID, u.FirstName, u.LastName, CONCAT(u.FirstName, " ", u.LastName) as ReviewerName, pr.ProjectID, p.ProjectName, r.ReviewStatus FROM Review r INNER JOIN ProjectReview pr ON r.ReviewID = pr.ReviewID INNER JOIN User u ON u.UserID = r.ReviewerID LEFT JOIN Project p ON p.ProjectID = pr.ProjectID WHERE r.ReceiverID = ? AND r.ReviewStatus = "Created"', [UserId]);
 
     console.log('joinTeamNotifications:', joinTeamNotifications);
     console.log('reviewNotifications:', reviewNotifications);
