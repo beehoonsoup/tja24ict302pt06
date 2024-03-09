@@ -7,9 +7,9 @@ exports.getRegisterPage = (req, res) => {
 
 exports.registerUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, Username, password } = req.body;
+    const { firstName, lastName, email, username, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    await db.execute('INSERT INTO User (FirstName, LastName, EmailAddress, UserName, UserPassword, RoleID, UserStatus) VALUES (?, ?, ?, ?, ?, ?, ?)', [firstName, lastName, email, Username, hashedPassword, 2, 'enabled']);
+    await db.execute('INSERT INTO User (FirstName, LastName, EmailAddress, UserName, UserPassword, RoleID, UserStatus) VALUES (?, ?, ?, ?, ?, ?, ?)', [firstName, lastName, email, username, hashedPassword, 2, 'enabled']);
     res.redirect('/login?message=User%20registered%20successfully');
   } catch (error) {
     console.error(error);
