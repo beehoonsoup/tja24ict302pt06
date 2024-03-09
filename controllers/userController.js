@@ -37,7 +37,7 @@ exports.updateUserProfile = async (req, res) => {
     const userId = req.session.user.UserID;
 
     // Construct the SQL query and parameters
-    let sql = 'UPDATE user SET FirstName = ?, LastName = ?, EmailAddress = ?';
+    let sql = 'UPDATE User SET FirstName = ?, LastName = ?, EmailAddress = ?';
     const params = [firstName, lastName, email];
 
     // Include the hashed password in the query and parameters if provided
