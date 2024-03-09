@@ -37,15 +37,16 @@ exports.loginUser = async (req, res) => {
     const [rows] = await db.execute('SELECT UserPassword FROM User WHERE EmailAddress = ? OR UserName = ?', [email, email]);
     const user = rows[0];
 
-    console.log('Retrieved hashed password from database:', user.UserPassword);
-    console.log('password from login page:', password);
-
     if (!user) {
       req.session.error = 'Invalid email/Username or password';
       res.redirect('/login');
       return;
     }
-    const passwordMatch = await bcrypt.compare(password, user.UserPassword);
+
+    // Convert the Buffer object representing the hashed password to a string
+    const hashedPassword = user.UserPassword.toString('utf8');
+
+    const passwordMatch = await bcrypt.compare(password, hashedPassword);
     if (!passwordMatch) {
       req.session.error = 'Invalid email/Username or password';
       res.redirect('/login');
@@ -58,6 +59,7 @@ exports.loginUser = async (req, res) => {
     res.status(500).send('An error occurred');
   }
 };
+
 
 exports.getHomePage = (req, res) => {
   if (!req.session.user) {
