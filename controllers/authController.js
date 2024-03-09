@@ -36,7 +36,10 @@ exports.loginUser = async (req, res) => {
     const { email, password } = req.body;
     const [rows] = await db.execute('SELECT UserPassword FROM User WHERE EmailAddress = ? OR UserName = ?', [email, email]);
     const user = rows[0];
-    //console.log('Retrieved hashed password from database:', User.UserPassword);
+
+    console.log('Retrieved hashed password from database:', user.UserPassword);
+    console.log('password from login page:', password);
+
     if (!user) {
       req.session.error = 'Invalid email/Username or password';
       res.redirect('/login');
