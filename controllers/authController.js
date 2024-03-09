@@ -31,7 +31,7 @@ exports.getLoginPage = (req, res) => {
   res.render('login', { error: req.session.error, message, fromRegisterPage });
 };
 
-exports.loginUser = async (req, res) => {
+/*exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     const [rows] = await db.execute('SELECT * FROM User WHERE EmailAddress = ? OR UserName = ?', [email, email]);
@@ -54,7 +54,37 @@ exports.loginUser = async (req, res) => {
     console.error(error);
     res.status(500).send('An error occurred');
   }
+};*/
+
+exports.loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Check if Username or password is missing
+    if (!email || !password) {
+      throw new Error('Username or password is missing');
+    }
+
+    // Retrieve hashed password from the database based on the provided Username
+    const hashedPassword = await retrieveHashedPasswordFromDatabase(email);
+
+    // Compare the provided password with the hashed password
+    const isPasswordMatch = await bcrypt.compare(password, hashedPassword);
+
+    if (isPasswordMatch) {
+      // Passwords match, proceed with login
+      res.send('Login successful');
+    } else {
+      // Passwords don't match, handle invalid login attempt
+      res.send('Invalid Username or password');
+    }
+  } catch (error) {
+    // Handle any errors that occur during the login process
+    console.error(error);
+    res.send('An error occurred during login');
+  }
 };
+
 
 exports.getHomePage = (req, res) => {
   if (!req.session.user) {
