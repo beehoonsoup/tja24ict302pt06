@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Member to Project</title>
+</head>
+
+<body>
+  <a href="/profile">Profile</a> | 
+  <a href="/project">Project</a> |
+  <a href="/notifications">Notifications</a> |
+  <a href="/logout">Logout</a>
+  <p></p>
+    <h1>Add Member to Project</h1>
+
+    Project Name: <%= project.ProjectName %><p>
+
+      <form action="/project-member-add/<%= project.ProjectID %>" method="POST">
+        <label for="user">Search for User:</label>
+        <select id="user" name="user" required>
+          <% users[0].forEach(users=> { %>
+            <option value="<%= users.UserID %>">
+              <%= users.UserName %>
+            </option>
+            <% }) %>
+        </select>
+        <br>
+        <label for="role">Select Role:</label>
+        <select id="role" name="role" required>
+          <option value="Member">Member</option>
+          <option value="Leader">Leader</option>
+        </select>
+        <br>
+        <button type="submit">Add Member</button>
+      </form>
+</body>
+
+</html>

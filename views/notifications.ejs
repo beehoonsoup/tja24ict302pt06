@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications</title>
+</head>
+
+<body>
+  <a href="/profile">Profile</a> |
+  <a href="/project">Project</a> |
+  <a href="/notifications">Notifications</a> |
+  <a href="/logout">Logout</a>
+  <p></p>
+  <h1>Notifications</h1>
+  <h2>Join Project Team Request</h2>
+  <table>
+    <% joinTeamNotifications.forEach(joinTeamNotifications=> { %>
+      <tr>
+        <td><b>
+            <%= joinTeamNotifications.UserName %>
+          </b> requested to join <b>
+            <a href="/project/<%= joinTeamNotifications.ProjectID %>"><%= joinTeamNotifications.ProjectName %></a>
+          </b></td>
+        <td></td>
+        <td>
+          <form action="/accept-join-request" method="POST">
+            <input type="hidden" name="userId" value="<%= joinTeamNotifications.UserID %>">
+            <input type="hidden" name="projectId" value="<%= joinTeamNotifications.ProjectID %>">
+            <button type="submit">Accept</button>
+          </form>
+        </td>
+        <td>
+          <form action="/reject-join-request" method="POST">
+            <input type="hidden" name="userId" value="<%= joinTeamNotifications.UserID %>">
+            <input type="hidden" name="projectId" value="<%= joinTeamNotifications.ProjectID %>">
+            <button type="submit">Reject</button>
+          </form>
+        </td>
+      </tr>
+      <% }) %>
+  </table>
+
+  <h2>Reviews Notification</h2>
+  <table>
+    <% reviewNotifications.forEach(reviewNotifications=> { %>
+      <tr>
+        <td><b>
+            <%= reviewNotifications.ReviewerName %>
+          </b> wrote a review for you in project <b>
+            <a href="/project/<%= reviewNotifications.ProjectID %>"><%= reviewNotifications.ProjectName %></a>
+          </b></td>
+        <td></td>
+        <td>
+          <form action="/review/<%= reviewNotifications.ReviewID %>" method="POST">
+            <input type="hidden" name="ReviewerID" value="<%= reviewNotifications.ReviewerID %>">
+            <input type="hidden" name="ReceiverID" value="<%= reviewNotifications.ReceiverID %>">
+            <input type="hidden" name="ProjectID" value="<%= reviewNotifications.ProjectID %>">
+            <input type="hidden" name="ReviewID" value="<%= reviewNotifications.ReviewID %>">
+            <button type="submit">Review</button>
+          </form>
+        </td>
+        <td>
+          
+        </td>
+      </tr>
+      <% }) %>
+  </table>
+
+</body>
+
+</html>

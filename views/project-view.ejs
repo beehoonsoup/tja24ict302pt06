@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Project</title>
+
+  <script>
+    function requestToJoin(projectId) {
+      // Make an AJAX request to the backend route to handle join requests
+      fetch(`/join-request/${projectId}`, {
+        method: 'POST',
+        credentials: 'same-origin', // Include cookies in the request
+      })
+        .then(response => {
+          if (response.ok) {
+            // Handle successful join request
+            alert('Request to join sent successfully.');
+          } else {
+            // Handle error response
+            alert('Failed to send join request. Please try again.');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('An error occurred while sending the join request.');
+        });
+    }
+  </script>
+
+</head>
+
+<body>
+  <a href="/profile">Profile</a> |
+  <a href="/project">Project</a> |
+  <a href="/notifications">Notifications</a> |
+  <a href="/logout">Logout</a>
+  <p></p>
+  <h1>Project Details</h1>
+  <table>
+    <tr>
+      <td><b>Project Name:</b></td>
+      <td>
+        <%= project.ProjectName %>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Project Description:</b></td>
+      <td>
+        <%= project.ProjectDescription %>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Start Date:</b></td>
+      <td>
+        <%= new Date(project.ProjectStartDate).toLocaleDateString('en-GB') %>
+      </td>
+    </tr>
+    <tr>
+      <td><b>End Date:</b></td>
+      <td>
+        <% if (new Date(project.ProjectEndDate).toDateString()==='Thu Jan 01 1970' ) { %>
+          <!-- Display blank if ProjectEndDate is 1/1/1970 -->
+          <%= '' %>
+            <% } else { %>
+              <%= new Date(project.ProjectEndDate).toLocaleDateString('en-GB') %>
+                <% } %>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Size:</b></td>
+      <td>
+        <%= project.ProjectSize %>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Grade:</b></td>
+      <td>
+        <%= project.ProjectGrade %>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Status:</b></td>
+      <td>
+        <%= project.ProjectStatus %>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Created By:</b></td>
+      <td>
+        <%= project.CreatedByFirstName %>
+          <%= project.CreatedByLastName %>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Created On:</b></td>
+      <td>
+        <%= new Date(project.ProjectCreatedDate).toLocaleDateString('en-GB') %>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Last Update:</b></td>
+      <td>
+        <%= new Date(project.ProjectModifiedDate).toLocaleDateString('en-GB') %>
+      </td>
+    </tr>
+  </table>
+  <p></p>
+
+  <table>
+    <tr>
+      <td><b>Member Name</b></td>
+      <td><b>Member Role</b></td>
+      <td><b></b></td>
+    </tr>
+    <% memberRows.forEach(member => { %>
+      <tr>
+          <td>
+              <%= member.UserName %>
+          </td>
+          <td>
+              <%= member.TeamRole %>
+          </td>
+          <% if (teamMemberCount > 0) { %>
+              <% if (member.UserID === user.UserID) { %>
+                  <!-- Not allowed to review -->
+                  <td></td>
+              <% } else { %>
+                  <!-- Allow to review -->
+                  <td>
+                      <form action="/review-create" method="get" style="display: inline;">
+                          <input type="hidden" name="projectId" value="<%= project.ProjectID %>">
+                          <input type="hidden" name="reviewer" value="<%= user.UserID %>">
+                          <input type="hidden" name="receiverName" value="<%= member.UserName %>">
+                          <input type="hidden" name="receiverID" value="<%= member.UserID %>">
+                          <button type="submit">Review</button>
+                      </form>
+                  </td>
+              <% } %>
+          <% } else { %>
+              <!-- Team member count is 0 -->
+              <td></td>
+          <% } %>
+      </tr>
+  <% }) %>
+  </table>
+  <p></p>
+  <div style="display: inline;">
+    <% if (project.ProjectCreatedBy===user.UserID || teamMemberCount> 0) { %>
+      <!-- Display the Modify button only if ProjectCreatedBy matches UserID -->
+      <form action="/project-edit/<%= project.ProjectID %>" method="get" style="display: inline;">
+        <button type="submit">Modify</button>
+      </form> |
+      <% if (memberCount.ProjectSize===memberCount.MemberCount) { %>
+        <!-- edit or remove?-->
+        <% } else { %>
+          <form action="/project-member-add/<%= project.ProjectID %>" method="get" style="display: inline;">
+            <button type="submit">Add Member</button>
+          </form> |
+          <% } %>
+            <a href="#">Add Self Evaluation</a> |
+            <form action="/reflection-create" method="get" style="display: inline;">
+              <input type="hidden" name="projectId" value="<%= project.ProjectID %>">
+              <input type="hidden" name="userId" value="<%= project.UserID %>">
+              <button type="submit">Add Reflection</button>
+            </form> |
+            <form action="/project-delete" method="POST" style="display: inline;">
+              <input type="hidden" name="projectId" value="<%= project.ProjectID %>">
+              <button type="submit">Delete Project</button>
+            </form>
+            <% } else if (teamRequestCount> 0) { %>
+              <i>Join Team Request Pending Approval</i>
+              <% } else if (memberCount.ProjectSize===memberCount.MemberCount) { %>
+                <!-- Team is full, no options available -->
+                <% } else if (teamLeaderCount> 0) { %>
+                  <form action="/project-join-request/<%= project.ProjectID %>" method="POST" style="display: inline;">
+                    <input type="hidden" name="teamRole" value="Member">
+                    <button type="submit">Request to Join as Member</button>
+                    <% } else { %>
+                      <form action="/project-join-request/<%= project.ProjectID %>" method="POST"
+                        style="display: inline;">
+                        <input type="hidden" name="teamRole" value="Member">
+                        <button type="submit">Request to Join as Member</button>
+                        <form action="/project-join-request/<%= project.ProjectID %>" method="POST"
+                          style="display: inline;">
+                          <input type="hidden" name="teamRole" value="Leader">
+                          <button type="submit">Request to Join as Leader</button>
+                        </form>
+                        <% } %>
+  </div>
+</body>
+
+</html>

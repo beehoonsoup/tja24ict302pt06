@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Review</title>
+</head>
+
+<body>
+    <a href="/profile">Profile</a> |
+    <a href="/project">Project</a> |
+    <a href="/notifications">Notifications</a> |
+    <a href="/logout">Logout</a>
+    <p></p>
+    <h1>Review</h1>
+    <p>
+        <%= existingReview[0].ReviewID %><br>
+        Project Name: <a href="/project/<%= projectName[0].ProjectID %>">
+            <%= projectName[0].ProjectName %>
+        </a><br>
+        You are viewing the review <%= reviewerName[0].ReviewerName %> wrote for you. <br>
+            <% if (existingReview && existingReview.length> 0) { %>
+                <p><textarea name="reviewDescription" rows="10" cols="100" placeholder="Enter review description"
+                        disabled><%= existingReview[0].ReviewDescription %></textarea></p>
+                <p>
+                <form action="/accept-review" method="POST" style="display: inline;">
+                    <input type="hidden" name="ReviewID" value="<%= existingReview[0].ReviewID %>">
+                    <button type="submit">Accept</button>
+                </form>
+                <form action="/reject-review" method="POST" style="display: inline;">
+                    <input type="hidden" name="ReviewID" value="<%= existingReview[0].ReviewID %>">
+                    <button type="submit">Reject</button>
+                </form>
+    </p>
+    <% } else { %>
+
+        <% } %>
+            </p>
+</body>
+
+</html>

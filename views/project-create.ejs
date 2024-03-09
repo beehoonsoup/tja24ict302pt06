@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Project</title>
+</head>
+<body>
+  <a href="/profile">Profile</a> | 
+  <a href="/project">Project</a> |
+  <a href="/notifications">Notifications</a> |
+  <a href="/logout">Logout</a>
+  <p></p>
+  <h1>Create Project</h1>
+  <form action="/project-create" method="POST">
+    <label for="projectName">Project Name:</label>
+    <input type="text" id="projectName" name="projectName" required><br>
+    <label for="projectDescription">Project Description:</label>
+    <textarea id="projectDescription" name="projectDescription" required></textarea><br>
+    <label for="projectStartDate">Start Date:</label>
+    <input type="date" id="projectStartDate" name="projectStartDate" required><br>
+    <label for="projectEndDate">End Date:</label>
+    <input type="date" id="projectEndDate" name="projectEndDate"><br>
+    <label for="teamRole">Team Role:</label>
+    <select id="teamRole" name="teamRole" required>
+      <option value="Leader">Leader</option>
+      <option value="Member">Member</option>
+    </select><br>
+    <label for="projectGrade">Grade:</label>
+    <input type="text" id="projectGrade" name="projectGrade"><br>
+    <label for="projectSize">Size:</label>
+    <select id="projectSize" name="projectSize" required>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+    </select><br>
+    <button type="submit">Create Project</button>
+  </form>
+</body>
+</html>

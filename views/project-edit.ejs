@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modify Project</title>
+</head>
+
+<body>
+  <a href="/profile">Profile</a> | 
+  <a href="/project">Project</a> |
+  <a href="/notifications">Notifications</a> |
+  <a href="/logout">Logout</a>
+  <p></p>
+  <h1>Modify Project</h1>
+  <form action="/project-edit/<%= project.ProjectID %>" method="POST">
+    <div>
+      <label for="projectName">Project Name:</label>
+      <input type="text" id="projectName" name="projectName" value="<%= project.ProjectName %>" required>
+    </div>
+    <div>
+      <label for="projectDescription">Project Description:</label>
+      <textarea id="projectDescription" name="projectDescription" rows="4"
+        required><%= project.ProjectDescription %></textarea>
+    </div>
+    <div>
+      <label for="projectStartDate">Start Date:</label>
+      <input type="date" id="projectStartDate" name="projectStartDate"
+        value="<%= new Date(project.ProjectStartDate).toLocaleDateString('en-GB') %>" required>
+    </div>
+    <div>
+      <label for="projectEndDate">End Date:</label>
+      <input type="date" id="projectEndDate" name="projectEndDate"
+        value="<%= new Date(project.ProjectEndDate).toLocaleDateString('en-GB') %>">
+    </div>
+    <div>
+      <label for="projectGrade">Grade:</label>
+      <input type="text" id="projectGrade" name="projectGrade" value="<%= project.ProjectGrade %>">
+    </div>
+    <div>
+      <label for="projectSize">Size:</label>
+      <select id="projectSize" name="projectSize" required>
+        <option value="2" <%=project.ProjectSize==='2' ? 'selected' : '' %>>2</option>
+        <option value="3" <%=project.ProjectSize==='3' ? 'selected' : '' %>>3</option>
+        <option value="4" <%=project.ProjectSize==='4' ? 'selected' : '' %>>4</option>
+        <option value="5" <%=project.ProjectSize==='5' ? 'selected' : '' %>>5</option>
+        <option value="6" <%=project.ProjectSize==='6' ? 'selected' : '' %>>6</option>
+        <option value="7" <%=project.ProjectSize==='7' ? 'selected' : '' %>>7</option>
+        <option value="8" <%=project.ProjectSize==='8' ? 'selected' : '' %>>8</option>
+      </select>
+    </div>
+    <button type="submit">Save Changes</button>
+  </form>
+
+  <p>
+  <p>
+    <b>Troubleshooting below:</b><br>
+    Issue: Start Date / End Date / Project Size not able to show when data exist
+  <p>
+    <!-- Output raw date values for debugging -->
+  <p>Start Date: <%= new Date(project.ProjectStartDate).toLocaleDateString('en-GB') %>
+  </p>
+  <p>End Date: <%= new Date(project.ProjectEndDate).toLocaleDateString('en-GB') %>
+  </p>
+
+  <!-- Display date inputs -->
+  <label for="projectStartDate">Start Date:</label>
+  <input type="date" id="projectStartDate" name="projectStartDate"
+    value="<%= new Date(project.ProjectStartDate).toLocaleDateString('en-GB') %>" required>
+
+  <label for="projectEndDate">End Date:</label>
+  <input type="date" id="projectEndDate" name="projectEndDate"
+    value="<%= new Date(project.ProjectEndDate).toLocaleDateString('en-GB') %>" required>
+</body>
+
+</html>
