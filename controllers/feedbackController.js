@@ -3,7 +3,7 @@ const db = require('../config/db');
 exports.getCreateReflectionPage = async (req, res) => {
     try {
         const projectId = req.query.projectId;
-        const UserId = req.session.User.UserID;
+        const UserId = req.session.user.UserID;
 
         // Fetch project name
         const [projectName] = await db.query('SELECT ProjectID, ProjectName FROM Project WHERE ProjectID = ?', [projectId]);
@@ -25,7 +25,7 @@ exports.getCreateReflectionPage = async (req, res) => {
 exports.createReflection = async (req, res) => {
     try {
         const { projectId, reflectionDescription } = req.body;
-        const UserId = req.session.User.UserID;
+        const UserId = req.session.user.UserID;
 
         //console.log('UserId:', UserId);
         //console.log('projectId:', projectId);
@@ -54,7 +54,7 @@ exports.getCreateReviewPage = async (req, res) => {
         //const { reviewer, projectId, receiver } = req.body;
         const receiverName = req.query.receiverName;
         const projectId = req.query.projectId;
-        const reviewerID = req.session.User.UserID;
+        const reviewerID = req.session.user.UserID;
         const receiverID = req.query.receiverID;
 
         // Fetch project name
@@ -77,7 +77,7 @@ exports.getCreateReviewPage = async (req, res) => {
 exports.createReview = async (req, res) => {
     try {
         const { projectId, receiverID, reviewerID, reviewDescription } = req.body;
-        const UserId = req.session.User.UserID;
+        const UserId = req.session.user.UserID;
 
         //console.log('UserId:', UserId);
         //console.log('projectId:', projectId);

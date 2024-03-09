@@ -35,20 +35,20 @@ exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     const [rows] = await db.execute('SELECT * FROM User WHERE EmailAddress = ? OR UserName = ?', [email, email]);
-    const User = rows[0];
+    const user = rows[0];
     //console.log('Retrieved hashed password from database:', User.UserPassword);
-    if (!User) {
+    if (!user) {
       req.session.error = 'Invalid email/Username or password';
       res.redirect('/login');
       return;
     }
-    const passwordMatch = await bcrypt.compare(password, User.UserPassword);
+    const passwordMatch = await bcrypt.compare(password, user.UserPassword);
     if (!passwordMatch) {
       req.session.error = 'Invalid email/Username or password';
       res.redirect('/login');
       return;
     }
-    req.session.User = User;
+    req.session.user = user;
     res.redirect('/home');
   } catch (error) {
     console.error(error);
@@ -57,7 +57,7 @@ exports.loginUser = async (req, res) => {
 };
 
 exports.getHomePage = (req, res) => {
-  if (!req.session.User) {
+  if (!req.session.user) {
     // User is not logged in, redirect them to the login page
     res.redirect('/login');
     return;
@@ -66,7 +66,7 @@ exports.getHomePage = (req, res) => {
   //console.log('User object:', req.session.User); // Log the User object
   
   // User is logged in, render the home page with the User object
-  res.render('home', { User: req.session.User });
+  res.render('home', { user: req.session.user });
 };
 
 exports.logoutUser = (req, res) => {

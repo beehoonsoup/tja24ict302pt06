@@ -8,7 +8,7 @@ exports.getCreateProjectPage = (req, res) => {
 exports.viewProject = async (req, res) => {
   try {
     const projectId = req.params.projectId;
-    const currentUser = req.session.User.UserID;
+    const currentUser = req.session.user.UserID;
 
     // Fetch project details from the database based on project ID
     const [project] = await db.query('SELECT p.*, u.FirstName AS CreatedByFirstName, u.LastName AS CreatedByLastName FROM Project p INNER JOIN User u on p.ProjectCreatedBy = u.UserID WHERE p.ProjectID = ? AND p.ProjectStatus = "Enabled"', [projectId]);
@@ -35,7 +35,7 @@ exports.viewProject = async (req, res) => {
       project: project[0],
       memberRows: memberRows,
       memberCount: memberCount[0],
-      User: req.session.User,
+      User: req.session.user,
       teamMemberCount: teamMemberCount,
       teamRequest: teamRequest[0],
       teamRequestCount: teamRequestCount,
@@ -65,7 +65,7 @@ exports.createProject = async (req, res) => {
     // Insert project details into the project database
     const [result] = await db.execute(
       'INSERT INTO Project (ProjectName, ProjectDescription, ProjectStartDate, ProjectEndDate, ProjectGrade, ProjectSize, ProjectStatus, ProjectCreatedBy, ProjectCreatedDate, ProjectModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())',
-      [projectName, projectDescription, formattedStartDate, formattedEndDate, formattedProjectGrade, projectSize, 'enabled', req.session.User.UserID]
+      [projectName, projectDescription, formattedStartDate, formattedEndDate, formattedProjectGrade, projectSize, 'enabled', req.session.user.UserID]
     );
 
     // Get ProjectID
@@ -75,7 +75,7 @@ exports.createProject = async (req, res) => {
     // Insert project details into the team database
     const [team] = await db.execute(
       'INSERT INTO Team (UserID, ProjectID, TeamRole, TeamStatus, TeamCreatedDate, TeamModifiedDate) VALUES (?, ?, ?, "Verified", NOW(), NOW())',
-      [req.session.User.UserID, PID, teamRole]
+      [req.session.user.UserID, PID, teamRole]
     );
 
     // Redirect to a success page or display a success message
@@ -102,7 +102,7 @@ exports.getProjectsPage = async (req, res) => {
     // Render the projects page with the formatted project data
     res.render('project', {
       projects,
-      User: req.session.User
+      User: req.session.user
     });
   } catch (error) {
     console.error(error);
@@ -156,7 +156,7 @@ exports.getEditProjectPage = async (req, res) => {
 exports.getAddMemberPage = async (req, res) => {
   try {
     const projectId = req.params.projectId;
-    const currentUser = req.session.User.UserID;
+    const currentUser = req.session.user.UserID;
 
     const [teamMember] = await db.query('SELECT COUNT(*) FROM Team WHERE ProjectID = ? AND UserID = ? AND TeamStatus = "Verified"', [projectId, currentUser]);
     const teamMemberCount = teamMember[0]['COUNT(*)'];
@@ -218,7 +218,7 @@ exports.requestToJoin = async (req, res) => {
   try {
     const { teamRole } = req.body;
     const { projectId } = req.params;
-    const UserId = req.session.User.UserID;
+    const UserId = req.session.user.UserID;
 
     // Insert the request to join into the team table
     await db.execute('INSERT INTO Team (UserID, ProjectID, TeamRole, TeamStatus, TeamCreatedDate, TeamModifiedDate) VALUES (?, ?, ?, "Requested", NOW(), NOW())', [UserId, projectId, teamRole]);
@@ -232,7 +232,7 @@ exports.requestToJoin = async (req, res) => {
 
 exports.getNotifications = async (req, res) => {
   try {
-    const UserId = req.session.User.UserID;
+    const UserId = req.session.user.UserID;
     const projectId = req.params.projectId;
 
     const [joinTeamNotifications] = await db.query('SELECT u.UserID, p.ProjectID, CONCAT(u.FirstName, " ", u.LastName) AS UserName, p.ProjectName, t.TeamStatus FROM Team t LEFT JOIN Project p ON p.ProjectID = t.ProjectID LEFT JOIN User u ON u.UserID = t.UserID WHERE t.ProjectID IN (SELECT DISTINCT ProjectID from Team t WHERE UserID = ? AND TeamStatus = "Verified") AND t.TeamStatus = "Requested"', [UserId]);
