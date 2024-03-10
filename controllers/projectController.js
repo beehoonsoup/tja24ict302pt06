@@ -27,7 +27,7 @@ exports.viewProject = async (req, res) => {
     const teamLeaderCount = teamLeader[0]['COUNT(*)'];
 
     // Log details to the console
-    //console.log('currentUser:', currentUser);
+    //console.log('currentuser:', currentUser);
     //console.log('teamLeaderCount:', teamLeaderCount);
 
     // Render the project view page with project details
@@ -35,7 +35,7 @@ exports.viewProject = async (req, res) => {
       project: project[0],
       memberRows: memberRows,
       memberCount: memberCount[0],
-      User: req.session.user,
+      user: req.session.user,
       teamMemberCount: teamMemberCount,
       teamRequest: teamRequest[0],
       teamRequestCount: teamRequestCount,
@@ -102,7 +102,7 @@ exports.getProjectsPage = async (req, res) => {
     // Render the projects page with the formatted project data
     res.render('project', {
       projects,
-      User: req.session.user
+      user: req.session.user
     });
   } catch (error) {
     console.error(error);
