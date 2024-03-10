@@ -8,6 +8,7 @@
 </head>
 
 <body>
+    <a href="/biography">Biography</a> |
     <a href="/profile">Profile</a> |
     <a href="/project">Project</a> |
     <a href="/notifications">Notifications</a> |
@@ -15,21 +16,26 @@
     <p></p>
     <h1>Create Review</h1>
     <p>
-        Project Name: <a href="/project/<%= projectName[0].ProjectID %>"><%= projectName[0].ProjectName %></a><br>
+        Project Name: <a href="/project/<%= projectName[0].ProjectID %>">
+            <%= projectName[0].ProjectName %>
+        </a><br>
         You are viewing the review you wrote for <%= receiverName %><br>
-        <% if (existingReview && existingReview.length > 0) { %>
-            <p>Review: <%= existingReview[0].ReviewDescription %></p>
-            <p>Review Status: <%= existingReview[0].ReviewStatus %></p>
-            <!-- Display additional review details if needed -->
-        <% } else { %>
-            <form action="/review-create" method="post">
-                <input type="hidden" name="projectId" value="<%= projectId %>">
-                <input type="hidden" name="reviewerID" value="<%= reviewerID %>">
-                <input type="hidden" name="receiverID" value="<%= receiverID %>">
-                <textarea name="reviewDescription" rows="4" cols="50" placeholder="Enter your review"></textarea><br>
-                <button type="submit">Submit Review</button>
-            </form>
-        <% } %>
+            <% if (existingReview && existingReview.length> 0) { %>
+                <p>Review: <%= existingReview[0].ReviewDescription %>
+                </p>
+                <p>Review Status: <%= existingReview[0].ReviewStatus %>
+                </p>
+                <!-- Display additional review details if needed -->
+                <% } else { %>
+                    <form action="/review-create" method="post">
+                        <input type="hidden" name="projectId" value="<%= projectId %>">
+                        <input type="hidden" name="reviewerID" value="<%= reviewerID %>">
+                        <input type="hidden" name="receiverID" value="<%= receiverID %>">
+                        <textarea name="reviewDescription" rows="4" cols="50"
+                            placeholder="Enter your review"></textarea><br>
+                        <button type="submit">Submit Review</button>
+                    </form>
+                    <% } %>
     </p>
 </body>
 

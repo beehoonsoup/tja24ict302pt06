@@ -18,7 +18,7 @@ const pool = mysql.createPool({
   database: 'sys',
   connectionLimit: 10
 });
-
+*/
 /*
 //localdb -kelly
 const pool = mysql.createPool({

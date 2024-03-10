@@ -5,6 +5,7 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const projectRoutes = require('./routes/projectRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
+const biographyRoutes = require('./routes/biographyRoutes');
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use('/', authRoutes);
 app.use('/', userRoutes);
 app.use('/', projectRoutes);
 app.use('/', feedbackRoutes);
+app.use('/', biographyRoutes);
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {

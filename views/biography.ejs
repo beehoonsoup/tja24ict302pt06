@@ -1,15 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script>
+    function viewBiography(reviewerID) {
+      // Make an AJAX POST request to the backend route with the reviewerID as a URL parameter
+      fetch(`/biography/${reviewerID}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        if (response.ok) {
+          // Redirect to the biography page if the request is successful
+          window.location.href = '/biography';
+        } else {
+          // Handle errors if needed
+          console.error('Error:', response.statusText);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+  </script>
+  
   <title>Biography</title>
 </head>
+
 <body>
-    <h1>Biography</h1>
-<h2>Reflection Posts</h2>
-  <% reflections.forEach(reflection => { %>
-    <%= reflection.ReflectionDescription %> - <%= reflection.ReflectionCreatedDate %>
-  <% }); %>
+  <a href="/biography">Biography</a> |
+  <a href="/profile">Profile</a> |
+  <a href="/project">Project</a> |
+  <a href="/notifications">Notifications</a> |
+  <a href="/logout">Logout</a>
+  <p></p>
+  <h1>Biography</h1>
+  <div class="feed">
+    <% feed.forEach(item=> { %>
+      <div class="item">
+        <% if (item.ReflectionID) { %>
+          <p>
+            Reflection wrote for <b>
+              <a href="/project/<%= item.reflectionProjectID %>"><%= item.reflectionProjectName %></a>
+            </b> on <b>
+              <%= new Date(item.ReflectionCreatedDate).toLocaleDateString() %>
+            </b>
+          </p>
+          <p>
+            <%= item.ReflectionDescription %>
+          </p>
+          ________________________________________________________________________
+          <% } else { %>
+            <p> Review wrote by <b>
+              <a href="/biography/<%= item.ReviewerID %>"><%= item.reviewerName %></a>
+              </b> for <b>
+                <a href="/project/<%= item.reviewProjectID %>"><%= item.reviewProjectName %></a>
+              </b> on <b>
+                <%= new Date(item.ReviewCreatedDate).toLocaleDateString() %>
+              </b>
+            </p>
+            <p>
+              <%= item.ReviewDescription %>
+            </p>
+            ________________________________________________________________________
+            <% } %>
+      </div>
+      <% }) %>
+  </div>
 </body>
+
 </html>

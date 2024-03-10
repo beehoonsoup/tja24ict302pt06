@@ -8,13 +8,16 @@
 </head>
 
 <body>
+    <a href="/biography">Biography</a> |
     <a href="/profile">Profile</a> |
     <a href="/project">Project</a> |
     <a href="/notifications">Notifications</a> |
     <a href="/logout">Logout</a>
     <p></p>
     <h1>Create Reflection</h1>
-    <p>Project Name: <a href="/project/<%= projectName[0].ProjectID %>"><%= projectName[0].ProjectName %></a>
+    <p>Project Name: <a href="/project/<%= projectName[0].ProjectID %>">
+            <%= projectName[0].ProjectName %>
+        </a>
     </p>
     <form action="/reflection-create" method="POST">
         <input type="hidden" name="projectId" value="<%= projectId %>">

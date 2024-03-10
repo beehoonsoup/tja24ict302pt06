@@ -239,8 +239,8 @@ exports.getNotifications = async (req, res) => {
 
     const [reviewNotifications] = await db.query('SELECT r.ReviewID, r.ReceiverID, r.ReviewerID, u.FirstName, u.LastName, CONCAT(u.FirstName, " ", u.LastName) as ReviewerName, pr.ProjectID, p.ProjectName, r.ReviewStatus FROM Review r INNER JOIN ProjectReview pr ON r.ReviewID = pr.ReviewID INNER JOIN User u ON u.UserID = r.ReviewerID LEFT JOIN Project p ON p.ProjectID = pr.ProjectID WHERE r.ReceiverID = ? AND r.ReviewStatus = "Created"', [userId]);
 
-    console.log('joinTeamNotifications:', joinTeamNotifications);
-    console.log('reviewNotifications:', reviewNotifications);
+    //console.log('joinTeamNotifications:', joinTeamNotifications);
+    //console.log('reviewNotifications:', reviewNotifications);
 
     res.render('notifications', { joinTeamNotifications, reviewNotifications});
   } catch (error) {
