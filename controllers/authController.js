@@ -21,14 +21,17 @@ exports.registerUser = async (req, res) => {
 exports.getLoginPage = (req, res) => {
   let message = req.query.message || null;
   let fromRegisterPage = false;
+  let fromLogout = false;
 
   // Check if the message is from the profile edit page
   if (req.headers.referer && req.headers.referer.endsWith('/register')) {
     fromRegisterPage = true;
+  } else if (req.headers.referer && req.headers.referer.endsWith('/logout')) {
+    fromLogout = true;
   }
 
   // Render the profile page with the message and fromRegisterPage flag
-  res.render('login', { error: req.session.error, message, fromRegisterPage });
+  res.render('login', { error: req.session.error, message, fromRegisterPage, fromLogout });
 };
 
 exports.loginUser = async (req, res) => {
@@ -79,7 +82,7 @@ exports.logoutUser = (req, res) => {
       res.status(500).send('An error occurred');
       return;
     }
-    res.redirect('/login');
+    res.redirect('/login?message=User%20logout%20successfully');
   });
 };
 
