@@ -3,18 +3,18 @@ const db = require('../config/db');
 exports.getCreateReflectionPage = async (req, res) => {
     try {
         const projectId = req.query.projectId;
-        const UserId = req.session.user.UserID;
+        const userId = req.session.user.UserID;
 
         // Fetch project name
         const [projectName] = await db.query('SELECT ProjectID, ProjectName FROM Project WHERE ProjectID = ?', [projectId]);
 
         // Fetch existing reflection for the given projectId and UserId
-        const [existingReflection] = await db.query('SELECT ReflectionDescription FROM Reflection WHERE ProjectID = ? AND UserID = ?', [projectId, UserId]);
+        const [existingReflection] = await db.query('SELECT ReflectionDescription FROM Reflection WHERE ProjectID = ? AND UserID = ?', [projectId, userId]);
 
         //console.log('projectName', projectName);
         //console.log('Userid', UserId);
 
-        res.render('reflection-create', { projectId, UserId, projectName, existingReflection });
+        res.render('reflection-create', { projectId, userId, projectName, existingReflection });
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred');
@@ -25,20 +25,20 @@ exports.getCreateReflectionPage = async (req, res) => {
 exports.createReflection = async (req, res) => {
     try {
         const { projectId, reflectionDescription } = req.body;
-        const UserId = req.session.user.UserID;
+        const userId = req.session.user.UserID;
 
         //console.log('UserId:', UserId);
         //console.log('projectId:', projectId);
 
         // Check if a reflection with the given projectId and UserId already exists
-        const [existingReflection] = await db.execute('SELECT * FROM Reflection WHERE ProjectID = ? AND UserID = ?', [projectId, UserId]);
+        const [existingReflection] = await db.execute('SELECT * FROM Reflection WHERE ProjectID = ? AND UserID = ?', [projectId, userId]);
 
         if (existingReflection.length > 0) {
             // If a reflection already exists, update it
-            await db.execute('UPDATE Reflection SET ReflectionDescription = ?, ReflectionModifiedDate = NOW() WHERE ProjectID = ? AND UserID = ?', [reflectionDescription, projectId, UserId]);
+            await db.execute('UPDATE Reflection SET ReflectionDescription = ?, ReflectionModifiedDate = NOW() WHERE ProjectID = ? AND UserID = ?', [reflectionDescription, projectId, userId]);
         } else {
             // If no reflection exists, insert a new one
-            await db.execute('INSERT INTO Reflection (ProjectID, UserID, ReflectionDescription, ReflectionCreatedDate, ReflectionModifiedDate) VALUES (?, ?, ?, NOW(), NOW())', [projectId, UserId, reflectionDescription]);
+            await db.execute('INSERT INTO Reflection (ProjectID, UserID, ReflectionDescription, ReflectionCreatedDate, ReflectionModifiedDate) VALUES (?, ?, ?, NOW(), NOW())', [projectId, userId, reflectionDescription]);
         }
 
         // Redirect to a success page or display a success message
@@ -77,7 +77,7 @@ exports.getCreateReviewPage = async (req, res) => {
 exports.createReview = async (req, res) => {
     try {
         const { projectId, receiverID, reviewerID, reviewDescription } = req.body;
-        const UserId = req.session.user.UserID;
+        //const UserId = req.session.user.UserID;
 
         //console.log('UserId:', UserId);
         //console.log('projectId:', projectId);
@@ -85,7 +85,7 @@ exports.createReview = async (req, res) => {
         await db.execute('INSERT INTO Review (ReviewerID, ReceiverID, ReviewDescription, ReviewStatus, ReviewCreatedDate, ReviewModifiedDate) VALUES (?, ?, ?, "Created", NOW(), NOW())', [reviewerID, receiverID, reviewDescription]);
 
         // Get ReviewID
-        const [ReviewID] = await db.query('SELECT MAX(ReviewID) FROM review');
+        const [ReviewID] = await db.query('SELECT MAX(ReviewID) FROM Review');
         const PID = ReviewID[0]['MAX(ReviewID)'];
 
         await db.execute('INSERT INTO ProjectReview (ReviewID, ProjectID, PRCreatedDate, PRModifiedDate) VALUES (?, ?, NOW(), NOW())', [PID, projectId]);
@@ -103,9 +103,9 @@ exports.getViewReview = async (req, res) => {
         const { ReviewerID, ProjectID, ReceiverID, ReviewID } = req.body;
         const receiverName = req.query.receiverName;
 
-        console.log('ReviewerID', ReviewerID);
-        console.log('ReceiverID', ReceiverID);
-        console.log('ReviewID', ReviewID);
+        //console.log('ReviewerID', ReviewerID);
+        //console.log('ReceiverID', ReceiverID);
+        //console.log('ReviewID', ReviewID);
 
         // Fetch project name
         const [projectName] = await db.query('SELECT ProjectID, ProjectName FROM Project WHERE ProjectID = ?', [ProjectID]);
@@ -128,7 +128,7 @@ exports.acceptReview = async (req, res) => {
       // Extract ReviewID from the request body
       const { ReviewID } = req.body;
   
-      console.log('ReviewID:', ReviewID);
+      //console.log('ReviewID:', ReviewID);
       //console.log('projectId:', projectId);
   
       // Update the review table to mark the created as approved
@@ -150,7 +150,7 @@ exports.acceptReview = async (req, res) => {
       // Extract ReviewID from the request body
       const { ReviewID } = req.body;
   
-      console.log('ReviewID:', ReviewID);
+      //console.log('ReviewID:', ReviewID);
       //console.log('projectId:', projectId);
   
       // Update the review table to mark the created as rejected
