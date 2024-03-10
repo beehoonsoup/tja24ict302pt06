@@ -47,10 +47,8 @@ exports.loginUser = async (req, res) => {
 
     const passwordMatch = await bcrypt.compare(password, hashedPassword);
     if (!passwordMatch) {
-      /*req.session.error = 'Invalid email/username or password';
-      res.redirect('/login');*/
-      req.session.user = user;
-    res.redirect('/home');
+      req.session.error = 'Invalid email/username or password';
+      res.redirect('/login');
       return;
     }
     req.session.user = user;
