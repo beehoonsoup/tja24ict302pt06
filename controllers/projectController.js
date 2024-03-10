@@ -162,12 +162,12 @@ exports.getAddMemberPage = async (req, res) => {
     const teamMemberCount = teamMember[0]['COUNT(*)'];
     const [project] = await db.query('SELECT * FROM Project WHERE ProjectID = ?', [projectId]);
 
-    const Users = await db.query('SELECT DISTINCT u.UserID, CONCAT(u.FirstName, " ", u.LastName) AS UserName FROM User u LEFT JOIN Team t ON t.UserID = u.UserID WHERE u.UserID NOT IN (SELECT u.UserID FROM User u LEFT JOIN Team t ON t.UserID = u.UserID WHERE t.ProjectID = ?)', [projectId]);
+    const users = await db.query('SELECT DISTINCT u.UserID, CONCAT(u.FirstName, " ", u.LastName) AS UserName FROM User u LEFT JOIN Team t ON t.UserID = u.UserID WHERE u.UserID NOT IN (SELECT u.UserID FROM User u LEFT JOIN Team t ON t.UserID = u.UserID WHERE t.ProjectID = ?)', [projectId]);
 
     const [memberCount] = await db.execute('SELECT p.*, CASE WHEN t.MemberCount IS NULL THEN 0 ELSE t.MemberCount END AS MemberCount, u.FirstName AS CreatedByFirstName, u.LastName AS CreatedByLastName FROM Project p INNER JOIN User u on p.ProjectCreatedBy = u.UserID LEFT JOIN (SELECT ProjectID, COUNT(*) as MemberCount FROM Team GROUP BY ProjectID) t ON t.ProjectID = p.ProjectID WHERE p.ProjectID = ?', [projectId]);
 
     // Console logs
-    //console.log('Users:', currentUser);
+    //console.log('users:', currentUser);
     //console.log('Project:', projectId);
     //console.log('teamMember:', teamMemberCount);
 
@@ -177,7 +177,7 @@ exports.getAddMemberPage = async (req, res) => {
       res.redirect(`/project/${projectId}`);
     } else {
       // Render the project-member-add page
-      res.render('project-member-add', { project: project[0], Users });
+      res.render('project-member-add', { project: project[0], users });
     }
   } catch (error) {
     console.error(error);
@@ -187,13 +187,13 @@ exports.getAddMemberPage = async (req, res) => {
 
 exports.addMemberToProject = async (req, res) => {
   try {
-    const { User, role } = req.body;
+    const { user, role } = req.body;
     const projectId = req.params.projectId;
 
     // Check if adding the User will exceed the project size
 
     // Insert the new member into the team table
-    await db.query('INSERT INTO Team (UserID, ProjectID, TeamRole, TeamStatus, TeamCreatedDate, TeamModifiedDate) VALUES (?, ?, ?, "Verified", NOW(), NOW())', [User, projectId, role]);
+    await db.query('INSERT INTO Team (UserID, ProjectID, TeamRole, TeamStatus, TeamCreatedDate, TeamModifiedDate) VALUES (?, ?, ?, "Verified", NOW(), NOW())', [user, projectId, role]);
 
     res.redirect(`/project/${projectId}`);
   } catch (error) {
@@ -218,10 +218,10 @@ exports.requestToJoin = async (req, res) => {
   try {
     const { teamRole } = req.body;
     const { projectId } = req.params;
-    const UserId = req.session.user.UserID;
+    const userId = req.session.user.UserID;
 
     // Insert the request to join into the team table
-    await db.execute('INSERT INTO Team (UserID, ProjectID, TeamRole, TeamStatus, TeamCreatedDate, TeamModifiedDate) VALUES (?, ?, ?, "Requested", NOW(), NOW())', [UserId, projectId, teamRole]);
+    await db.execute('INSERT INTO Team (UserID, ProjectID, TeamRole, TeamStatus, TeamCreatedDate, TeamModifiedDate) VALUES (?, ?, ?, "Requested", NOW(), NOW())', [userId, projectId, teamRole]);
 
     res.redirect(`/project/${projectId}`);
   } catch (error) {
@@ -232,12 +232,12 @@ exports.requestToJoin = async (req, res) => {
 
 exports.getNotifications = async (req, res) => {
   try {
-    const UserId = req.session.user.UserID;
+    const userId = req.session.user.UserID;
     const projectId = req.params.projectId;
 
-    const [joinTeamNotifications] = await db.query('SELECT u.UserID, p.ProjectID, CONCAT(u.FirstName, " ", u.LastName) AS UserName, p.ProjectName, t.TeamStatus FROM Team t LEFT JOIN Project p ON p.ProjectID = t.ProjectID LEFT JOIN User u ON u.UserID = t.UserID WHERE t.ProjectID IN (SELECT DISTINCT ProjectID from Team t WHERE UserID = ? AND TeamStatus = "Verified") AND t.TeamStatus = "Requested"', [UserId]);
+    const [joinTeamNotifications] = await db.query('SELECT u.UserID, p.ProjectID, CONCAT(u.FirstName, " ", u.LastName) AS UserName, p.ProjectName, t.TeamStatus FROM Team t LEFT JOIN Project p ON p.ProjectID = t.ProjectID LEFT JOIN User u ON u.UserID = t.UserID WHERE t.ProjectID IN (SELECT DISTINCT ProjectID from Team t WHERE UserID = ? AND TeamStatus = "Verified") AND t.TeamStatus = "Requested"', [userId]);
 
-    const [reviewNotifications] = await db.query('SELECT r.ReviewID, r.ReceiverID, r.ReviewerID, u.FirstName, u.LastName, CONCAT(u.FirstName, " ", u.LastName) as ReviewerName, pr.ProjectID, p.ProjectName, r.ReviewStatus FROM Review r INNER JOIN ProjectReview pr ON r.ReviewID = pr.ReviewID INNER JOIN User u ON u.UserID = r.ReviewerID LEFT JOIN Project p ON p.ProjectID = pr.ProjectID WHERE r.ReceiverID = ? AND r.ReviewStatus = "Created"', [UserId]);
+    const [reviewNotifications] = await db.query('SELECT r.ReviewID, r.ReceiverID, r.ReviewerID, u.FirstName, u.LastName, CONCAT(u.FirstName, " ", u.LastName) as ReviewerName, pr.ProjectID, p.ProjectName, r.ReviewStatus FROM Review r INNER JOIN ProjectReview pr ON r.ReviewID = pr.ReviewID INNER JOIN User u ON u.UserID = r.ReviewerID LEFT JOIN Project p ON p.ProjectID = pr.ProjectID WHERE r.ReceiverID = ? AND r.ReviewStatus = "Created"', [userId]);
 
     console.log('joinTeamNotifications:', joinTeamNotifications);
     console.log('reviewNotifications:', reviewNotifications);
@@ -252,13 +252,13 @@ exports.getNotifications = async (req, res) => {
 exports.acceptJoinRequest = async (req, res) => {
   try {
     // Extract UserId and projectId from the request body
-    const { UserId, projectId } = req.body;
+    const { userId, projectId } = req.body;
 
-    //console.log('UserId:', UserId);
+    //console.log('userId:', userId);
     //console.log('projectId:', projectId);
 
     // Update the team table to mark the request as accepted
-    await db.query('UPDATE Team SET TeamStatus = "Verified", TeamModifiedDate = NOW() WHERE UserID = ? AND ProjectID = ? AND TeamStatus = "Requested"', [UserId, projectId]);
+    await db.query('UPDATE Team SET TeamStatus = "Verified", TeamModifiedDate = NOW() WHERE UserID = ? AND ProjectID = ? AND TeamStatus = "Requested"', [userId, projectId]);
 
     // Redirect the User to the notifications page or any other desired page
     res.redirect('/notifications');
@@ -270,14 +270,14 @@ exports.acceptJoinRequest = async (req, res) => {
 
 exports.rejectJoinRequest = async (req, res) => {
   try {
-    // Extract UserId and projectId from the request body
-    const { UserId, projectId } = req.body;
+    // Extract userId and projectId from the request body
+    const { userId, projectId } = req.body;
 
-    //console.log('UserId:', UserId);
+    //console.log('userId:', userId);
     //console.log('projectId:', projectId);
 
     // Update the team table to mark the request as accepted
-    await db.query('UPDATE Team SET TeamStatus = "Rejected", TeamModifiedDate = NOW() WHERE UserID = ? AND ProjectID = ? AND TeamStatus = "Requested"', [UserId, projectId]);
+    await db.query('UPDATE Team SET TeamStatus = "Rejected", TeamModifiedDate = NOW() WHERE UserID = ? AND ProjectID = ? AND TeamStatus = "Requested"', [userId, projectId]);
 
     // Redirect the User to the notifications page or any other desired page
     res.redirect('/notifications');
@@ -289,13 +289,12 @@ exports.rejectJoinRequest = async (req, res) => {
 
 exports.deleteProject = async (req, res) => {
   try {
-    // Extract UserId and projectId from the request body
+    // Extract projectId from the request body
     const { projectId } = req.body;
 
-    // Update the team table to mark the request as accepted
+    // Update the team table to mark the status as disabled so it will not appear on project table
     await db.query('UPDATE Project SET ProjectStatus = "Disabled", ProjectModifiedDate = NOW() WHERE ProjectID = ?', [projectId]);
 
-    // Redirect the User to the notifications page or any other desired page
     res.redirect('/project');
   } catch (error) {
     console.error(error);
