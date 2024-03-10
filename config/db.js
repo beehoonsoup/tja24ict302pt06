@@ -8,12 +8,24 @@ const pool = mysql.createPool({
   connectionLimit: 10
 });
 
-/*const pool = mysql.createPool({
+/*
+//localdb -mk
+const pool = mysql.createPool({
   host: 'localhost',
   user: 'mabelin',
   password: '123',
   database: 'sys',
   connectionLimit: 10
-});*/
+});
+
+//localdb -kelly
+const pool = mysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: 'Qwer1234',
+  database: 'sys',
+  connectionLimit: 10
+});
+*/
 
 module.exports = pool.promise();

@@ -12,6 +12,7 @@ app.set('view engine', 'ejs');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: true }));
+app.use('/public', express.static('public'));
 
 app.use('/', authRoutes);
 app.use('/', userRoutes);
