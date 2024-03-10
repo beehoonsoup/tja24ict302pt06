@@ -9,7 +9,7 @@ exports.registerUser = async (req, res) => {
   try {
     const { firstName, lastName, email, username, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    await db.execute('INSERT INTO User (FirstName, LastName, EmailAddress, UserName, UserPassword, RoleID, UserStatus) VALUES (?, ?, ?, ?, ?, ?, ?)', [firstName, lastName, email, username, hashedPassword, 2, 'Enabled']);
+    await db.execute('INSERT INTO User (FirstName, LastName, EmailAddress, UserName, UserPassword, RoleID, UserStatus) VALUES (?, ?, ?, ?, ?, ?, ?)', [firstName, lastName, email, username, hashedPassword, 2, 'enabled']);
     res.redirect('/login?message=User%20registered%20successfully');
   } catch (error) {
     console.error(error);
@@ -34,21 +34,17 @@ exports.getLoginPage = (req, res) => {
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const [rows] = await db.execute('SELECT UserPassword FROM User WHERE EmailAddress = ? OR UserName = ?', [email, email]);
+    const [rows] = await db.execute('SELECT * FROM User WHERE EmailAddress = ? OR UserName = ?', [email, email]);
     const user = rows[0];
-
+    //console.log('Retrieved hashed password from database:', user.UserPassword);
     if (!user) {
-      req.session.error = 'Invalid email/Username or password';
+      req.session.error = 'Invalid email/username or password';
       res.redirect('/login');
       return;
     }
-
-    // Convert the Buffer object representing the hashed password to a string
-    const hashedPassword = user.UserPassword.toString('utf8');
-
-    const passwordMatch = await bcrypt.compare(password, hashedPassword);
+    const passwordMatch = await bcrypt.compare(password, user.UserPassword);
     if (!passwordMatch) {
-      req.session.error = 'Invalid email/Username or password';
+      req.session.error = 'Invalid email/username or password';
       res.redirect('/login');
       return;
     }
@@ -60,7 +56,6 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-
 exports.getHomePage = (req, res) => {
   if (!req.session.user) {
     // User is not logged in, redirect them to the login page
@@ -68,9 +63,9 @@ exports.getHomePage = (req, res) => {
     return;
   }
   
-  //console.log('User object:', req.session.User); // Log the User object
+  //console.log('User object:', req.session.user); // Log the user object
   
-  // User is logged in, render the home page with the User object
+  // User is logged in, render the home page with the user object
   res.render('home', { user: req.session.user });
 };
 

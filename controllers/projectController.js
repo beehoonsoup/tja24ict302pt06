@@ -65,7 +65,7 @@ exports.createProject = async (req, res) => {
     // Insert project details into the project database
     const [result] = await db.execute(
       'INSERT INTO Project (ProjectName, ProjectDescription, ProjectStartDate, ProjectEndDate, ProjectGrade, ProjectSize, ProjectStatus, ProjectCreatedBy, ProjectCreatedDate, ProjectModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())',
-      [projectName, projectDescription, formattedStartDate, formattedEndDate, formattedProjectGrade, projectSize, 'enabled', req.session.user.UserID]
+      [projectName, projectDescription, formattedStartDate, formattedEndDate, formattedProjectGrade, projectSize, 'Enabled', req.session.user.UserID]
     );
 
     // Get ProjectID
