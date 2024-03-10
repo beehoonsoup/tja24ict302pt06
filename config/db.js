@@ -7,8 +7,8 @@ const pool = mysql.createPool({
   database: 'tw2024',
   connectionLimit: 10
 });
-/*
-const pool = mysql.createPool({
+
+/*const pool = mysql.createPool({
   host: 'localhost',
   user: 'mabelin',
   password: '123',

@@ -42,7 +42,10 @@ exports.loginUser = async (req, res) => {
       res.redirect('/login');
       return;
     }
-    const passwordMatch = await bcrypt.compare(password, user.UserPassword);
+    // Convert the Buffer object representing the hashed password to a string
+    const hashedPassword = user.UserPassword.toString('utf8');
+
+    const passwordMatch = await bcrypt.compare(password, hashedPassword);
     if (!passwordMatch) {
       req.session.error = 'Invalid email/username or password';
       res.redirect('/login');
