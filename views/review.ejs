@@ -4,16 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/public/css/styles.css" rel="stylesheet" type="text/css"/>
     <title>Create Review</title>
 </head>
 
 <body>
-    <a href="/biography">Biography</a> |
-    <a href="/profile">Profile</a> |
-    <a href="/project">Project</a> |
-    <a href="/notifications">Notifications</a> |
-    <a href="/logout">Logout</a>
-    <p></p>
+    <!-- Header section -->
+<div class="header">
+    <!-- Company logo -->
+    <div class="company">
+        <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
+    </div>
+  
+    <!-- Navigation bar -->
+    <nav class="nav-bar">
+      <ul class="nav-links">
+          <li class="nav-item"><a href="/home">Home</a></li>
+          <li class="nav-item"><a href="/biography">Biography</a></li>
+          <li class="nav-item"><a href="/profile">Profile</a></li>
+          <li class="nav-item"><a href="/project">Project</a></li>
+          <li class="nav-item"><a href="/notifications">Notifications</a></li>
+          <li class="nav-item"><a href="/logout">Logout</a></li>
+          <!-- Add more navigation links as needed -->
+      </ul>
+  </nav>
+  </div>
+
     <h1>Review</h1>
     <p>
         <%= existingReview[0].ReviewID %><br>

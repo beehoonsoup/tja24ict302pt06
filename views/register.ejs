@@ -3,18 +3,72 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/public/css/styles.css" rel="stylesheet" type="text/css"/>
   <title>Register</title>
 </head>
 <body>
-  <h1>Register</h1>
+  <!-- Header section -->
+  <div class="header">
+    <!-- Company logo -->
+    <div class="company">
+        <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
+    </div>
+</div>
+<div class="container">
+  <h1>Create an account</h1>
   <form action="/register" method="POST">
+    <label for="firstName">First Name:</label>
     <input type="text" name="firstName" placeholder="First Name" required><br>
+
+    <label for="lastName">Last Name:</label>
     <input type="text" name="lastName" placeholder="Last Name" required><br>
+
+    <label for="email">Email Address:</label>
     <input type="email" name="email" placeholder="Email" required><br>
+
+    <label for="username">Username:</label>
     <input type="text" name="username" placeholder="Username" required><br>
+
+    <label for="password">Password:</label>
     <input type="password" name="password" placeholder="Password" required><br>
+    <span id="passwordCriteriaError" class="error"></span><br>
+
+
+    <label for="confirmPassword">Confirm Password:</label>
     <input type="password" name="confirmPassword" placeholder="Confirm Password" required><br>
+    <span id="passwordMatchError" class="error"></span><br>
+
     <button type="submit">Register</button>
   </form>
+</div>
+
+<!-- JavaScript -->
+<script>
+  document.getElementById('confirmPassword').addEventListener('input', function() {
+            var password = document.getElementById('password').value;
+            var confirmPassword = this.value;
+
+            if (password !== confirmPassword) {
+                document.getElementById('passwordMatchError').textContent = 'Passwords do not match!';
+            } else {
+                document.getElementById('passwordMatchError').textContent = 'Passwords match.';
+            }
+        });
+
+        document.getElementById('password').addEventListener('input', function() {
+            var password = this.value;
+
+            var hasNumber = /\d/.test(password);
+            var hasLowerCase = /[a-z]/.test(password);
+            var hasUpperCase = /[A-Z]/.test(password);
+            var isValidLength = password.length >= 8;
+
+            if (!isValidLength || !hasNumber || !hasLowerCase || !hasUpperCase) {
+                document.getElementById('passwordCriteriaError').textContent = 'Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, and one number';
+            } else {
+                document.getElementById('passwordCriteriaError').textContent = '';
+            }
+        });
+    </script>
 </body>
 </html>

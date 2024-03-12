@@ -3,33 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/public/css/styles.css" rel="stylesheet" type="text/css"/>
   <title>Create Project</title>
 </head>
 <body>
-  <a href="/biography">Biography</a> |
-  <a href="/profile">Profile</a> |
-  <a href="/project">Project</a> |
-  <a href="/notifications">Notifications</a> |
-  <a href="/logout">Logout</a>
-  <p></p>
+<!-- Header section -->
+<div class="header">
+  <!-- Company logo -->
+  <div class="company">
+      <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
+  </div>
+
+  <!-- Navigation bar -->
+  <nav class="nav-bar">
+    <ul class="nav-links">
+        <li class="nav-item"><a href="/home">Home</a></li>
+        <li class="nav-item"><a href="/biography">Biography</a></li>
+        <li class="nav-item"><a href="/profile">Profile</a></li>
+        <li class="nav-item"><a href="/project">Project</a></li>
+        <li class="nav-item"><a href="/notifications">Notifications</a></li>
+        <li class="nav-item"><a href="/logout">Logout</a></li>
+        <!-- Add more navigation links as needed -->
+    </ul>
+</nav>
+</div>
   <h1>Create Project</h1>
-  <form action="/project-create" method="POST">
+  <form id="projectForm" action="/project-create" method="POST">
     <label for="projectName">Project Name:</label>
     <input type="text" id="projectName" name="projectName" required><br>
+
     <label for="projectDescription">Project Description:</label>
-    <textarea id="projectDescription" name="projectDescription" required></textarea><br>
+    <textarea id="projectDescription" name="projectDescription" rows="4" cols="50" maxlength="1500" required></textarea><br>
+    <p><span id="charCount">0</span>/1500 characters</p>
+
     <label for="projectStartDate">Start Date:</label>
     <input type="date" id="projectStartDate" name="projectStartDate" required><br>
+
     <label for="projectEndDate">End Date:</label>
     <input type="date" id="projectEndDate" name="projectEndDate"><br>
+
     <label for="teamRole">Team Role:</label>
     <select id="teamRole" name="teamRole" required>
       <option value="Leader">Leader</option>
       <option value="Member">Member</option>
     </select><br>
+
     <label for="projectGrade">Grade:</label>
-    <input type="text" id="projectGrade" name="projectGrade"><br>
-    <label for="projectSize">Size:</label>
+    <select id="projectGrade" name="projectGrade">
+      <option value="NA">NA</option>
+      <option value="HD">HD</option>
+      <option value="D">D</option>
+      <option value="C">C</option>
+      <option value="P">P</option>
+      <option value="U">U</option>
+      <!-- Add more grades as needed -->
+  </select><br>
+
+    <label for="projectSize">Number of Members:</label>
     <select id="projectSize" name="projectSize" required>
       <option value="2">2</option>
       <option value="3">3</option>
@@ -41,5 +71,22 @@
     </select><br>
     <button type="submit">Create Project</button>
   </form>
+
+  <script>
+    const projectForm = document.getElementById('projectForm');
+    const projectDescription = document.getElementById('projectDescription');
+    const charCount = document.getElementById('charCount');
+  
+    projectDescription.addEventListener('input', () => {
+        charCount.textContent = projectDescription.value.length;
+    });
+
+    /*
+    projectForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        // You can add your submission logic here
+        alert('Project submitted!');
+    });*/
+  </script>
 </body>
 </html>
