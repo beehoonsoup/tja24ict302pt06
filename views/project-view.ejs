@@ -135,10 +135,10 @@
     <% memberRows.forEach(member => { %>
       <tr>
           <td>
-              <%= member.UserName %>
+            <a href="/biography/<%= member.UserID %>"><%= member.UserName %></a>
           </td>
           <td>
-              <%= member.TeamRole %>
+            <%= member.TeamRole %>
           </td>
           <% if (teamMemberCount > 0) { %>
               <% if (member.UserID === user.UserID) { %>
