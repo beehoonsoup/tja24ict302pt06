@@ -23,6 +23,6 @@ router.post('/reject-review', isLoggedIn, feedbackController.rejectReview);
 router.post('/selfEvaluation-create', isLoggedIn, feedbackController.createSelfEvaluation);
 router.post('/selfEvaluation-create', isLoggedIn, feedbackController.addSelfEvaluation);
 router.get('/selfEvaluation', isLoggedIn, feedbackController.getSkills);
-router.get('/biography/:userId', isLoggedIn, feedbackController.viewSkills);
+router.get('/biography/:userId', isLoggedIn, feedbackController.getBiographyPage);
 
 module.exports = router;
