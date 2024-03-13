@@ -167,29 +167,30 @@ exports.rejectReview = async (req, res) => {
     }
 }
 
-exports.getBiographyPage = async (req, res) => {
+exports.getSkills = async (req, res) => {
     try {
-      const userId = req.session.user.UserID;
-  
-      // Fetch reflections for the user
-      const [reflections] = await db.query('SELECT * FROM Reflection WHERE UserID = ? ORDER BY ReflectionCreatedDate DESC', [userId]);
-  
-      // Fetch accepted reviews for the user
-      const [acceptedReviews] = await db.query('SELECT r.*, p.ProjectID, p.ProjectName FROM Review r INNER JOIN ProjectReview pr ON r.ReviewID = pr.ReviewID INNER JOIN Project p ON pr.ProjectID = p.ProjectID WHERE r.ReviewStatus = "Accepted" AND r.ReviewerID = ? ORDER BY r.ReviewCreatedDate DESC', [userId]);
-  
-      // Combine reflections and accepted reviews into a single array
-      const feed = [...reflections, ...acceptedReviews];
-  
-      // Sort the feed based on creation dates
-      feed.sort((a, b) => new Date(b.ReflectionCreatedDate || b.ReviewCreatedDate) - new Date(a.ReflectionCreatedDate || a.ReviewCreatedDate));
-  
-      res.render('biography', { feed });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('An error occurred');
-    }
-  };
+        const projectId = req.query.projectId;
+        const userId = req.session.user.UserID;
 
+        const skills = await db.query('SELECT SkillID, SkillName FROM Skill');
+
+        const project = await db.query('SELECT ProjectName FROM Project WHERE ProjectID = ?', [projectId]);
+        const projectName = project[0][0].ProjectName;
+        
+        // Console logs
+        //console.log('projectId:', projectId);
+        //console.log('Project Name:', projectName);
+        //console.log('userID:', userId);
+        //console.log('skill:', skills);
+
+        res.render('selfEvaluation-create', { projectId, userId, skills, projectName });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Failed to fetch skills');
+    }
+};
+
+/*
 exports.createSelfEvaluation = async (req, res) => {
     try {
         const { projectId, userId } = req.body;
@@ -226,26 +227,6 @@ exports.addSelfEvaluation = async (req, res) => {
     }
 };
 
-exports.getSkills = async (req, res) => {
-    try {
-        const { projectId, userId } = req.body;
-
-        const skills = await db.query('SELECT SkillID, SkillName FROM Skill');
-
-        const projectName = await db.query('SELECT ProjectName FROM Project WHERE ProjectID = ?', [projectId]);
-
-        // Console logs
-        console.log('projectId:', projectId);
-        console.log('userID:', userId);
-        console.log('skill:', skills);
-
-        res.render('selfEvaluation-create', { projectId, userId, skills, projectName });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Failed to fetch skills');
-    }
-}
-
 exports.viewSkills = async (req, res) => {
     const userId = req.params.userId;
 
@@ -260,3 +241,4 @@ exports.viewSkills = async (req, res) => {
         res.status(500).send('Failed to retrieve skills');
     }
 };
+*/
