@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self Evaluation</title>
+</head>
+
+<body>
+    <a href="/biography">Biography</a> |
+    <a href="/profile">Profile</a> |
+    <a href="/project">Project</a> |
+    <a href="/notifications">Notifications</a> |
+    <a href="/logout">Logout</a>
+    <p></p>
+    <h1>Self Evaluation</h1>
+    <form action="/selfEvaluation" method="POST">
+        <input type="hidden" name="projectId" value="<%= projectId %>">
+        <input type="hidden" name="userID" value="<%= userId %>">
+        <label for="skill">Evaluated the skills accquired from the project:</label><br>
+        <select id="skill" name="skill" multiple>
+            <% skills[0].forEach(skills=> { %>
+                <option value="<%= skills.SkillID %>">
+                    <%= skills.SkillName %>
+                </option>
+                <% }) %>
+        </select>
+        <br>
+        <button type="submit">Add Skills</button>
+    </form>
+</body>
+
+</html>

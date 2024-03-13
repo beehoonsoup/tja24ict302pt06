@@ -20,6 +20,9 @@ router.post('/review/:reviewID', isLoggedIn, feedbackController.getViewReview);
 router.get('/review/:reviewID', isLoggedIn, feedbackController.getViewReview);
 router.post('/accept-review', isLoggedIn, feedbackController.acceptReview);
 router.post('/reject-review', isLoggedIn, feedbackController.rejectReview);
-
+router.post('/selfEvaluation-create', isLoggedIn, feedbackController.createSelfEvaluation);
+router.post('/selfEvaluation-create', isLoggedIn, feedbackController.addSelfEvaluation);
+router.get('/selfEvaluation', isLoggedIn, feedbackController.getSkills);
+router.get('/biography/:userId', isLoggedIn, feedbackController.viewSkills);
 
 module.exports = router;

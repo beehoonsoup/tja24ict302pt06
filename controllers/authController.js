@@ -75,6 +75,14 @@ exports.getHomePage = (req, res) => {
   res.render('home', { user: req.session.user });
 };
 
+exports.geTestPage = (req, res) => {
+ 
+  //console.log('User object:', req.session.user); // Log the user object
+  
+  // User is logged in, render the home page with the user object
+  res.render('test', { user: req.session.user });
+};
+
 exports.logoutUser = (req, res) => {
   req.session.destroy(err => {
     if (err) {

@@ -125,44 +125,115 @@ exports.getViewReview = async (req, res) => {
 
 exports.acceptReview = async (req, res) => {
     try {
-      // Extract ReviewID from the request body
-      const { ReviewID } = req.body;
-  
-      //console.log('ReviewID:', ReviewID);
-      //console.log('projectId:', projectId);
-  
-      // Update the review table to mark the created as approved
-      await db.query('UPDATE Review SET ReviewStatus = "Approved", ReviewModifiedDate = NOW() WHERE ReviewID = ? AND ReviewStatus = "Created"', [ReviewID]);
+        // Extract ReviewID from the request body
+        const { ReviewID } = req.body;
 
-      // Update the projectreview table to mark the created as approved
-      await db.query('UPDATE ProjectReview SET PRModifiedDate = NOW() WHERE ReviewID = ?', [ReviewID]);
-  
-      // Redirect the User to the notifications page or any other desired page
-      res.redirect('/notifications');
+        //console.log('ReviewID:', ReviewID);
+        //console.log('projectId:', projectId);
+
+        // Update the review table to mark the created as approved
+        await db.query('UPDATE Review SET ReviewStatus = "Approved", ReviewModifiedDate = NOW() WHERE ReviewID = ? AND ReviewStatus = "Created"', [ReviewID]);
+
+        // Update the projectreview table to mark the created as approved
+        await db.query('UPDATE ProjectReview SET PRModifiedDate = NOW() WHERE ReviewID = ?', [ReviewID]);
+
+        // Redirect the User to the notifications page or any other desired page
+        res.redirect('/notifications');
     } catch (error) {
-      console.error(error);
-      res.status(500).send('An error occurred');
+        console.error(error);
+        res.status(500).send('An error occurred');
     }
-  }
+}
 
-  exports.rejectReview = async (req, res) => {
+exports.rejectReview = async (req, res) => {
     try {
-      // Extract ReviewID from the request body
-      const { ReviewID } = req.body;
-  
-      //console.log('ReviewID:', ReviewID);
-      //console.log('projectId:', projectId);
-  
-      // Update the review table to mark the created as rejected
-      await db.query('UPDATE Review SET ReviewStatus = "Rejected", ReviewModifiedDate = NOW() WHERE ReviewID = ? AND ReviewStatus = "Created"', [ReviewID]);
+        // Extract ReviewID from the request body
+        const { ReviewID } = req.body;
 
-      // Update the projectreview table to mark the created as approved
-      await db.query('UPDATE ProjectReview SET PRModifiedDate = NOW() WHERE ReviewID = ?', [ReviewID]);
-  
-      // Redirect the User to the notifications page or any other desired page
-      res.redirect('/notifications');
+        //console.log('ReviewID:', ReviewID);
+        //console.log('projectId:', projectId);
+
+        // Update the review table to mark the created as rejected
+        await db.query('UPDATE Review SET ReviewStatus = "Rejected", ReviewModifiedDate = NOW() WHERE ReviewID = ? AND ReviewStatus = "Created"', [ReviewID]);
+
+        // Update the projectreview table to mark the created as approved
+        await db.query('UPDATE ProjectReview SET PRModifiedDate = NOW() WHERE ReviewID = ?', [ReviewID]);
+
+        // Redirect the User to the notifications page or any other desired page
+        res.redirect('/notifications');
     } catch (error) {
-      console.error(error);
-      res.status(500).send('An error occurred');
+        console.error(error);
+        res.status(500).send('An error occurred');
     }
-  }
+}
+
+exports.createSelfEvaluation = async (req, res) => {
+    try {
+        const { projectId, userId } = req.body;
+
+        const skills = await db.query('SELECT SkillID, SkillName FROM Skill');
+
+        // Console logs
+        console.log('projectId:', projectId);
+        console.log('userID:', userId);
+        console.log('skill:', skills);
+
+        res.render('selfEvaluation', { projectId, userId, skills });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred');
+    }
+};
+
+exports.addSelfEvaluation = async (req, res) => {
+    try {
+        const { projectId, userId } = req.body;
+
+        const skills = await db.query('SELECT SkillID, SkillName FROM Skill');
+
+        // Console logs
+        console.log('projectId:', projectId);
+        console.log('userID:', userId);
+        console.log('skill:', skills);
+
+        res.render('selfEvaluation-create', { projectId, userId, skills });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred');
+    }
+};
+
+exports.getSkills = async (req, res) => {
+    try {
+        const { projectId, userId } = req.body;
+
+        const skills = await db.query('SELECT SkillID, SkillName FROM Skill');
+
+        const projectName = await db.query('SELECT ProjectName FROM Project WHERE ProjectID = ?', [projectId]);
+
+        // Console logs
+        console.log('projectId:', projectId);
+        console.log('userID:', userId);
+        console.log('skill:', skills);
+        
+        res.render('selfEvaluation-create', { projectId, userId, skills, projectName });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Failed to fetch skills');
+    }
+}
+
+exports.viewSkills = async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        // Retrieve the skills associated with the user from the database
+        const [skills] = await db.query('SELECT SkillID FROM SelfEvaluation WHERE UserID = ?', [userId]);
+
+        // Render the view with the skills data
+        res.render('biography', { skills });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Failed to retrieve skills');
+    }
+};
