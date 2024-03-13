@@ -62,7 +62,7 @@ body {
     margin: 0; /* Removing default margin */
     padding: 0; /* Removing default padding */
     text-align: center; /* Center aligning text */
-    padding-top: 50px; /* Adding padding to the top of the body */
+    /*padding-top: 50px;*/ /* Adding padding to the top of the body */
 }
 
 /* Styling for a container div */
