@@ -49,6 +49,25 @@ exports.createReflection = async (req, res) => {
     }
 };
 
+exports.deleteReflection = async (req, res) => {
+    try {
+        const { projectId } = req.body;
+        const userId = req.session.user.UserID;
+
+        //console.log('UserId:', UserId);
+        //console.log('projectId:', projectId);
+
+        // Delete reflection 
+        await db.query('DELETE FROM Reflection WHERE ProjectID = ? AND UserID = ?', [projectId, userId]);
+
+        // Redirect the User to the project page or any other desired page
+        res.redirect(`/project/${projectId}`);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred');
+    }
+};
+
 exports.getCreateReviewPage = async (req, res) => {
     try {
         //const { reviewer, projectId, receiver } = req.body;
@@ -161,6 +180,50 @@ exports.rejectReview = async (req, res) => {
 
         // Redirect the User to the notifications page or any other desired page
         res.redirect('/notifications');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred');
+    }
+}
+
+exports.unhideReview = async (req, res) => {
+    try {
+        // Extract ReviewID from the request body
+        const { ReviewID } = req.body;
+
+        //console.log('ReviewID:', ReviewID);
+        //console.log('projectId:', projectId);
+
+        // Update the review table to mark the created as approved
+        await db.query('UPDATE Review SET ReviewStatus = "Approved", ReviewModifiedDate = NOW() WHERE ReviewID = ? AND ReviewStatus = "Rejected"', [ReviewID]);
+
+        // Update the projectreview table to mark the created as approved
+        await db.query('UPDATE ProjectReview SET PRModifiedDate = NOW() WHERE ReviewID = ?', [ReviewID]);
+
+        // Redirect the User to the notifications page or any other desired page
+        res.redirect('/biography');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred');
+    }
+}
+
+exports.hideReview = async (req, res) => {
+    try {
+        // Extract ReviewID from the request body
+        const { ReviewID } = req.body;
+
+        //console.log('ReviewID:', ReviewID);
+        //console.log('projectId:', projectId);
+
+        // Update the review table to mark the created as approved
+        await db.query('UPDATE Review SET ReviewStatus = "Rejected", ReviewModifiedDate = NOW() WHERE ReviewID = ? AND ReviewStatus = "Approved"', [ReviewID]);
+
+        // Update the projectreview table to mark the created as approved
+        await db.query('UPDATE ProjectReview SET PRModifiedDate = NOW() WHERE ReviewID = ?', [ReviewID]);
+
+        // Redirect the User to the notifications page or any other desired page
+        res.redirect('/biography');
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred');

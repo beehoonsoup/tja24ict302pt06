@@ -4,21 +4,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="/public/css/styles.css" rel="stylesheet" type="text/css"/>
+  <link href="/public/css/styles.css" rel="stylesheet" type="text/css" />
   <title>Notifications</title>
 </head>
 
 <body>
   <!-- Header section -->
-<div class="header">
-  <!-- Company logo -->
-  <div class="company">
+  <div class="header">
+    <!-- Company logo -->
+    <div class="company">
       <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
-  </div>
+    </div>
 
-  <!-- Navigation bar -->
-  <nav class="nav-bar">
-    <ul class="nav-links">
+    <!-- Navigation bar -->
+    <nav class="nav-bar">
+      <ul class="nav-links">
         <li class="nav-item"><a href="/home">Home</a></li>
         <li class="nav-item"><a href="/biography">Biography</a></li>
         <li class="nav-item"><a href="/profile">Profile</a></li>
@@ -26,64 +26,51 @@
         <li class="nav-item"><a href="/notifications">Notifications</a></li>
         <li class="nav-item"><a href="/logout">Logout</a></li>
         <!-- Add more navigation links as needed -->
-    </ul>
-</nav>
-</div>
+      </ul>
+    </nav>
+  </div>
   <h1>Notifications</h1>
-  <h2>Join Project Team Request</h2>
-  <table>
-    <% joinTeamNotifications.forEach(joinTeamNotifications=> { %>
-      <tr>
-        <td><b>
-            <%= joinTeamNotifications.UserName %>
-          </b> requested to join <b>
-            <a href="/project/<%= joinTeamNotifications.ProjectID %>"><%= joinTeamNotifications.ProjectName %></a>
-          </b></td>
-        <td></td>
-        <td>
-          <form action="/accept-join-request" method="POST">
-            <input type="hidden" name="userId" value="<%= joinTeamNotifications.UserID %>">
-            <input type="hidden" name="projectId" value="<%= joinTeamNotifications.ProjectID %>">
-            <button type="submit">Accept</button>
-          </form>
-        </td>
-        <td>
-          <form action="/reject-join-request" method="POST">
-            <input type="hidden" name="userId" value="<%= joinTeamNotifications.UserID %>">
-            <input type="hidden" name="projectId" value="<%= joinTeamNotifications.ProjectID %>">
-            <button type="submit">Reject</button>
-          </form>
-        </td>
-      </tr>
+  <p>
+  <div class="feed">
+    <% feed.forEach(item=> { %>
+      <div class="item">
+        <% if (item.ReviewID) { %>
+          <%= item.ReviewerName %>
+            </b> wrote a review for you in project <b>
+              <a href="/project/<%= item.ProjectID %>">
+                <%= item.ProjectName %>
+              </a>
+            </b>
+            <form action="/review/<%= item.ReviewID %>" method="POST" style="display: inline;">
+              <input type="hidden" name="ReviewerID" value="<%= item.ReviewerID %>">
+              <input type="hidden" name="ReceiverID" value="<%= item.ReceiverID %>">
+              <input type="hidden" name="ProjectID" value="<%= item.ProjectID %>">
+              <input type="hidden" name="ReviewID" value="<%= item.ReviewID %>">
+              <button type="submit">Review</button>
+            </form>
+            <p>________________________________________________________________________</p>
+            <% } else { %>
+              <%= item.UserName %>
+                </b> requested to join <b>
+                  <a href="/project/<%= item.ProjectID %>">
+                    <%= item.ProjectName %>
+                  </a>
+                </b>
+                <form action="/accept-join-request" method="POST" style="display: inline;">
+                  <input type="hidden" name="userId" value="<%= item.UserID %>">
+                  <input type="hidden" name="projectId" value="<%= item.ProjectID %>">
+                  <button type="submit">Accept</button>
+                </form>
+                <form action="/reject-join-request" method="POST" style="display: inline;">
+                  <input type="hidden" name="userId" value="<%= item.UserID %>">
+                  <input type="hidden" name="projectId" value="<%= item.ProjectID %>">
+                  <button type="submit">Reject</button>
+                </form>
+                <p>________________________________________________________________________</p>
+                <% } %>
+      </div>
       <% }) %>
-  </table>
-
-  <h2>Reviews Notification</h2>
-  <table>
-    <% reviewNotifications.forEach(reviewNotifications=> { %>
-      <tr>
-        <td><b>
-            <%= reviewNotifications.ReviewerName %>
-          </b> wrote a review for you in project <b>
-            <a href="/project/<%= reviewNotifications.ProjectID %>"><%= reviewNotifications.ProjectName %></a>
-          </b></td>
-        <td></td>
-        <td>
-          <form action="/review/<%= reviewNotifications.ReviewID %>" method="POST">
-            <input type="hidden" name="ReviewerID" value="<%= reviewNotifications.ReviewerID %>">
-            <input type="hidden" name="ReceiverID" value="<%= reviewNotifications.ReceiverID %>">
-            <input type="hidden" name="ProjectID" value="<%= reviewNotifications.ProjectID %>">
-            <input type="hidden" name="ReviewID" value="<%= reviewNotifications.ReviewID %>">
-            <button type="submit">Review</button>
-          </form>
-        </td>
-        <td>
-          
-        </td>
-      </tr>
-      <% }) %>
-  </table>
-
+  </div>
 </body>
 
 </html>

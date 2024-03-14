@@ -98,8 +98,28 @@
             <p>
               <%= item.ReviewDescription %>
             </p>
-            ________________________________________________________________________
-            <% } %>
+            <% if (user[0].UserID=item.ReceiverID) { %>
+              <p></p>
+              <% } else { %>
+                <% if (item.ReviewStatus==="Rejected" ) { %>
+                  <p>
+                  <form action="/unhide-review" method="POST" style="display: inline;">
+                    <input type="hidden" name="ReviewID" value="<%= item.ReviewID %>">
+                    <button type="submit">Unhide Review</button>
+                  </form>
+                  </p>
+                  <% } else { %>
+                    <p>
+                    <form action="/hide-review" method="POST" style="display: inline;">
+                      <input type="hidden" name="ReviewID" value="<%= item.ReviewID %>">
+                      <button type="submit">Hide Review</button>
+                    </form>
+                    </p>
+                    <% } %>
+                      <% } %>
+
+                        ________________________________________________________________________
+                        <% } %>
       </div>
       <% }) %>
   </div>
@@ -110,7 +130,9 @@
       <% projectFeed.forEach(projectItem=> { %>
         <div class="projectItem">
           <% if (projectItem.ProjectID) { %>
-            <a href="/project/<%= projectItem.ProjectID %>"><%= projectItem.ProjectName %></a><br>
+            <a href="/project/<%= projectItem.ProjectID %>">
+              <%= projectItem.ProjectName %>
+            </a><br>
             <% } %>
     </p>
   </div>

@@ -34,13 +34,18 @@
             <%= projectName[0].ProjectName %>
         </a>
     </p>
-    <form action="/reflection-create" method="POST">
+    <form action="/reflection-create" method="POST" style="display: inline;">
         <input type="hidden" name="projectId" value="<%= projectId %>">
         <input type="hidden" name="userId" value="<%= userId %>">
         <textarea name="reflectionDescription" rows="4" cols="50"
             placeholder="Enter reflection description"><%= existingReflection.length > 0 ? existingReflection[0].ReflectionDescription : '' %></textarea><br>
         <button type="submit">Submit</button>
     </form>
+    <form action="/reflection-delete" method="POST" style="display: inline;">
+        <input type="hidden" name="projectId" value="<%= projectId %>">
+        <input type="hidden" name="userId" value="<%= userId %>">
+        <button type="submit">Delete Reflection</button>
+      </form>
 </body>
 
 </html>
