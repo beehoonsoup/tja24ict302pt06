@@ -4,11 +4,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self Evaluation</title>
     <link href="/public/css/styles.css" rel="stylesheet" type="text/css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/js/select2.min.js"></script>
 
+</head>
+
+<body>
+    <!-- Header section -->
+    <div class="header">
+        <!-- Company logo -->
+        <div class="company">
+            <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
+        </div>
+
+        <!-- Navigation bar -->
+        <nav class="nav-bar">
+            <ul class="nav-links">
+                <li class="nav-item"><a href="/home">Home</a></li>
+                <li class="nav-item"><a href="/biography">Biography</a></li>
+                <li class="nav-item"><a href="/profile">Profile</a></li>
+                <li class="nav-item"><a href="/project">Project</a></li>
+                <li class="nav-item"><a href="/notifications">Notifications</a></li>
+                <li class="nav-item"><a href="/logout">Logout</a></li>
+                <!-- Add more navigation links as needed -->
+            </ul>
+        </nav>
+    </div>
+    <h1>Self Evaluation</h1>
+    <form id="skillsForm" action="/submitSkills" method="POST">
+        <input type="hidden" name="projectId" value="<%= projectId %>">
+        <input type="hidden" name="userID" value="<%= userId %>">
+        <p>Project Name: <a href="/project/<%= projectId %>">
+                <%= projectName %>
+            </a></p>
+
+        <p>
+            <label for="skill">Evaluated the skills accquired from the project:</label><br>
+            <input type="text" id="searchInput" placeholder="e.g. database management"
+                oninput="getSuggestions(this.value)">
+        <div id="skillSuggestionsContainer"></div>
+        <p>
+        <div id="selectedSkills"></div>
+        </p>
+        <input type="hidden" id="selectedSkillIds" name="selectedSkillIds">
+        <% selectedSkills.forEach(skill=> { %>
+            <div class="selectedSkill">
+                <%= skill %>
+                    <span class="removeSkill" onclick="removeSkill('<%= skill %>')">x</span>
+            </div>
+            <% }); %>
+                <button type="submit">Update</button>
+                </p>
+
+    </form>
+
+    <!-- JavaScript code -->
     <script>
         function getSuggestions(input) {
             fetch(`/searchSkills?query=${input}`)
@@ -63,55 +116,17 @@
             document.getElementById('skillSuggestionsContainer').innerHTML = '';
         }
 
-        // Submit selected skills to insert into database
-        function submitSkillsForm() {
-            document.getElementById('skillsForm').submit();
+        // Remove selected skill
+        function removeSkill(skillId) {
+            const selectedSkill = document.querySelector(`.selectedSkill[data-id="${skillId}"]`);
+            const selectedSkillIdsInput = document.getElementById('selectedSkillIds');
+
+            if (selectedSkill) {
+                selectedSkill.remove(); // Remove the skill from the display
+                selectedSkillIdsInput.value = selectedSkillIdsInput.value.replace(`${skillId},`, ''); // Remove the skill ID from the hidden input
+            }
         }
     </script>
-    <title>Self Evaluation</title>
-</head>
-
-<body>
-    <!-- Header section -->
-    <div class="header">
-        <!-- Company logo -->
-        <div class="company">
-            <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
-        </div>
-
-        <!-- Navigation bar -->
-        <nav class="nav-bar">
-            <ul class="nav-links">
-                <li class="nav-item"><a href="/home">Home</a></li>
-                <li class="nav-item"><a href="/biography">Biography</a></li>
-                <li class="nav-item"><a href="/profile">Profile</a></li>
-                <li class="nav-item"><a href="/project">Project</a></li>
-                <li class="nav-item"><a href="/notifications">Notifications</a></li>
-                <li class="nav-item"><a href="/logout">Logout</a></li>
-                <!-- Add more navigation links as needed -->
-            </ul>
-        </nav>
-    </div>
-    <h1>Self Evaluation</h1>
-    <form id="skillsForm" action="/submitSkills" method="POST">
-        <input type="hidden" name="projectId" value="<%= projectId %>">
-        <input type="hidden" name="userID" value="<%= userId %>">
-
-        Project Name: <a href="/project/<%= projectId %>">
-            <%= projectName %>
-        </a>
-        <p>
-            <label for="skill">Evaluated the skills accquired from the project:</label><br>
-            <input type="text" id="searchInput" placeholder="e.g. database management"
-                oninput="getSuggestions(this.value)">
-        <div id="skillSuggestionsContainer"></div>
-        <p>
-        <div id="selectedSkills"></div>
-        </p>
-        <input type="hidden" id="selectedSkillIds" name="selectedSkillIds">
-        <button type="submit">Submit</button>
-    </form>
-    </p>
 </body>
 
 </html>

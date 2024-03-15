@@ -230,6 +230,28 @@ exports.hideReview = async (req, res) => {
     }
 }
 
+exports.handleSelfEvaluation = async (req, res) => {
+    try {
+        const projectId = req.query.projectId;
+        const userId = req.session.user.UserID;
+
+        // Check if there are entries in the database for the specified project and user
+        // Replace this query with your actual query to check for entries in the database
+        const entriesExist = await db.query('SELECT COUNT(*) AS count FROM SelfEvaluation WHERE ProjectID = ? AND UserID = ?', [projectId, userId]);
+
+        // If entries exist, redirect to /selfEvaluation-view
+        if (entriesExist[0][0].count > 0) {
+            res.redirect('/selfEvaluation-view?projectId=' + projectId + '&userId=' + userId);
+        } else {
+            // If no entries exist, redirect to /selfEvaluation-create
+            res.redirect('/selfEvaluation-create?projectId=' + projectId + '&userId=' + userId);
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Failed to handle self evaluation');
+    }
+};
+
 exports.getSkills = async (req, res) => {
     try {
         const projectId = req.query.projectId;
@@ -239,12 +261,6 @@ exports.getSkills = async (req, res) => {
 
         const project = await db.query('SELECT ProjectName FROM Project WHERE ProjectID = ?', [projectId]);
         const projectName = project[0][0].ProjectName;
-        
-        // Console logs
-        //console.log('projectId:', projectId);
-        //console.log('Project Name:', projectName);
-        //console.log('userID:', userId);
-        //console.log('skill:', skills);
 
         res.render('selfEvaluation-create', { projectId, userId, skills, projectName });
     } catch (error) {
@@ -253,7 +269,66 @@ exports.getSkills = async (req, res) => {
     }
 };
 
-  exports.createSelfEvaluation = async (req, res) => {
+exports.getSelectedSkills = async (req, res) => {
+    try {
+        const projectId = req.query.projectId;
+        const userId = req.session.user.UserID;
+
+        const project = await db.query('SELECT ProjectName FROM Project WHERE ProjectID = ?', [projectId]);
+        const projectName = project[0][0].ProjectName;
+
+        // Fetch selected skills from the database for the specified project and user
+        // Replace this query with your actual query to fetch selected skills
+        const selectedSkillsData = await db.query('SELECT s.SkillName FROM SelfEvaluation se LEFT JOIN Skill s ON s.SkillID = se.SkillID WHERE se.ProjectID = ? AND se.UserID = ?', [projectId, userId]);
+
+        // Extract skill names from the retrieved data
+        const selectedSkills = selectedSkillsData[0].map(skill => skill.SkillName);
+        
+        console.log('selectedSkillsData', selectedSkillsData);
+        console.log('selectedSkills', selectedSkills);
+
+        res.render('selfEvaluation-view', { 
+            projectId: projectId, 
+            userId: userId,
+            projectName: projectName,
+            selectedSkills: selectedSkills  });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Failed to fetch selected skills');
+    }
+};
+
+exports.searchSkills = async (req, res) => {
+    try {
+        const query = req.query.query; // Get the search query from the request
+        // Query the database to fetch project names matching the search query
+        const [skills] = await db.query('SELECT SkillName, SkillID FROM Skill WHERE SkillName LIKE ?', [`%${query}%`]);
+        res.json(skills); // Send the project names as JSON response
+      } catch (error) {
+        console.error('Error fetching project suggestions:', error);
+        res.status(500).json({ error: 'An error occurred while fetching project suggestions' });
+      }
+  };
+
+exports.submitSkills = async (req, res) => {
+    try {
+        const selectedSkillIds = req.body.selectedSkillIds.split(',').filter(id => id !== ''); 
+        const userId = req.session.user.UserID;
+        const { projectId } = req.body;
+
+        // Insert selected skills into the database
+        for (const skillId of selectedSkillIds) {
+            await db.query('INSERT INTO SelfEvaluation (UserID, ProjectID, SkillID, EvaluationCreatedDate, EvaluationModifiedDate) VALUES (?, ?, ?, NOW(), NOW())', [userId, projectId, skillId]);
+        }
+
+        res.redirect('/selfEvaluation-view?projectId=' + projectId + '&userId=' + userId + 'message=' + encodeURIComponent('Skills inserted successfully'));
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Failed to insert skills');
+    }
+  };
+
+/*exports.createSelfEvaluation = async (req, res) => {
     try {
         const { projectId, selectedSkills } = req.body;
         const userId = req.session.user.UserID;
@@ -268,9 +343,9 @@ exports.getSkills = async (req, res) => {
         console.error(error);
         res.status(500).send('Failed to add skills to project');
     }
-  };
+};
 
-/*exports.getCreateSelfEvaluationPage = async (req, res) => {
+exports.getCreateSelfEvaluationPage = async (req, res) => {
     try {
         const projectId = req.query.projectId;
         const userId = req.session.user.UserID;

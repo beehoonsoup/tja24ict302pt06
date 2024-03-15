@@ -209,3 +209,51 @@ input[type="reset"]:hover {
     display: table; /* Displaying as table */
     clear: both; /* Clearing float */
 }
+
+/* selfEvalutation-create search skills layout */
+#suggestionsContainer {
+    position: fixed;
+    top: 40px; /* Adjust this value to position it below the input */
+    left: 0;
+    width: 100%;
+    background-color: white; /* Adjust as needed */
+    border: 1px solid #ccc; /* Adjust as needed */
+    z-index: 1000; /* Ensure it's above other elements */
+  }
+
+#skillSuggestionsContainer {
+    max-height: 200px; 
+    overflow-y: auto; 
+    border: 1px solid #ccc; 
+}
+
+.suggestion {
+    cursor: pointer;
+    padding: 5px;
+}
+
+/* Styles for selected skills */
+#selectedSkills {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.selectedSkill {
+    background-color: #f0f0f0;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin: 3px;
+    display: flex;
+    align-items: center;
+}
+
+.selectedSkill span {
+    margin-right: 5px;
+}
+
+.removeSkill {
+    cursor: pointer;
+    font-weight: bold;
+    color: #666;
+    margin-left: 5px;
+}
