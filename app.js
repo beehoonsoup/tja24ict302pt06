@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const db = require('./config/db');
+const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const projectRoutes = require('./routes/projectRoutes');
@@ -12,6 +13,8 @@ const app = express();
 app.set('view engine', 'ejs');
 
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: true }));
 app.use('/public', express.static('public'));
 

@@ -4,21 +4,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="/public/css/styles.css" rel="stylesheet" type="text/css"/>
+  <link href="/public/css/styles.css" rel="stylesheet" type="text/css" />
   <title>Modify Project</title>
 </head>
 
 <body>
   <!-- Header section -->
-<div class="header">
-  <!-- Company logo -->
-  <div class="company">
+  <div class="header">
+    <!-- Company logo -->
+    <div class="company">
       <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
-  </div>
+    </div>
 
-  <!-- Navigation bar -->
-  <nav class="nav-bar">
-    <ul class="nav-links">
+    <!-- Navigation bar -->
+    <nav class="nav-bar">
+      <ul class="nav-links">
         <li class="nav-item"><a href="/home">Home</a></li>
         <li class="nav-item"><a href="/biography">Biography</a></li>
         <li class="nav-item"><a href="/profile">Profile</a></li>
@@ -26,68 +26,75 @@
         <li class="nav-item"><a href="/notifications">Notifications</a></li>
         <li class="nav-item"><a href="/logout">Logout</a></li>
         <!-- Add more navigation links as needed -->
-    </ul>
-</nav>
-</div>
+      </ul>
+    </nav>
+  </div>
   <h1>Modify Project</h1>
-  <form action="/project-edit/<%= project.ProjectID %>" method="POST">
+  <form id="projectForm" action="/project-edit/<%= project.ProjectID %>" method="POST">
     <div>
       <label for="projectName">Project Name:</label>
       <input type="text" id="projectName" name="projectName" value="<%= project.ProjectName %>" required>
     </div>
     <div>
       <label for="projectDescription">Project Description:</label>
-      <textarea id="projectDescription" name="projectDescription" rows="4"
-        required><%= project.ProjectDescription %></textarea>
+      <textarea id="projectDescription" name="projectDescription" rows="4" cols="50" maxlength="1500" required><%= project.ProjectDescription %></textarea>
+      <span id="charCount">0</span>/1500 characters<p>
     </div>
     <div>
       <label for="projectStartDate">Start Date:</label>
       <input type="date" id="projectStartDate" name="projectStartDate"
-        value="<%= new Date(project.ProjectStartDate).toLocaleDateString('en-GB') %>" required>
+        value="<%= new Date(project.ProjectStartDate).toLocaleDateString('en-GL') %>" required>
     </div>
     <div>
       <label for="projectEndDate">End Date:</label>
       <input type="date" id="projectEndDate" name="projectEndDate"
-        value="<%= new Date(project.ProjectEndDate).toLocaleDateString('en-GB') %>">
+        value="<%= new Date(project.ProjectEndDate).toLocaleDateString('en-GL') %>">
     </div>
     <div>
       <label for="projectGrade">Grade:</label>
-      <input type="text" id="projectGrade" name="projectGrade" value="<%= project.ProjectGrade %>">
+      <select id="projectGrade" name="projectGrade">
+        <option value="NA" <%=project.ProjectGrade=='NA' ? 'selected' : '' %>>NA</option>
+        <option value="HD" <%=project.ProjectGrade=='HD' ? 'selected' : '' %>>HD</option>
+        <option value="D" <%=project.ProjectGrade=='D' ? 'selected' : '' %>>D</option>
+        <option value="C" <%=project.ProjectGrade=='C' ? 'selected' : '' %>>C</option>
+        <option value="P" <%=project.ProjectGrade=='P' ? 'selected' : '' %>>P</option>
+        <option value="U" <%=project.ProjectGrade=='U' ? 'selected' : '' %>>U</option>
+      </select>
     </div>
     <div>
       <label for="projectSize">Size:</label>
       <select id="projectSize" name="projectSize" required>
-        <option value="2" <%=project.ProjectSize==='2' ? 'selected' : '' %>>2</option>
-        <option value="3" <%=project.ProjectSize==='3' ? 'selected' : '' %>>3</option>
-        <option value="4" <%=project.ProjectSize==='4' ? 'selected' : '' %>>4</option>
-        <option value="5" <%=project.ProjectSize==='5' ? 'selected' : '' %>>5</option>
-        <option value="6" <%=project.ProjectSize==='6' ? 'selected' : '' %>>6</option>
-        <option value="7" <%=project.ProjectSize==='7' ? 'selected' : '' %>>7</option>
-        <option value="8" <%=project.ProjectSize==='8' ? 'selected' : '' %>>8</option>
+        <option value="2" <%=project.ProjectSize=='2' ? 'selected' : '' %>>2</option>
+        <option value="3" <%=project.ProjectSize=='3' ? 'selected' : '' %>>3</option>
+        <option value="4" <%=project.ProjectSize=='4' ? 'selected' : '' %>>4</option>
+        <option value="5" <%=project.ProjectSize=='5' ? 'selected' : '' %>>5</option>
+        <option value="6" <%=project.ProjectSize=='6' ? 'selected' : '' %>>6</option>
+        <option value="7" <%=project.ProjectSize=='7' ? 'selected' : '' %>>7</option>
+        <option value="8" <%=project.ProjectSize=='8' ? 'selected' : '' %>>8</option>
       </select>
     </div>
     <button type="submit">Save Changes</button>
   </form>
 
+  <script>
+    const projectForm = document.getElementById('projectForm');
+    const projectDescription = document.getElementById('projectDescription');
+    const charCount = document.getElementById('charCount');
+  
+    projectDescription.addEventListener('input', () => {
+        charCount.textContent = projectDescription.value.length;
+    });
+  </script>
   <p>
   <p>
     <b>Troubleshooting below:</b><br>
-    Issue: Start Date / End Date / Project Size not able to show when data exist
+    Issue: Start Date / End Date not able to show when data exist
   <p>
     <!-- Output raw date values for debugging -->
-  <p>Start Date: <%= new Date(project.ProjectStartDate).toLocaleDateString('en-GB') %>
+  <p>Start Date: <%= new Date(project.ProjectStartDate).toLocaleDateString('en-GL') %>
   </p>
-  <p>End Date: <%= new Date(project.ProjectEndDate).toLocaleDateString('en-GB') %>
+  <p>End Date: <%= new Date(project.ProjectEndDate).toLocaleDateString('en-GL') %>
   </p>
-
-  <!-- Display date inputs -->
-  <label for="projectStartDate">Start Date:</label>
-  <input type="date" id="projectStartDate" name="projectStartDate"
-    value="<%= new Date(project.ProjectStartDate).toLocaleDateString('en-GB') %>" required>
-
-  <label for="projectEndDate">End Date:</label>
-  <input type="date" id="projectEndDate" name="projectEndDate"
-    value="<%= new Date(project.ProjectEndDate).toLocaleDateString('en-GB') %>" required>
 </body>
 
 </html>

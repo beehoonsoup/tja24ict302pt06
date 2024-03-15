@@ -35,39 +35,58 @@
     <% feed.forEach(item=> { %>
       <div class="item">
         <% if (item.ReviewID) { %>
-          <%= item.ReviewerName %>
-            </b> wrote a review for you in project <b>
-              <a href="/project/<%= item.ProjectID %>">
-                <%= item.ProjectName %>
-              </a>
+          <% const reviewDate=new Date(item.ReviewModifiedDate); const
+            formattedDate=reviewDate.toLocaleDateString('en-US', { day: '2-digit' , month: 'short' , year: 'numeric' });
+            const formattedTime=reviewDate.toLocaleTimeString('en-US', { hour12: false }); %>
+            <b>
+              <p>
+                <%= formattedDate %>
+                  <%= formattedTime %>
+              </p>
             </b>
-            <form action="/review/<%= item.ReviewID %>" method="POST" style="display: inline;">
-              <input type="hidden" name="ReviewerID" value="<%= item.ReviewerID %>">
-              <input type="hidden" name="ReceiverID" value="<%= item.ReceiverID %>">
-              <input type="hidden" name="ProjectID" value="<%= item.ProjectID %>">
-              <input type="hidden" name="ReviewID" value="<%= item.ReviewID %>">
-              <button type="submit">Review</button>
-            </form>
-            <p>________________________________________________________________________</p>
-            <% } else { %>
-              <%= item.UserName %>
-                </b> requested to join <b>
-                  <a href="/project/<%= item.ProjectID %>">
-                    <%= item.ProjectName %>
-                  </a>
-                </b>
-                <form action="/accept-join-request" method="POST" style="display: inline;">
-                  <input type="hidden" name="userId" value="<%= item.UserID %>">
-                  <input type="hidden" name="projectId" value="<%= item.ProjectID %>">
-                  <button type="submit">Accept</button>
-                </form>
-                <form action="/reject-join-request" method="POST" style="display: inline;">
-                  <input type="hidden" name="userId" value="<%= item.UserID %>">
-                  <input type="hidden" name="projectId" value="<%= item.ProjectID %>">
-                  <button type="submit">Reject</button>
-                </form>
-                <p>________________________________________________________________________</p>
-                <% } %>
+            <%= item.ReviewerName %>
+              </b> wrote a review for you in project <b>
+                <a href="/project/<%= item.ProjectID %>">
+                  <%= item.ProjectName %>
+                </a>
+              </b>
+              <form action="/review/<%= item.ReviewID %>" method="POST" style="display: inline;">
+                <input type="hidden" name="ReviewerID" value="<%= item.ReviewerID %>">
+                <input type="hidden" name="ReceiverID" value="<%= item.ReceiverID %>">
+                <input type="hidden" name="ProjectID" value="<%= item.ProjectID %>">
+                <input type="hidden" name="ReviewID" value="<%= item.ReviewID %>">
+                <button type="submit">Review</button>
+              </form>
+              <p>________________________________________________________________________</p>
+              <% } else { %>
+                <% const reviewDate=new Date(item.TeamModifiedDate); const
+                  TeamformattedDate=reviewDate.toLocaleDateString('en-US', { day: '2-digit' , month: 'short' ,
+                  year: 'numeric' }); const TeamformattedTime=reviewDate.toLocaleTimeString('en-US', { hour12: false });
+                  %>
+                  <b>
+                    <p>
+                      <%= TeamformattedDate %>
+                        <%= TeamformattedTime %>
+                    </p>
+                  </b>
+                  <%= item.UserName %>
+                    </b> requested to join <b>
+                      <a href="/project/<%= item.ProjectID %>">
+                        <%= item.ProjectName %>
+                      </a>
+                    </b>
+                    <form action="/accept-join-request" method="POST" style="display: inline;">
+                      <input type="hidden" name="userId" value="<%= item.UserID %>">
+                      <input type="hidden" name="projectId" value="<%= item.ProjectID %>">
+                      <button type="submit">Accept</button>
+                    </form>
+                    <form action="/reject-join-request" method="POST" style="display: inline;">
+                      <input type="hidden" name="userId" value="<%= item.UserID %>">
+                      <input type="hidden" name="projectId" value="<%= item.ProjectID %>">
+                      <button type="submit">Reject</button>
+                    </form>
+                    <p>________________________________________________________________________</p>
+                    <% } %>
       </div>
       <% }) %>
   </div>

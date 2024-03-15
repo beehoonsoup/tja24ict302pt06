@@ -253,55 +253,67 @@ exports.getSkills = async (req, res) => {
     }
 };
 
-/*
+  exports.createSelfEvaluation = async (req, res) => {
+    try {
+        const { projectId, selectedSkills } = req.body;
+        const userId = req.session.user.UserID;
+
+        // Assuming skills is an array of skill IDs
+        const skillValues = selectedSkills.map(skill => [userId, projectId, skill, new Date(), new Date()]);
+
+        await db.query('INSERT INTO SelfEvaluation (UserID, ProjectID, SkillID, EvaluationCreatedDate, EvaluationModifiedDate) VALUES ?', [skillValues]);
+
+        res.redirect(`/project/${projectId}`);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Failed to add skills to project');
+    }
+  };
+
+/*exports.getCreateSelfEvaluationPage = async (req, res) => {
+    try {
+        const projectId = req.query.projectId;
+        const userId = req.session.user.UserID;
+
+        const skills = await db.query('SELECT SkillID, SkillName FROM Skill');
+
+        const project = await db.query('SELECT ProjectName FROM Project WHERE ProjectID = ?', [projectId]);
+        const projectName = project[0][0].ProjectName;
+
+        const existingSelfEvaluation = await db.query('SELECT * FROM SelfEvaluation WHERE UserID = ? AND ProjectID = ?', [userId, projectId]);
+        
+        const { query } = req.query; // Get the search query from the request query parameters
+        
+        // Query the database to search for skills matching the query
+        //const skills = await db.query('SELECT * FROM Skill WHERE SkillName LIKE ?', [`%${query}%`]);
+
+        // Console logs
+        //console.log('projectId:', projectId);
+        //console.log('Project Name:', projectName);
+        //console.log('userID:', userId);
+        //console.log('skill:', skills);
+
+        res.render('selfEvaluation-create', { projectId, userId, skills, projectName, existingSelfEvaluation });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Failed to fetch skills');
+    }
+};
+
 exports.createSelfEvaluation = async (req, res) => {
     try {
-        const { projectId, userId } = req.body;
+        const { projectId, skills } = req.body;
+        const userId = req.session.user.UserID;
 
-        const skills = await db.query('SELECT SkillID, SkillName FROM Skill');
+        // Assuming skills is an array of skill IDs
+        const skillValues = skills.map(skill => [userId, projectId, skill, new Date(), new Date()]);
 
-        // Console logs
-        console.log('projectId:', projectId);
-        console.log('userID:', userId);
-        console.log('skill:', skills);
+        await db.query('INSERT INTO SelfEvaluation (UserID, ProjectID, SkillID, EvaluationCreatedDate, EvaluationModifiedDate) VALUES ?', [skillValues]);
 
-        res.render('selfEvaluation', { projectId, userId, skills });
+        res.redirect(`/project/${projectId}`);
     } catch (error) {
         console.error(error);
-        res.status(500).send('An error occurred');
-    }
-};
-
-exports.addSelfEvaluation = async (req, res) => {
-    try {
-        const { projectId, userId } = req.body;
-
-        const skills = await db.query('SELECT SkillID, SkillName FROM Skill');
-
-        // Console logs
-        console.log('projectId:', projectId);
-        console.log('userID:', userId);
-        console.log('skill:', skills);
-
-        res.render('selfEvaluation-create', { projectId, userId, skills });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('An error occurred');
-    }
-};
-
-exports.viewSkills = async (req, res) => {
-    const userId = req.params.userId;
-
-    try {
-        // Retrieve the skills associated with the user from the database
-        const [skills] = await db.query('SELECT SkillID FROM SelfEvaluation WHERE UserID = ?', [userId]);
-
-        // Render the view with the skills data
-        res.render('biography', { skills });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Failed to retrieve skills');
+        res.status(500).send('Failed to add skills to project');
     }
 };
 */

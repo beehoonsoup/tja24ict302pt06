@@ -24,8 +24,9 @@ router.post('/reject-review', isLoggedIn, feedbackController.rejectReview);
 router.post('/unhide-review', isLoggedIn, feedbackController.unhideReview);
 router.post('/hide-review', isLoggedIn, feedbackController.hideReview);
 //router.post('/selfEvaluation', isLoggedIn, feedbackController.createSelfEvaluation);
-//router.post('/selfEvaluation', isLoggedIn, feedbackController.addSelfEvaluation);
+//router.get('/selfEvaluation-create', isLoggedIn, feedbackController.getCreateSelfEvaluationPage);
+
 router.get('/selfEvaluation-create', isLoggedIn, feedbackController.getSkills);
-//router.get('/biography/:userId', isLoggedIn, feedbackController.getBiographyPage);
+router.post('/selfEvaluation', isLoggedIn, feedbackController.createSelfEvaluation);
 
 module.exports = router;
