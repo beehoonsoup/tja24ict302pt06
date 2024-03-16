@@ -4,51 +4,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/public/css/styles.css" rel="stylesheet" type="text/css"/>
+    <link href="/public/css/styles.css" rel="stylesheet" type="text/css" />
     <title>Create Review</title>
 </head>
 
 <body>
     <!-- Header section -->
-<div class="header">
-    <!-- Company logo -->
-    <div class="company">
-        <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
+    <div class="header">
+        <!-- Company logo -->
+        <div class="company">
+            <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
+        </div>
+
+        <!-- Navigation bar -->
+        <nav class="nav-bar">
+            <ul class="nav-links">
+                <li class="nav-item"><a href="/home">Home</a></li>
+                <li class="nav-item"><a href="/biography">Biography</a></li>
+                <li class="nav-item"><a href="/profile">Profile</a></li>
+                <li class="nav-item"><a href="/project">Project</a></li>
+                <li class="nav-item"><a href="/notifications">Notifications</a></li>
+                <li class="nav-item"><a href="/logout">Logout</a></li>
+                <!-- Add more navigation links as needed -->
+            </ul>
+        </nav>
     </div>
-  
-    <!-- Navigation bar -->
-    <nav class="nav-bar">
-      <ul class="nav-links">
-          <li class="nav-item"><a href="/home">Home</a></li>
-          <li class="nav-item"><a href="/biography">Biography</a></li>
-          <li class="nav-item"><a href="/profile">Profile</a></li>
-          <li class="nav-item"><a href="/project">Project</a></li>
-          <li class="nav-item"><a href="/notifications">Notifications</a></li>
-          <li class="nav-item"><a href="/logout">Logout</a></li>
-          <!-- Add more navigation links as needed -->
-      </ul>
-  </nav>
-  </div>
 
     <h1>Review</h1>
     <p>
-        <%= existingReview[0].ReviewID %><br>
-            Project Name: <a href="/project/<%= projectName[0].ProjectID %>">
-                <%= projectName[0].ProjectName %>
-            </a><br>
-            You are viewing the review <%= reviewerName[0].ReviewerName %> wrote for you. <br>
-                <% if (existingReview && existingReview.length> 0) { %>
-                    <p><textarea name="reviewDescription" rows="10" cols="100" placeholder="Enter review description"
-                            disabled><%= existingReview[0].ReviewDescription %></textarea></p>
-                    <p>
-                    <form action="/accept-review" method="POST" style="display: inline;">
-                        <input type="hidden" name="ReviewID" value="<%= existingReview[0].ReviewID %>">
-                        <button type="submit">Accept</button>
-                    </form>
-                    <form action="/reject-review" method="POST" style="display: inline;">
-                        <input type="hidden" name="ReviewID" value="<%= existingReview[0].ReviewID %>">
-                        <button type="submit">Reject</button>
-                    </form>
+        Project Name: <a href="/project/<%= projectName[0].ProjectID %>">
+            <%= projectName[0].ProjectName %>
+        </a><br>
+        You are viewing the review <a href="/biography/<%= reviewerName[0].ReviewerID %>"><%= reviewerName[0].ReviewerName %></a> wrote for you. <br>
+            <% if (existingReview && existingReview.length> 0) { %>
+                <p><textarea name="reviewDescription" rows="10" cols="100" placeholder="Enter review description"
+                        disabled><%= existingReview[0].ReviewDescription %></textarea></p>
+                <p>
+                <form action="/accept-review" method="POST" style="display: inline;">
+                    <input type="hidden" name="ReviewID" value="<%= existingReview[0].ReviewID %>">
+                    <button type="submit">Accept</button>
+                </form>
+                <form action="/reject-review" method="POST" style="display: inline;">
+                    <input type="hidden" name="ReviewID" value="<%= existingReview[0].ReviewID %>">
+                    <button type="submit">Reject</button>
+                </form>
     </p>
     <% } else { %>
 

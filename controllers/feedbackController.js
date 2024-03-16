@@ -133,7 +133,7 @@ exports.getViewReview = async (req, res) => {
         const [existingReview] = await db.query('SELECT r.ReviewID, r.ReviewerID, r.ReceiverID, r.ReviewDescription, r.ReviewStatus FROM Review r INNER JOIN ProjectReview pr ON r.ReviewID = pr.ReviewID WHERE r.ReviewID = ?', [ReviewID]);
 
         // Fetch ReviewerName
-        const [reviewerName] = await db.query('SELECT r.ReviewDescription, r.ReviewStatus, CONCAT(u.FirstName, " ", u.LastName) as ReviewerName FROM Review r INNER JOIN User u ON u.UserID = r.ReviewerID WHERE r.ReviewID = ?', [ReviewID]);
+        const [reviewerName] = await db.query('SELECT r.ReviewerID, r.ReviewDescription, r.ReviewStatus, CONCAT(u.FirstName, " ", u.LastName) as ReviewerName FROM Review r INNER JOIN User u ON u.UserID = r.ReviewerID WHERE r.ReviewID = ?', [ReviewID]);
 
         res.render('review', { ReviewID, ProjectID, ReviewerID, ReceiverID, receiverName, projectName, existingReview, reviewerName });
     } catch (error) {
@@ -279,13 +279,13 @@ exports.getSelectedSkills = async (req, res) => {
 
         // Fetch selected skills from the database for the specified project and user
         // Replace this query with your actual query to fetch selected skills
-        const selectedSkillsData = await db.query('SELECT s.SkillName FROM SelfEvaluation se LEFT JOIN Skill s ON s.SkillID = se.SkillID WHERE se.ProjectID = ? AND se.UserID = ?', [projectId, userId]);
+        const selectedSkillsData = await db.query('SELECT s.SkillName, s.SkillID FROM SelfEvaluation se LEFT JOIN Skill s ON s.SkillID = se.SkillID WHERE se.ProjectID = ? AND se.UserID = ?', [projectId, userId]);
 
         // Extract skill names from the retrieved data
-        const selectedSkills = selectedSkillsData[0].map(skill => skill.SkillName);
+        const selectedSkills = selectedSkillsData[0].map(skill => ({ SkillName: skill.SkillName, SkillID: skill.SkillID }));
         
-        console.log('selectedSkillsData', selectedSkillsData);
-        console.log('selectedSkills', selectedSkills);
+        //console.log('selectedSkillsData', selectedSkillsData);
+        //console.log('selectedSkills', selectedSkills);
 
         res.render('selfEvaluation-view', { 
             projectId: projectId, 
@@ -327,6 +327,45 @@ exports.submitSkills = async (req, res) => {
         res.status(500).send('Failed to insert skills');
     }
   };
+
+exports.updateSkills = async (req, res) => {
+    try {
+        const userId = req.session.user.UserID;
+        const projectId = req.body.projectId;
+        const selectedNewSkillIds = req.body.selectedSkillIds.split(',').filter(id => id !== ''); 
+
+        const project = await db.query('SELECT ProjectName FROM Project WHERE ProjectID = ?', [projectId]);
+        const projectName = project[0][0].ProjectName;
+
+        // Get the current skills of the user from the database
+        const currentSkills = await db.query('SELECT s.SkillName, s.SkillID FROM SelfEvaluation se LEFT JOIN Skill s ON s.SkillID = se.SkillID WHERE se.ProjectID = ? AND se.UserID = ?', [projectId, userId]);
+
+        await db.query('DELETE FROM SelfEvaluation WHERE UserID = ? AND ProjectID = ?', [userId, projectId]);
+
+        // Insert selected skills into the database
+        for (const skillId of selectedNewSkillIds) {
+            await db.query('INSERT INTO SelfEvaluation (UserID, ProjectID, SkillID, EvaluationCreatedDate, EvaluationModifiedDate) VALUES (?, ?, ?, NOW(), NOW())', [userId, projectId, skillId]);
+        }
+
+        // Fetch selected skills from the database for the specified project and user
+        // Replace this query with your actual query to fetch selected skills
+        const selectedSkillsData = await db.query('SELECT s.SkillName, s.SkillID FROM SelfEvaluation se LEFT JOIN Skill s ON s.SkillID = se.SkillID WHERE se.ProjectID = ? AND se.UserID = ?', [projectId, userId]);
+
+        // Extract skill names from the retrieved data
+        const selectedSkills = selectedSkillsData[0].map(skill => ({ SkillName: skill.SkillName, SkillID: skill.SkillID }));
+        
+
+        res.render('selfEvaluation-view', { 
+            projectId: projectId, 
+            userId: userId,
+            projectName: projectName,
+            selectedSkills: selectedSkills  });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Failed to update skills');
+    }
+};
+
 
 /*exports.createSelfEvaluation = async (req, res) => {
     try {

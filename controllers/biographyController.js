@@ -62,7 +62,7 @@ exports.viewBiography = async (req, res) => {
         feed.sort((a, b) => new Date(b.ReflectionCreatedDate || b.ReviewCreatedDate) - new Date(a.ReflectionCreatedDate || a.ReviewCreatedDate));
 
         //console logs
-        console.log('userId', userId);
+        //console.log('userId', userId);
 
         // Render the biography page with user details
         res.render('biography', { user, feed, projectFeed, userId });

@@ -34,7 +34,7 @@
         </nav>
     </div>
     <h1>Self Evaluation</h1>
-    <form id="skillsForm" action="/submitSkills" method="POST">
+    <form id="skillsForm" action="/updateSkills" method="POST">
         <input type="hidden" name="projectId" value="<%= projectId %>">
         <input type="hidden" name="userID" value="<%= userId %>">
         <p>Project Name: <a href="/project/<%= projectId %>">
@@ -51,12 +51,12 @@
         </p>
         <input type="hidden" id="selectedSkillIds" name="selectedSkillIds">
         <% selectedSkills.forEach(skill=> { %>
-            <div class="selectedSkill">
-                <%= skill %>
-                    <span class="removeSkill" onclick="removeSkill('<%= skill %>')">x</span>
+            <div class="selectedSkill" data-id="<%= skill.SkillID %>">
+                <%= skill.SkillName %>
+                    <span class="removeSkill" onclick="removeSkill('<%= skill.SkillID %>')">x</span>
             </div>
             <% }); %>
-                <button type="submit">Update</button>
+                <button type="button" onclick="updateSkills()">Update</button>
                 </p>
 
     </form>
@@ -123,9 +123,19 @@
 
             if (selectedSkill) {
                 selectedSkill.remove(); // Remove the skill from the display
-                selectedSkillIdsInput.value = selectedSkillIdsInput.value.replace(`${skillId},`, ''); // Remove the skill ID from the hidden input
+                // Remove the skill ID from the hidden input
+                selectedSkillIdsInput.value = selectedSkillIdsInput.value.replace(`${skillId},`, '');
             }
         }
+
+        function updateSkills() {
+            var selectedSkills = document.querySelectorAll('.selectedSkill');
+            var selectedSkillIds = Array.from(selectedSkills).map(skill => skill.getAttribute('data-id')).join(',');
+            document.getElementById('selectedSkillIds').value = selectedSkillIds;
+
+            document.getElementById('skillsForm').submit();
+        }
+
     </script>
 </body>
 

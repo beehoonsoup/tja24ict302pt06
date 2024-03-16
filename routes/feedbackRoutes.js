@@ -12,9 +12,12 @@ const isLoggedIn = (req, res, next) => {
   }
 };
 
+//reflection control
 router.get('/reflection-create', isLoggedIn, feedbackController.getCreateReflectionPage);
 router.post('/reflection-create', isLoggedIn, feedbackController.createReflection);
 router.post('/reflection-delete', isLoggedIn, feedbackController.deleteReflection);
+
+//review control
 router.get('/review-create', isLoggedIn, feedbackController.getCreateReviewPage);
 router.post('/review-create', isLoggedIn, feedbackController.createReview);
 router.post('/review/:reviewID', isLoggedIn, feedbackController.getViewReview);
@@ -23,14 +26,14 @@ router.post('/accept-review', isLoggedIn, feedbackController.acceptReview);
 router.post('/reject-review', isLoggedIn, feedbackController.rejectReview);
 router.post('/unhide-review', isLoggedIn, feedbackController.unhideReview);
 router.post('/hide-review', isLoggedIn, feedbackController.hideReview);
-//router.post('/selfEvaluation', isLoggedIn, feedbackController.createSelfEvaluation);
-//router.get('/selfEvaluation-create', isLoggedIn, feedbackController.getCreateSelfEvaluationPage);
 
+//self evaluation control
 router.get('/selfEvaluation', isLoggedIn, feedbackController.handleSelfEvaluation);
 router.get('/selfEvaluation-create', isLoggedIn, feedbackController.getSkills);
 router.get('/selfEvaluation-view', isLoggedIn, feedbackController.getSelectedSkills);
 router.get('/searchSkills', isLoggedIn, feedbackController.searchSkills);
 router.post('/submitSkills', isLoggedIn, feedbackController.submitSkills);
+router.post('/updateSkills', isLoggedIn, feedbackController.updateSkills);
 //router.post('/selfEvaluation', isLoggedIn, feedbackController.createSelfEvaluation);
 
 module.exports = router;
