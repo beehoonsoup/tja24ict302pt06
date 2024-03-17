@@ -34,7 +34,7 @@
         </nav>
     </div>
     <h1>Self Evaluation</h1>
-    <form id="skillsForm" action="/updateSkills" method="POST">
+    <form id="skillsForm" action="/update-skills" method="POST">
         <input type="hidden" name="projectId" value="<%= projectId %>">
         <input type="hidden" name="userID" value="<%= userId %>">
         <p>Project Name: <a href="/project/<%= projectId %>">
@@ -64,7 +64,7 @@
     <!-- JavaScript code -->
     <script>
         function getSuggestions(input) {
-            fetch(`/searchSkills?query=${input}`)
+            fetch(`/search-skills?query=${input}`)
                 .then(response => response.json())
                 .then(data => {
                     const skillSuggestionsContainer = document.getElementById('skillSuggestionsContainer');
@@ -72,7 +72,7 @@
                     data.forEach(skill => {
                         const suggestion = document.createElement('div');
                         suggestion.textContent = skill.SkillName;
-                        suggestion.classList.add('suggestion');
+                        suggestion.classList.add('skillSuggestion');
                         suggestion.onclick = () => selectSkill(skill);
                         skillSuggestionsContainer.appendChild(suggestion);
                     });

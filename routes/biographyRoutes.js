@@ -15,5 +15,6 @@ const isLoggedIn = (req, res, next) => {
 router.get('/biography', isLoggedIn, biographyController.getBiographyPage);
 router.get('/biography/:reviewerID', isLoggedIn, biographyController.viewBiography);
 router.post('/biography/:reviewerID', isLoggedIn, biographyController.viewBiography);
+router.get('/skill/:skillId', isLoggedIn, biographyController.searchSkill);
 
 module.exports = router;

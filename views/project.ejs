@@ -23,36 +23,37 @@
 <script>
   function positionSuggestionsContainer() {
     const searchInput = document.getElementById('searchInput');
-    const suggestionsContainer = document.getElementById('suggestionsContainer');
+    const projectSuggestionsContainer = document.getElementById('projectSuggestionsContainer');
 
     // Get the position and dimensions of the search input
     const inputRect = searchInput.getBoundingClientRect();
 
     // Set the top position of the suggestions container
-    suggestionsContainer.style.top = inputRect.bottom + 'px';
+    projectSuggestionsContainer.style.top = inputRect.bottom + 'px';
   }
 
   function getSuggestions(input) {
-    const suggestionsContainer = document.getElementById('suggestionsContainer');
+    const projectSuggestionsContainer = document.getElementById('projectSuggestionsContainer');
 
     if (input.trim() === '') {
       // Clear input, hide suggestions container, and return
-      suggestionsContainer.innerHTML = '';
+      projectSuggestionsContainer.innerHTML = '';
       return;
     }
 
     fetch(`/search-projects?query=${input}`)
       .then(response => response.json())
       .then(data => {
-        suggestionsContainer.innerHTML = '';
+        projectSuggestionsContainer.innerHTML = '';
         data.forEach(project => {
           const suggestion = document.createElement('div');
           suggestion.textContent = project.ProjectName;
+          suggestion.classList.add('projectSuggestion');
           suggestion.onclick = () => selectProject(project.ProjectID);
-          suggestionsContainer.appendChild(suggestion);
+          projectSuggestionsContainer.appendChild(suggestion);
         });
         // Show suggestions container
-        suggestionsContainer.style.display = 'block';
+        projectSuggestionsContainer.style.display = 'block';
       })
       .catch(error => console.error('Error fetching suggestions:', error));
   }
@@ -91,7 +92,7 @@
 </div>
   <h1>Projects</h1>
   <input type="text" id="searchInput" placeholder="Search project..." oninput="getSuggestions(this.value)">
-  <div id="suggestionsContainer"></div><p>
+  <div id="projectSuggestionsContainer"></div><p>
   <a href="/project-create">Add Project</a> |
   <p>
   <table>

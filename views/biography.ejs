@@ -5,31 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="/public/css/styles.css" rel="stylesheet" type="text/css" />
-
-  <script>
-    function viewBiography(reviewerID) {
-      // Make an AJAX POST request to the backend route with the reviewerID as a URL parameter
-      fetch(`/biography/${reviewerID}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(response => {
-          if (response.ok) {
-            // Redirect to the biography page if the request is successful
-            window.location.href = '/biography';
-          } else {
-            // Handle errors if needed
-            console.error('Error:', response.statusText);
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    }
-  </script>
-
+  <script src="/public/js/biography.js" defer></script>
   <title>Biography</title>
 </head>
 
@@ -65,80 +41,111 @@
     ________________________________________________________________________
   <p>
     Get me know more about me below:<br>
-  <div class="feed">
-    <% feed.forEach(item=> { %>
-      <div class="item">
-        <% if (item.ReflectionID) { %>
-          <p>
-            Reflection wrote for <b>
-              <a href="/project/<%= item.reflectionProjectID %>">
-                <%= item.reflectionProjectName %>
-              </a>
-            </b> on <b>
-              <%= new Date(item.ReflectionCreatedDate).toLocaleDateString() %>
-            </b>
-          </p>
-          <p>
-            <%= item.ReflectionDescription %>
-          </p>
-          ________________________________________________________________________
-          <% } else { %>
-            <p> Review wrote by <b>
-                <a href="/biography/<%= item.ReviewerID %>">
-                  <%= item.reviewerName %>
-                </a>
-              </b> for <b>
-                <a href="/project/<%= item.reviewProjectID %>">
-                  <%= item.reviewProjectName %>
-                </a>
-              </b> on <b>
-                <%= new Date(item.ReviewCreatedDate).toLocaleDateString() %>
-              </b>
-            </p>
-            <p>
-              <%= item.ReviewDescription %>
-            </p>
-            <% if (user[0].UserID=item.ReceiverID) { %>
-              <p></p>
-              <% } else { %>
-                <% if (item.ReviewStatus==="Rejected" ) { %>
-                  <p>
-                  <form action="/unhide-review" method="POST" style="display: inline;">
-                    <input type="hidden" name="ReviewID" value="<%= item.ReviewID %>">
-                    <button type="submit">Unhide Review</button>
-                  </form>
-                  </p>
-                  <% } else { %>
-                    <p>
-                    <form action="/hide-review" method="POST" style="display: inline;">
-                      <input type="hidden" name="ReviewID" value="<%= item.ReviewID %>">
-                      <button type="submit">Hide Review</button>
-                    </form>
-                    </p>
-                    <% } %>
-                      <% } %>
+    <% const projectsMap = new Map(); %>
+<% feedback.forEach(item => { %>
+    <% if (!projectsMap.has(item.ProjectID)) { %>
+        <% projectsMap.set(item.ProjectID, item); %>
+    <% } %>
+<% }) %>
 
-                        ________________________________________________________________________
-                        <% } %>
-      </div>
-      <% }) %>
-  </div>
-  <p>
-  <div class="projectFeed">
-    Project I was involved in
-    <p>
-      <% projectFeed.forEach(projectItem=> { %>
-        <div class="projectItem">
-          <% if (projectItem.ProjectID) { %>
-            <a href="/project/<%= projectItem.ProjectID %>">
-              <%= projectItem.ProjectName %>
-            </a><br>
+<% const projects = [...projectsMap.values()]; %>
+<% projects.forEach(project => { %>
+    <div class="project">
+        <h3><a href="/project/<%= project.ProjectID %>"><%= project.ProjectName %></a></h3>
+
+        <!-- Display self-evaluations for the project -->
+        <% const uniqueSelfEvaluationsMap = new Map(); %>
+        <% const selfEvaluations = feedback.filter(item => item.SkillID && item.ProjectID === project.ProjectID); %>
+        <% selfEvaluations.forEach(selfEvaluation => { %>
+            <% if (!uniqueSelfEvaluationsMap.has(selfEvaluation.SkillID)) { %>
+                <% uniqueSelfEvaluationsMap.set(selfEvaluation.SkillID, selfEvaluation); %>
             <% } %>
-    </p>
-  </div>
-  <% }) %>
+        <% }) %>
+        <% const uniqueSelfEvaluations = [...uniqueSelfEvaluationsMap.values()]; %>
+        <% if (uniqueSelfEvaluations.length > 0) { %>
+            <div class="selfEvaluationItem">
+                <h4>Self-Evaluation:</h4>
+                <div class="bubble-container">
+                    <% uniqueSelfEvaluations.forEach(selfEvaluation => { %>
+                        <div class="bubble">
+                            <a href="/skill/<%= selfEvaluation.SkillID %>"><%= selfEvaluation.SkillName %></a>
+                        </div>
+                        <!-- Add any additional information you want to display -->                 
+                    <% }) %>
+                </div>
+            </div>
+        <% } %>
     </div>
-    </p>
-</body>
 
+        <!-- Display reflections for the project -->
+        <% const uniqueReflectionsMap = new Map(); %>
+        <% const reflections = feedback.filter(item => item.ReflectionID && item.ProjectID === project.ProjectID); %>
+        <% reflections.forEach(reflection => { %>
+            <% if (!uniqueReflectionsMap.has(reflection.ReflectionID)) { %>
+                <% uniqueReflectionsMap.set(reflection.ReflectionID, reflection); %>
+            <% } %>
+        <% }) %>
+        <% const uniqueReflections = [...uniqueReflectionsMap.values()]; %>
+        <% if (uniqueReflections.length > 0) { %>
+            <div class="reflections">
+                <h4>Reflections:</h4>
+                <% uniqueReflections.forEach(reflection => { %>
+                    <div class="reflection">
+                        <p>Reflection: <%= reflection.ReflectionDescription %></p>
+                        <% const ReflectionCreatedTime = reflection.ReflectionCreatedDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }); %>
+                        <p>Created Date: <%= new Date(reflection.ReflectionCreatedDate).toLocaleDateString() %> <%= ReflectionCreatedTime %></p>
+                    </div>
+                <% }) %>
+            </div>
+        <% } %>
+
+         <!-- Display unique reviews for the project -->
+        <% const uniqueReviewsMap = new Map(); %>
+        <% const reviews = feedback.filter(item => item.ReviewID && item.ProjectID === project.ProjectID); %>
+        <% reviews.forEach(review => { %>
+            <% const key = `${review.ReviewerID}-${review.ReceiverID}-${review.ProjectID}`; %>
+            <% if (!uniqueReviewsMap.has(key)) { %>
+                <% uniqueReviewsMap.set(key, review); %>
+            <% } %>
+        <% }) %>
+        <% const uniqueReviews = [...uniqueReviewsMap.values()]; %>
+        <% if (uniqueReviews.length > 0) { %>
+            <div class="reviews">
+                <h4>Reviews:</h4>
+                <% uniqueReviews.forEach(review => { %>
+                    <div class="review">
+                        <p> Review wrote by <b>
+                          <a href="/biography/<%= review.ReviewerID %>">
+                            <%= review.ReviewerName %> </b> 
+                          </a> on 
+                          <% const ReviewCreatedTime = review.ReviewCreatedDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }); %>
+                          <%= new Date(review.ReviewCreatedDate).toLocaleDateString() %> <%= ReviewCreatedTime %>
+                        </p>
+                        <p><%= review.ReviewDescription %></p>
+
+                    <% if (userId!=review.ReceiverID) { %>
+                      <p>peers</p>
+                      <% } else { %>
+                        <% if (review.ReviewStatus==="Rejected" ) { %>
+                          <p>
+                          <form action="/unhide-review" method="POST" style="display: inline;">
+                            <input type="hidden" name="ReviewID" value="<%= review.ReviewID %>">
+                            <button type="submit">Unhide Review</button>
+                          </form>
+                          </p>
+                          <% } else { %>
+                            <p>
+                            <form action="/hide-review" method="POST" style="display: inline;">
+                              <input type="hidden" name="ReviewID" value="<%= review.ReviewID %>">
+                              <button type="submit">Hide Review</button>
+                            </form>
+                            </p>
+                            <% } %>
+                              <% } %>
+                            </div>
+                <% }) %>
+            </div>
+        <% } %>
+<% }) %>
+  </body>
 </html>

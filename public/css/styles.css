@@ -4,71 +4,100 @@
 
 /* Styling for the header */
 .header {
-    background-color: #333; /* Setting background color */
-    color: #fff; /* Setting text color */
-    padding: 20px 0; /* Adding padding */
-    text-align: center; /* Center aligning text */
+    background-color: #333;
+    /* Setting background color */
+    color: #fff;
+    /* Setting text color */
+    padding: 20px 0;
+    /* Adding padding */
+    text-align: center;
+    /* Center aligning text */
 }
 
 /* Styling for company name */
 .company-name {
-    font-size: 24px; /* Setting font size */
-    margin-bottom: 10px; /* Adding margin bottom */
+    font-size: 24px;
+    /* Setting font size */
+    margin-bottom: 10px;
+    /* Adding margin bottom */
 }
 
 /* Styling for logo */
 .logo {
-    width: 100px; /* Setting width */
-    height: auto; /* Auto height */
+    width: 100px;
+    /* Setting width */
+    height: auto;
+    /* Auto height */
 }
 
 /* Styling for navigation bar */
 .nav-bar {
-    background-color: #555; /* Setting background color */
-    padding: 10px 0; /* Adding padding */
+    background-color: #555;
+    /* Setting background color */
+    padding: 10px 0;
+    /* Adding padding */
 }
 
 /* Styling for navigation links */
 .nav-links {
-    list-style-type: none; /* Removing list style */
-    margin: 0; /* Removing default margin */
-    padding: 0; /* Removing default padding */
-    text-align: center; /* Center aligning text */
+    list-style-type: none;
+    /* Removing list style */
+    margin: 0;
+    /* Removing default margin */
+    padding: 0;
+    /* Removing default padding */
+    text-align: center;
+    /* Center aligning text */
 }
 
 /* Styling for navigation items */
 .nav-item {
-    display: inline; /* Displaying inline */
-    margin: 0 10px; /* Setting margins */
+    display: inline;
+    /* Displaying inline */
+    margin: 0 10px;
+    /* Setting margins */
 }
 
 /* Styling for navigation links */
 .nav-item a {
-    color: #fff; /* Setting text color */
-    text-decoration: none; /* Removing default underline */
-    padding: 5px 10px; /* Adding padding */
-    border-radius: 4px; /* Adding border radius */
+    color: #fff;
+    /* Setting text color */
+    text-decoration: none;
+    /* Removing default underline */
+    padding: 5px 10px;
+    /* Adding padding */
+    border-radius: 4px;
+    /* Adding border radius */
 }
 
 /* Styling for navigation links hover state */
 .nav-item a:hover {
-    background-color: #777; /* Changing background color on hover */
+    background-color: #777;
+    /* Changing background color on hover */
 }
 
 /* Styling for the body */
 body {
-    font-family: Arial, sans-serif; /* Setting font family */
-    background-color: #f4f4f4; /* Setting background color */
-    margin: 0; /* Removing default margin */
-    padding: 0; /* Removing default padding */
-    text-align: center; /* Center aligning text */
-    /*padding-top: 50px;*/ /* Adding padding to the top of the body */
+    font-family: Arial, sans-serif;
+    /* Setting font family */
+    background-color: #f4f4f4;
+    /* Setting background color */
+    margin: 0;
+    /* Removing default margin */
+    padding: 0;
+    /* Removing default padding */
+    text-align: center;
+    /* Center aligning text */
+    /*padding-top: 50px;*/
+    /* Adding padding to the top of the body */
 }
 
 /* Styling for a container div */
 .container {
-    width: 300px; /* Setting width */
-    margin: 0 auto; /* Centering the container horizontally */
+    width: 300px;
+    /* Setting width */
+    margin: 0 auto;
+    /* Centering the container horizontally */
 }
 
 /* Styling for error message */
@@ -80,156 +109,233 @@ body {
 input[type="text"],
 input[type="password"],
 input[type="email"] {
-    width: calc(100% - 12px); /* Calculating width */
-    padding: 8px; /* Adding padding */
-    margin-bottom: 15px; /* Adding margin bottom */
-    border: 1px solid #ccc; /* Adding border */
-    border-radius: 4px; /* Adding border radius */
-    box-sizing: border-box; /* Including padding and border in the width */
-    display: block; /* Display as block */
+    width: calc(100% - 12px);
+    /* Calculating width */
+    padding: 8px;
+    /* Adding padding */
+    margin-bottom: 15px;
+    /* Adding margin bottom */
+    border: 1px solid #ccc;
+    /* Adding border */
+    border-radius: 4px;
+    /* Adding border radius */
+    box-sizing: border-box;
+    /* Including padding and border in the width */
+    display: block;
+    /* Display as block */
 }
 
 /* Styling for a button */
 .button {
-    background-color: #4CAF50; /* Setting background color */
-    color: white; /* Setting text color */
-    padding: 14px 20px; /* Adding padding */
-    margin: 8px 0; /* Setting margins */
-    border: none; /* Removing border */
-    cursor: pointer; /* Setting cursor to pointer */
-    border-radius: 4px; /* Adding border radius */
-    font-size: 16px; /* Setting font size */
-    width: 100%; /* Making button take full width */
+    background-color: #4CAF50;
+    /* Setting background color */
+    color: white;
+    /* Setting text color */
+    padding: 14px 20px;
+    /* Adding padding */
+    margin: 8px 0;
+    /* Setting margins */
+    border: none;
+    /* Removing border */
+    cursor: pointer;
+    /* Setting cursor to pointer */
+    border-radius: 4px;
+    /* Adding border radius */
+    font-size: 16px;
+    /* Setting font size */
+    width: 100%;
+    /* Making button take full width */
 }
 
 /* Styling for button hover state */
 .button:hover {
-    background-color: #45a049; /* Changing background color on hover */
+    background-color: #45a049;
+    /* Changing background color on hover */
 }
 
 /* Additional styling for the login form */
 .container h2 {
-    color: #333; /* Setting color for h2 element inside container */
+    color: #333;
+    /* Setting color for h2 element inside container */
 }
 
 .container p {
-    margin-top: 20px; /* Adding margin to paragraphs inside container */
-    font-size: 14px; /* Setting font size for paragraphs */
+    margin-top: 20px;
+    /* Adding margin to paragraphs inside container */
+    font-size: 14px;
+    /* Setting font size for paragraphs */
 }
 
 .container a {
-    color: #007bff; /* Setting link color */
-    text-decoration: none; /* Removing default underline */
+    color: #007bff;
+    /* Setting link color */
+    text-decoration: none;
+    /* Removing default underline */
 }
 
 .container a:hover {
-    text-decoration: underline; /* Adding underline on hover for links */
+    text-decoration: underline;
+    /* Adding underline on hover for links */
 }
 
 
 /* Styling for the form */
 form {
-    max-width: 400px; /* Setting maximum width */
-    margin: 20px auto; /* Centering the form horizontally */
-    padding: 20px; /* Adding padding */
-    background: #fff; /* Setting background color */
-    border-radius: 8px; /* Adding border radius */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adding box shadow */
+    max-width: 400px;
+    /* Setting maximum width */
+    margin: 20px auto;
+    /* Centering the form horizontally */
+    padding: 20px;
+    /* Adding padding */
+    background: #fff;
+    /* Setting background color */
+    border-radius: 8px;
+    /* Adding border radius */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* Adding box shadow */
 }
 
 /* Styling for heading */
 h2 {
-    text-align: center; /* Center aligning text */
-    margin-bottom: 20px; /* Adding margin bottom */
+    text-align: center;
+    /* Center aligning text */
+    margin-bottom: 20px;
+    /* Adding margin bottom */
 }
 
 /* Styling for labels */
 label {
-    display: block; /* Displaying block */
-    margin-bottom: 5px; /* Adding margin bottom */
+    display: block;
+    /* Displaying block */
+    margin-bottom: 5px;
+    /* Adding margin bottom */
 }
 
 /* Styling for confirm password */
 input[type="password"][name="confirmPassword"] {
-    margin-bottom: 5px; /* Adjusting margin bottom for confirm password */
+    margin-bottom: 5px;
+    /* Adjusting margin bottom for confirm password */
 }
 
 /* Styling for input fields and select */
 input[type="text"],
 input[type="date"],
 select {
-    width: calc(100% - 12px); /* Calculating width */
-    padding: 8px; /* Adding padding */
-    margin-bottom: 15px; /* Adding margin bottom */
-    border: 1px solid #ccc; /* Adding border */
-    border-radius: 4px; /* Adding border radius */
-    box-sizing: border-box; /* Including padding and border in the width */
+    width: calc(100% - 12px);
+    /* Calculating width */
+    padding: 8px;
+    /* Adding padding */
+    margin-bottom: 15px;
+    /* Adding margin bottom */
+    border: 1px solid #ccc;
+    /* Adding border */
+    border-radius: 4px;
+    /* Adding border radius */
+    box-sizing: border-box;
+    /* Including padding and border in the width */
 }
 
 /* Styling for textarea */
 textarea {
-    width: calc(100% - 12px); /* Calculating width */
-    padding: 8px; /* Adding padding */
-    margin-bottom: 15px; /* Adding margin bottom */
-    border: 1px solid #ccc; /* Adding border */
-    border-radius: 4px; /* Adding border radius */
-    box-sizing: border-box; /* Including padding and border in the width */
-    resize: vertical; /* Allowing vertical resizing */
+    width: calc(100% - 12px);
+    /* Calculating width */
+    padding: 8px;
+    /* Adding padding */
+    margin-bottom: 15px;
+    /* Adding margin bottom */
+    border: 1px solid #ccc;
+    /* Adding border */
+    border-radius: 4px;
+    /* Adding border radius */
+    box-sizing: border-box;
+    /* Including padding and border in the width */
+    resize: vertical;
+    /* Allowing vertical resizing */
 }
 
 /* Styling for counter text */
 .counter {
-    color: #999; /* Setting text color */
-    font-size: 12px; /* Setting font size */
-    margin-top: 5px; /* Adding margin top */
-    text-align: right; /* Right aligning text */
+    color: #999;
+    /* Setting text color */
+    font-size: 12px;
+    /* Setting font size */
+    margin-top: 5px;
+    /* Adding margin top */
+    text-align: right;
+    /* Right aligning text */
 }
 
 /* Styling for submit and reset buttons */
 input[type="submit"],
 input[type="reset"] {
-    background-color: #4CAF50; /* Setting background color */
-    color: white; /* Setting text color */
-    padding: 10px 20px; /* Adding padding */
-    border: none; /* Removing border */
-    border-radius: 4px; /* Adding border radius */
-    cursor: pointer; /* Setting cursor to pointer */
-    width: 48%; /* Setting width */
+    background-color: #4CAF50;
+    /* Setting background color */
+    color: white;
+    /* Setting text color */
+    padding: 10px 20px;
+    /* Adding padding */
+    border: none;
+    /* Removing border */
+    border-radius: 4px;
+    /* Adding border radius */
+    cursor: pointer;
+    /* Setting cursor to pointer */
+    width: 48%;
+    /* Setting width */
 }
 
 /* Styling for button hover state */
 input[type="submit"]:hover,
 input[type="reset"]:hover {
-    background-color: #45a049; /* Changing background color on hover */
+    background-color: #45a049;
+    /* Changing background color on hover */
 }
 
 /* Clearing float */
 .btn-group:after {
-    content: ""; /* Adding content */
-    display: table; /* Displaying as table */
-    clear: both; /* Clearing float */
+    content: "";
+    /* Adding content */
+    display: table;
+    /* Displaying as table */
+    clear: both;
+    /* Clearing float */
 }
 
 /* selfEvalutation-create search skills layout */
-#suggestionsContainer {
+#projectSuggestionsContainer {
     position: fixed;
-    top: 40px; /* Adjust this value to position it below the input */
+    top: 40px;
     left: 0;
     width: 100%;
-    background-color: white; /* Adjust as needed */
-    border: 1px solid #ccc; /* Adjust as needed */
-    z-index: 1000; /* Ensure it's above other elements */
-  }
-
-#skillSuggestionsContainer {
-    max-height: 200px; 
-    overflow-y: auto; 
-    border: 1px solid #ccc; 
+    background-color: white;
+    border: 1px solid #ccc;
+    z-index: 1000;
 }
 
-.suggestion {
+.projectSuggestion {
+    padding: 10px;
     cursor: pointer;
-    padding: 5px;
+    transition: background-color 0.3s; 
+}
+
+.projectSuggestion:hover {
+    background-color: #f0f0f0; 
+}
+
+#skillSuggestionsContainer {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+}
+
+.skillSuggestion {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s; 
+}
+
+.skillSuggestion:hover {
+    background-color: #f0f0f0; 
 }
 
 /* Styles for selected skills */
@@ -256,4 +362,34 @@ input[type="reset"]:hover {
     font-weight: bold;
     color: #666;
     margin-left: 5px;
+}
+
+.bubble-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Skill bubble */
+.bubble {
+    background-color: #ccc;
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    display: inline-block;
+    padding: 5px 10px;
+}
+
+.bubble a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.bubble a:hover {
+    background-color: #aaa; 
+    border-radius: 20px; 
+    padding: 5px 10px; 
+    padding: 5px 10px;
 }

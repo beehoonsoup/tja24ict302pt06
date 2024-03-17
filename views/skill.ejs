@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/public/css/styles.css" rel="stylesheet" type="text/css" />
+    <title>Search Skills</title>
+</head>
+
+<body>
+    <!-- Header section -->
+    <div class="header">
+        <!-- Company logo -->
+        <div class="company">
+            <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
+        </div>
+
+        <!-- Navigation bar -->
+        <nav class="nav-bar">
+            <ul class="nav-links">
+                <li class="nav-item"><a href="/home">Home</a></li>
+                <li class="nav-item"><a href="/biography">Biography</a></li>
+                <li class="nav-item"><a href="/profile">Profile</a></li>
+                <li class="nav-item"><a href="/project">Project</a></li>
+                <li class="nav-item"><a href="/notifications">Notifications</a></li>
+                <li class="nav-item"><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="ctnSearchSkills">
+        <h1>Search Skills</h1>
+        <input type="text" id="searchInput" placeholder="Search skill..." oninput="getSuggestions(this.value)">
+  <div id="skillSuggestionsContainer"></div>
+        <% users.forEach(user=> { %>
+            <h2>
+                <%= user.UserName %>
+            </h2>
+            <% user.projects.forEach(project=> { %>
+                <div>
+                    <b>
+                        <a href="/project/<%= project.ProjectID %>"><%= project.ProjectName %></a>
+                    </b>
+                    
+                    <!-- Display skills for the project -->
+                    <div class="bubble-container">
+                    <% project.skills.forEach(skill=> { %>
+                        <% if (skill.SkillID==selectedSkillId) { %>
+                            <span class="ctnSearchSkills-selected-skill">
+                                <div class="bubble"><b><a href="/skill/<%= skill.SkillID %>"><%= skill.SkillName %></a></b></div>
+                            </span>
+                            
+                            <% } else { %>
+                                <div class="bubble"><a href="/skill/<%= skill.SkillID %>"><%= skill.SkillName %></a></div>
+                                    <% } %>
+                                        <% }) %>
+                            </div>
+                        </div>
+                <% }) %>
+                    <% }) %>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/js/select2.min.js"></script>
+
+    <script>
+        function positionSuggestionsContainer() {
+    const searchInput = document.getElementById('searchInput');
+    const skillSuggestionsContainer = document.getElementById('skillSuggestionsContainer');
+
+    // Get the position and dimensions of the search input
+    const inputRect = searchInput.getBoundingClientRect();
+
+    // Set the top position of the suggestions container
+    skillSuggestionsContainer.style.top = inputRect.bottom + 'px';
+  }
+  function getSuggestions(input) {
+    fetch(`/search-skills?query=${input}`)
+        .then(response => response.json())
+        .then(data => {
+            const skillSuggestionsContainer = document.getElementById('skillSuggestionsContainer');
+            skillSuggestionsContainer.innerHTML = '';
+            data.forEach(skill => {
+                const suggestion = document.createElement('div');
+                suggestion.textContent = skill.SkillName;
+                suggestion.classList.add('skillSuggestion');
+                suggestion.onclick = () => selectSkill(skill.SkillID);
+                skillSuggestionsContainer.appendChild(suggestion);
+            });
+        })
+        .catch(error => console.error('Error fetching suggestions:', error));
+}
+
+        function selectSkill(skillID) {
+            window.location.href = `/skill/${skillID}`;
+        }
+
+  
+
+  // Call positionSuggestionsContainer initially and whenever window is resized
+  window.addEventListener('DOMContentLoaded', positionSuggestionsContainer);
+  window.addEventListener('resize', positionSuggestionsContainer);
+    </script>
+</body>
+
+</html>
