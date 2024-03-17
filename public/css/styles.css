@@ -187,12 +187,8 @@ form {
     /* Centering the form horizontally */
     padding: 20px;
     /* Adding padding */
-    background: #fff;
-    /* Setting background color */
-    border-radius: 8px;
-    /* Adding border radius */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    /* Adding box shadow */
+    
+  
 }
 
 /* Styling for heading */
@@ -392,4 +388,43 @@ input[type="reset"]:hover {
     border-radius: 20px; 
     padding: 5px 10px; 
     padding: 5px 10px;
+}
+
+/* Styling for tooltip */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip::after {
+    /*content: "?";*/
+    position: absolute;
+    top: 50%;
+    right: -20px;
+    transform: translateY(-50%);
+    font-size: 10px;
+    color: #555;
+    cursor: pointer;
 }

@@ -1,6 +1,6 @@
 const mysql = require('mysql2');
 
-
+/*
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
@@ -8,6 +8,7 @@ const pool = mysql.createPool({
   database: 'tw2024',
   connectionLimit: 10
 });
+*/
 
 /*
 //localdb -mk
@@ -20,7 +21,7 @@ const pool = mysql.createPool({
 });
 */
 
-/*
+
 //localdb -kelly
 const pool = mysql.createPool({
   host: 'localhost',
@@ -29,17 +30,18 @@ const pool = mysql.createPool({
   database: 'sys',
   connectionLimit: 10
 });
-*/
 
 
+/*
 //localdb -cheyne
-/*/const pool = mysql.createPool({
+const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: '1234',
   database: 'sys',
   connectionLimit: 10
-});*/
+});
+*/
 
 
 module.exports = pool.promise();
