@@ -4,21 +4,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="/public/css/styles.css" rel="stylesheet" type="text/css"/>
+  <link href="/public/css/styles.css" rel="stylesheet" type="text/css" />
   <title>Edit Profile</title>
 </head>
 
 <body>
   <!-- Header section -->
-<div class="header">
-  <!-- Company logo -->
-  <div class="company">
+  <div class="header">
+    <!-- Company logo -->
+    <div class="company">
       <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
-  </div>
+    </div>
 
-  <!-- Navigation bar -->
-  <nav class="nav-bar">
-    <ul class="nav-links">
+    <!-- Navigation bar -->
+    <nav class="nav-bar">
+      <ul class="nav-links">
         <li class="nav-item"><a href="/home">Home</a></li>
         <li class="nav-item"><a href="/biography">Biography</a></li>
         <li class="nav-item"><a href="/profile">Profile</a></li>
@@ -26,21 +26,52 @@
         <li class="nav-item"><a href="/notifications">Notifications</a></li>
         <li class="nav-item"><a href="/logout">Logout</a></li>
         <!-- Add more navigation links as needed -->
-    </ul>
-</nav>
-</div>
+      </ul>
+    </nav>
+  </div>
 
   <h1>Edit Profile</h1>
   <form action="/profile-edit" method="POST">
-    <label for="firstName">First Name:</label>
-    <input type="text" id="firstName" name="firstName" value="<%= user.FirstName %>" required><br>
-    <label for="lastName">Last Name:</label>
-    <input type="text" id="lastName" name="lastName" value="<%= user.LastName %>" required><br>
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" value="<%= user.EmailAddress %>" required><br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password"><br>
-    <button type="submit">Save Changes</button>
+    <table>
+      <tr>
+        <td>
+          <label for="firstName">First Name:</label>
+        </td>
+        <td>
+          <input type="text" id="firstName" name="firstName" value="<%= user.FirstName %>" required>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <label for="lastName">Last Name:</label>
+        </td>
+        <td>
+          <input type="text" id="lastName" name="lastName" value="<%= user.LastName %>" required>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <label for="email">Email:</label>
+        </td>
+      
+      <td>
+        <input type="email" id="email" name="email" value="<%= user.EmailAddress %>" required>
+      </td>
+    </tr>
+      
+      <tr>
+        <td>
+          <label for="password">Password:</label>
+        </td>
+        <td width="300">
+          <input type="password" id="password" name="password">
+        </td>
+      </tr>
+</table>
+        <button type="submit">Save Changes</button>
+      
   </form>
 </body>
 

@@ -31,15 +31,16 @@ const pool = mysql.createPool({
 });
 */
 
-
+/*
 //localdb -cheyne
-/*/const pool = mysql.createPool({
+const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: '1234',
   database: 'sys',
   connectionLimit: 10
-});*/
+});
+*/
 
 
 module.exports = pool.promise();
