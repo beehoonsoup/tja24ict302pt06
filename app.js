@@ -4,6 +4,7 @@ const db = require('./config/db');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const homeRoutes = require('./routes/homeRoutes');
 const projectRoutes = require('./routes/projectRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
 const biographyRoutes = require('./routes/biographyRoutes');
@@ -20,6 +21,7 @@ app.use('/public', express.static('public'));
 
 app.use('/', authRoutes);
 app.use('/', userRoutes);
+app.use('/', homeRoutes);
 app.use('/', projectRoutes);
 app.use('/', feedbackRoutes);
 app.use('/', biographyRoutes);

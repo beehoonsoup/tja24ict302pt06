@@ -230,32 +230,6 @@ exports.requestToJoin = async (req, res) => {
   }
 };
 
-exports.getNotifications = async (req, res) => {
-  try {
-    const userId = req.session.user.UserID;
-    const projectId = req.params.projectId;
-
-    const [joinTeamNotifications] = await db.query('SELECT u.UserID, p.ProjectID, CONCAT(u.FirstName, " ", u.LastName) AS UserName, p.ProjectName, t.TeamStatus, t.TeamModifiedDate FROM Team t LEFT JOIN Project p ON p.ProjectID = t.ProjectID LEFT JOIN User u ON u.UserID = t.UserID WHERE t.ProjectID IN (SELECT DISTINCT ProjectID from Team t WHERE UserID = ? AND TeamStatus = "Verified") AND t.TeamStatus = "Requested"', [userId]);
-
-    const [reviewNotifications] = await db.query('SELECT r.ReviewID, r.ReceiverID, r.ReviewerID, u.FirstName, u.LastName, CONCAT(u.FirstName, " ", u.LastName) as ReviewerName, pr.ProjectID, p.ProjectName, r.ReviewStatus, r.ReviewModifiedDate FROM Review r INNER JOIN ProjectReview pr ON r.ReviewID = pr.ReviewID INNER JOIN User u ON u.UserID = r.ReviewerID LEFT JOIN Project p ON p.ProjectID = pr.ProjectID WHERE r.ReceiverID = ? AND r.ReviewStatus = "Created"', [userId]);
-
-    // Combine join team and review notification into a single array
-    const feed = [...joinTeamNotifications, ...reviewNotifications];
-
-    //console.log('joinTeamNotifications:', joinTeamNotifications);
-    //console.log('reviewNotifications:', reviewNotifications);
-
-    // Sort the feed based on creation dates
-    feed.sort((a, b) => new Date(b.TeamModifiedDate || b.ReviewModifiedDate) - new Date(a.TeamModifiedDate || a.ReviewModifiedDate));
-
-
-    res.render('notifications', { feed });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('An error occurred');
-  }
-};
-
 exports.acceptJoinRequest = async (req, res) => {
   try {
     // Extract UserId and projectId from the request body
@@ -268,7 +242,7 @@ exports.acceptJoinRequest = async (req, res) => {
     await db.query('UPDATE Team SET TeamStatus = "Verified", TeamModifiedDate = NOW() WHERE UserID = ? AND ProjectID = ? AND TeamStatus = "Requested"', [userId, projectId]);
 
     // Redirect the User to the notifications page or any other desired page
-    res.redirect('/notifications');
+    res.redirect('/home');
   } catch (error) {
     console.error(error);
     res.status(500).send('An error occurred');
@@ -287,7 +261,7 @@ exports.rejectJoinRequest = async (req, res) => {
     await db.query('UPDATE Team SET TeamStatus = "Rejected", TeamModifiedDate = NOW() WHERE UserID = ? AND ProjectID = ? AND TeamStatus = "Requested"', [userId, projectId]);
 
     // Redirect the User to the notifications page or any other desired page
-    res.redirect('/notifications');
+    res.redirect('/home');
   } catch (error) {
     console.error(error);
     res.status(500).send('An error occurred');

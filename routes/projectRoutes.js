@@ -24,7 +24,6 @@ router.post('/project-member-add/:projectId', isLoggedIn, projectController.addM
 router.get('/project-join-request/:projectId', isLoggedIn, projectController.requestToJoin);
 router.post('/project-join-request/:projectId', isLoggedIn, projectController.requestToJoin);
 router.get('/search-projects', isLoggedIn, projectController.searchProject);
-router.get('/notifications', isLoggedIn, projectController.getNotifications);
 router.post('/accept-join-request', isLoggedIn, projectController.acceptJoinRequest);
 router.post('/reject-join-request', isLoggedIn, projectController.rejectJoinRequest);
 router.post('/project-delete', isLoggedIn, projectController.deleteProject);

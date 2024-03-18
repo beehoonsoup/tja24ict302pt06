@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="/public/css/styles.css" rel="stylesheet" type="text/css"/>
   <title>Home</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <!-- Header section -->
@@ -19,14 +20,115 @@
     <ul class="nav-links">
         <li class="nav-item"><a href="/home">Home</a></li>
         <li class="nav-item"><a href="/biography">Biography</a></li>
-        <li class="nav-item"><a href="/profile">Profile</a></li>
         <li class="nav-item"><a href="/project">Project</a></li>
-        <li class="nav-item"><a href="/notifications">Notifications</a></li>
         <li class="nav-item"><a href="/logout">Logout</a></li>
         <!-- Add more navigation links as needed -->
     </ul>
 </nav>
 </div>
-  <h1>Welcome <%= user.FirstName %> <%= user.LastName %></h1>
+    <div class="home-container">
+        <div class="home-profile-container">
+          <img class="rounded-image" src="/public/images/female.png">
+          <h1><%= user.FirstName %> <%= user.LastName %></h1>
+          <% if (message && fromProfileEditPage) { %>
+            <div id="message">
+              <p><%= message %></p>
+            </div>
+          <% } %></i>
+          <p><%= user.EmailAddress %>  <a href="/profile-edit"><img src="/public/images/edit.png" width="15" height="15"></a></p>  
+          <p>
+            Projects Involved: <br>
+            Reflections written: <br>
+            Skills Accquired: <br>
+            Reviews Received: <br>
+          </p>  
+        </div>
+        <div class="home-content-container">
+            <div class="home-right-top">
+                <h3>Notifications</h3>
+                <% if (notificationsFeed.length === 0) { %>
+                  <p><i>You're up to date, there's no pending notifications...</i></p>
+              <% } else { %>
+                <% notificationsFeed.forEach(item=> { %>
+                  <div class="item">
+                    <% if (item.ReviewID) { %>
+                      <% const reviewDate=new Date(item.ReviewModifiedDate); const
+                        formattedDate=reviewDate.toLocaleDateString('en-US', { day: '2-digit' , month: 'short' , year: 'numeric' });
+                        const formattedTime=reviewDate.toLocaleTimeString('en-US', { hour12: false }); %>
+                          <p>
+                            <%= formattedDate %>
+                              <%= formattedTime %>
+                          </p>
+                        <a href="/biography/<%= item.ReviewerID %>"><b><%= item.ReviewerName %></b></a>
+                          </b> wrote a review for you in project <b>
+                            <a href="/project/<%= item.ProjectID %>">
+                              <%= item.ProjectName %>
+                            </a>
+                          </b>
+                          <form action="/review/<%= item.ReviewID %>" method="POST" style="display: inline;">
+                            <input type="hidden" name="ReviewerID" value="<%= item.ReviewerID %>">
+                            <input type="hidden" name="ReceiverID" value="<%= item.ReceiverID %>">
+                            <input type="hidden" name="ProjectID" value="<%= item.ProjectID %>">
+                            <input type="hidden" name="ReviewID" value="<%= item.ReviewID %>">
+                            <button type="submit">Review</button>
+                          </form>
+                          <hr>
+                          <% } else { %>
+                            <% const reviewDate=new Date(item.TeamModifiedDate); const
+                              TeamformattedDate=reviewDate.toLocaleDateString('en-US', { day: '2-digit' , month: 'short' ,
+                              year: 'numeric' }); const TeamformattedTime=reviewDate.toLocaleTimeString('en-US', { hour12: false });
+                              %>
+                                <p>
+                                  <%= TeamformattedDate %>
+                                    <%= TeamformattedTime %>
+                                </p>
+                              <a href="/biography/<%= item.UserID %>"><b><%= item.UserName %></b></a>
+                                </b> requested to join <b>
+                                  <a href="/project/<%= item.ProjectID %>">
+                                    <%= item.ProjectName %> 
+                                  </a>
+                                </b>
+                                <form action="/accept-join-request" method="POST" style="display: inline;">
+                                  <input type="hidden" name="userId" value="<%= item.UserID %>">
+                                  <input type="hidden" name="projectId" value="<%= item.ProjectID %>">
+                                  <button type="submit">Accept</button>
+                                </form>
+                                <form action="/reject-join-request" method="POST" style="display: inline;">
+                                  <input type="hidden" name="userId" value="<%= item.UserID %>">
+                                  <input type="hidden" name="projectId" value="<%= item.ProjectID %>">
+                                  <button type="submit">Reject</button>
+                                </form>
+                                <hr>
+                                <% } %>
+                  </div>
+                  <% }) %>
+                  <% } %>
+            </div>
+            <div class="home-right-bottom">
+              <h3>Feed</h3>
+              <% if (Object.keys(groupedTeamMembers).length > 0) { %>
+                <% Object.keys(groupedTeamMembers).forEach(projectId => { %>
+                    <div>
+                      <%= groupedTeamMembers[projectId].ProjectCreatedDate %>
+                        <p><%= groupedTeamMembers[projectId].ProjectName %></p>
+                        <p>Team Members:</p>
+                        <ul>
+                            <% if (groupedTeamMembers[projectId].TeamMembers.length > 0) { %>
+                                <% groupedTeamMembers[projectId].TeamMembers.forEach(member => { %>
+                                    <li><%= member.TeamMember %></li>
+                                <% }) %>
+                            <% } else { %>
+                                <li>No team members</li>
+                            <% } %>
+                        </ul>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p>No projects available</p>
+            <% } %>            
+            </div>
+        </div>
+    </div>
+</script>
 </body>
 </html>

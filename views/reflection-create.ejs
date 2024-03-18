@@ -21,9 +21,7 @@
       <ul class="nav-links">
           <li class="nav-item"><a href="/home">Home</a></li>
           <li class="nav-item"><a href="/biography">Biography</a></li>
-          <li class="nav-item"><a href="/profile">Profile</a></li>
           <li class="nav-item"><a href="/project">Project</a></li>
-          <li class="nav-item"><a href="/notifications">Notifications</a></li>
           <li class="nav-item"><a href="/logout">Logout</a></li>
           <!-- Add more navigation links as needed -->
       </ul>
@@ -34,18 +32,30 @@
             <%= projectName[0].ProjectName %>
         </a>
     </p>
-    <form action="/reflection-create" method="POST" style="display: inline;">
+    <form class="form-input" id="reflectionForm" action="/reflection-create" method="POST">
         <input type="hidden" name="projectId" value="<%= projectId %>">
         <input type="hidden" name="userId" value="<%= userId %>">
-        <textarea name="reflectionDescription" rows="4" cols="50"
+        <textarea id="reflectionDescription" name="reflectionDescription" rows="4" cols="50"
             placeholder="Enter reflection description"><%= existingReflection.length > 0 ? existingReflection[0].ReflectionDescription : '' %></textarea><br>
-        <button type="submit">Submit</button>
+            <p style="text-align: right; font-size: 12px;"><span id="charCount">0</span>/1500 characters</p>
+            <button type="submit">Submit</button>
     </form>
     <form action="/reflection-delete" method="POST" style="display: inline;">
         <input type="hidden" name="projectId" value="<%= projectId %>">
         <input type="hidden" name="userId" value="<%= userId %>">
         <button type="submit">Delete Reflection</button>
-      </form>
+    </form>
+
+    <script>
+        const reflectionForm = document.getElementById('reflectionForm');
+        const reflectionDescription = document.getElementById('reflectionDescription');
+        const charCount = document.getElementById('charCount');
+      
+        reflectionDescription.addEventListener('input', () => {
+            charCount.textContent = reflectionDescription.value.length;
+        });
+      </script>
+    
 </body>
 
 </html>

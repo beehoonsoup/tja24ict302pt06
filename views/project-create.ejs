@@ -19,22 +19,20 @@
     <ul class="nav-links">
         <li class="nav-item"><a href="/home">Home</a></li>
         <li class="nav-item"><a href="/biography">Biography</a></li>
-        <li class="nav-item"><a href="/profile">Profile</a></li>
         <li class="nav-item"><a href="/project">Project</a></li>
-        <li class="nav-item"><a href="/notifications">Notifications</a></li>
         <li class="nav-item"><a href="/logout">Logout</a></li>
         <!-- Add more navigation links as needed -->
     </ul>
 </nav>
 </div>
   <h1>Create Project</h1>
-  <form id="projectForm" action="/project-create" method="POST">
+  <form class="form-input" id="projectForm" action="/project-create" method="POST">
     <label for="projectName">Project Name:</label>
     <input type="text" id="projectName" name="projectName" required><br>
 
     <label for="projectDescription">Project Description:</label>
-    <textarea id="projectDescription" name="projectDescription" rows="4" cols="50" maxlength="1500" required></textarea><br>
-    <span id="charCount">0</span>/1500 characters<p>
+    <textarea id="projectDescription" name="projectDescription" rows="4" cols="50" maxlength="1500" required></textarea>
+    <p style="text-align: right; font-size: 12px;"><span id="charCount">0</span>/1500 characters</p>
 
     <label for="projectStartDate">Start Date:</label>
     <input type="date" id="projectStartDate" name="projectStartDate" required><br>
@@ -79,13 +77,6 @@
     projectDescription.addEventListener('input', () => {
         charCount.textContent = projectDescription.value.length;
     });
-
-    /*
-    projectForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        // You can add your submission logic here
-        alert('Project submitted!');
-    });*/
   </script>
 </body>
 </html>

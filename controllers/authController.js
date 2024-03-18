@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const db = require('../config/db');
+const nodemailer = require('nodemailer');
 
 exports.getRegisterPage = (req, res) => {
   res.render('register');
@@ -94,3 +95,63 @@ exports.logoutUser = (req, res) => {
   });
 };
 
+exports.getForgetPassword = async (req, res) => {
+  res.render('forget-password');
+};
+
+exports.forgetPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Check if the email exists in the User table
+    const user = await db.query('SELECT * FROM User WHERE EmailAddress = ?', [email]);
+
+    // If the user doesn't exist, display a message to the user
+    if (!user || user.length === 0) {
+      return res.status(400).send('Email not registered');
+    }
+
+    const generateToken = require('../public/js/tokenUtils.js');
+
+    // Generate a unique token (e.g., using crypto or UUID)
+    const token = generateToken();
+
+    // Store the token in your database along with the user's email
+    await saveTokenInDatabase(email, token);
+
+    // Send reset password email
+    await sendResetPasswordEmail(email, token);
+
+    res.send('Password reset email sent successfully');
+  } catch (error) {
+    console.error('Error sending reset password email:', error);
+    res.status(500).send('Failed to send reset password email');
+  }
+};
+
+async function sendResetPasswordEmail(email, token) {
+  try {
+      // Create a transporter using the SMTP transport
+      const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+              user: 'loves.xixi@gmail.com', // Your Gmail address
+              pass: 'Welcome12345!' // Your Gmail App Password
+          }
+      });
+
+      // Send reset password email
+      await transporter.sendMail({
+          from: 'loves.xixi@gmail.com', // Sender email address (must be your Gmail address)
+          to: email, // Recipient email address
+          subject: 'Reset Your Password', // Email subject
+          text: `Click the link below to reset your password: http://example.com/reset-password?token=${token}`, // Email body
+          html: `<p>Click the link below to reset your password:</p><p><a href="http://example.com/reset-password?token=${token}">Reset Password</a></p>` // HTML email body
+      });
+
+      console.log('Password reset email sent successfully');
+  } catch (error) {
+      console.error('Error sending reset password email:', error);
+      throw error; // Throw the error to handle it in the calling function
+  }
+}

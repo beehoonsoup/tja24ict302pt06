@@ -42,7 +42,7 @@
                 </p>
                 <!-- Display additional review details if needed -->
                 <% } else { %>
-                    <form action="/review-create" method="post">
+                    <form class="form-input" action="/review-create" method="post">
                         <input type="hidden" name="projectId" value="<%= projectId %>">
                         <input type="hidden" name="reviewerID" value="<%= reviewerID %>">
                         <input type="hidden" name="receiverID" value="<%= receiverID %>">

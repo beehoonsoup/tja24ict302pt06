@@ -157,7 +157,7 @@ exports.acceptReview = async (req, res) => {
         await db.query('UPDATE ProjectReview SET PRModifiedDate = NOW() WHERE ReviewID = ?', [ReviewID]);
 
         // Redirect the User to the notifications page or any other desired page
-        res.redirect('/notifications');
+        res.redirect('/home');
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred');
@@ -179,7 +179,7 @@ exports.rejectReview = async (req, res) => {
         await db.query('UPDATE ProjectReview SET PRModifiedDate = NOW() WHERE ReviewID = ?', [ReviewID]);
 
         // Redirect the User to the notifications page or any other desired page
-        res.redirect('/notifications');
+        res.redirect('/home');
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred');

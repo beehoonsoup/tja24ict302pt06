@@ -6,8 +6,8 @@ router.get('/register', authController.getRegisterPage);
 router.post('/register', authController.registerUser);
 router.get('/login', authController.getLoginPage);
 router.post('/login', authController.loginUser);
-router.get('/home', authController.getHomePage);
 router.get('/logout', authController.logoutUser);
-router.get('/test', authController.geTestPage);
+router.get('/forget-password', authController.getForgetPassword);
+router.post('/forget-password', authController.forgetPassword);
 
 module.exports = router;

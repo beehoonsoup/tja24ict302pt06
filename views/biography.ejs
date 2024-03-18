@@ -22,11 +22,8 @@
       <ul class="nav-links">
         <li class="nav-item"><a href="/home">Home</a></li>
         <li class="nav-item"><a href="/biography">Biography</a></li>
-        <li class="nav-item"><a href="/profile">Profile</a></li>
         <li class="nav-item"><a href="/project">Project</a></li>
-        <li class="nav-item"><a href="/notifications">Notifications</a></li>
         <li class="nav-item"><a href="/logout">Logout</a></li>
-        <!-- Add more navigation links as needed -->
       </ul>
     </nav>
   </div>
@@ -124,7 +121,7 @@
                         <p><%= review.ReviewDescription %></p>
 
                     <% if (userId!=review.ReceiverID) { %>
-                      <p>peers</p>
+                      <!--<p>peers</p>-->
                       <% } else { %>
                         <% if (review.ReviewStatus==="Rejected" ) { %>
                           <p>

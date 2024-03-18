@@ -34,7 +34,7 @@
         </nav>
     </div>
     <h1>Self Evaluation</h1>
-    <form id="skillsForm" action="/update-skills" method="POST">
+    <form class="form-input"  id="skillsForm" action="/update-skills" method="POST">
         <input type="hidden" name="projectId" value="<%= projectId %>">
         <input type="hidden" name="userID" value="<%= userId %>">
         <p>Project Name: <a href="/project/<%= projectId %>">
