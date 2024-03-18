@@ -53,7 +53,7 @@ exports.getHomePage = async (req, res) => {
     });
 
     // Now 'groupedTeamMembers' contains team members grouped by project ID along with project names
-    console.log(groupedTeamMembers);
+    //console.log(groupedTeamMembers);
 
     // Check if the message is from the profile edit page
     if (req.headers.referer && req.headers.referer.endsWith('/profile-edit')) {

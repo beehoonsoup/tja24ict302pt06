@@ -28,7 +28,11 @@
 </div>
     <div class="home-container">
         <div class="home-profile-container">
-          <img class="rounded-image" src="/public/images/female.png">
+          <% if (user.FirstName === 'Mabelin' && user.LastName === 'Kong' || user.FirstName === 'Kelly' && user.LastName === 'Chia') { %>
+            <img class="rounded-image" src="/public/images/female.png">
+          <% } else { %>
+              <img class="rounded-image" src="/public/images/male.png">
+          <% } %>
           <h1><%= user.FirstName %> <%= user.LastName %></h1>
           <% if (message && fromProfileEditPage) { %>
             <div id="message">

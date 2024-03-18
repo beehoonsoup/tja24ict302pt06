@@ -484,6 +484,20 @@ input[type="reset"]:hover {
     flex: 70%;
 }
 
+.home-right-top button {
+    padding: 10px 20px;
+    background-color: #333; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px; 
+}
+
+.home-right-top button:hover {
+    background-color: #aaa; 
+}
+
 /* WebKit scrollbar */
 .home-right-top::-webkit-scrollbar,
 .home-right-bottom::-webkit-scrollbar {
@@ -528,4 +542,20 @@ hr {
     border: none;
     height: 1px;
     background-color: #ccc;
+}
+
+.bio-container {
+    height: 100vh; /* Full height of the viewport */
+}
+
+.feedback-container {
+    max-width: 600px;
+    /* Setting maximum width */
+    margin: 20px auto;
+    /* Centering the form horizontally */
+    padding: 20px;
+    /* Adding padding */
+    background: #fff; /* Setting background color */
+    border-radius: 8px; /* Adding border radius */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adding box shadow */
 }
