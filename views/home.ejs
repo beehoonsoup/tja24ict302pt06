@@ -28,7 +28,7 @@
 </div>
     <div class="home-container">
         <div class="home-profile-container">
-          <% if (user.FirstName === 'Mabelin' && user.LastName === 'Kong' || user.FirstName === 'Kelly' && user.LastName === 'Chia') { %>
+          <% if (user.FirstName === 'Mabelin' && user.LastName === 'Kong' || user.FirstName === 'Kelly' && user.LastName === 'Chia' || user.FirstName === 'Amy' && user.LastName === 'Weng') { %>
             <img class="rounded-image" src="/public/images/female.png">
           <% } else { %>
               <img class="rounded-image" src="/public/images/male.png">
@@ -113,18 +113,16 @@
               <% if (Object.keys(groupedTeamMembers).length > 0) { %>
                 <% Object.keys(groupedTeamMembers).forEach(projectId => { %>
                     <div>
-                      <%= groupedTeamMembers[projectId].ProjectCreatedDate %>
-                        <p><%= groupedTeamMembers[projectId].ProjectName %></p>
-                        <p>Team Members:</p>
-                        <ul>
+                      <% const ProjectCreatedTime = groupedTeamMembers[projectId].ProjectCreatedDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }); %>
+                      <p style="font-size:12px;"><%= new Date(groupedTeamMembers[projectId].ProjectCreatedDate).toLocaleDateString() %> <%= ProjectCreatedTime %></p>
+                        <p>New project <b><a href="/project/<%= groupedTeamMembers[projectId].ProjectID %>"><%= groupedTeamMembers[projectId].ProjectName %></a></b> was created by <b><a href="/biography/<%= groupedTeamMembers[projectId].ProjectCreatedByID %>"><%= groupedTeamMembers[projectId].ProjectCreatedBy %></a></b></p>
+                        Team Members:
                             <% if (groupedTeamMembers[projectId].TeamMembers.length > 0) { %>
                                 <% groupedTeamMembers[projectId].TeamMembers.forEach(member => { %>
-                                    <li><%= member.TeamMember %></li>
+                                  <div class="bubble"><%= member.TeamMember %></div>
                                 <% }) %>
                             <% } else { %>
-                                <li>No team members</li>
                             <% } %>
-                        </ul>
                     </div>
                 <% }) %>
             <% } else { %>

@@ -444,7 +444,7 @@ input[type="reset"]:hover {
 .home-container {
     display: flex;
     flex-direction: row;
-    height: 100vh; /* Full height of the viewport */
+    height: 80vh; /* Full height of the viewport */
 }
 
 .home-profile-container {

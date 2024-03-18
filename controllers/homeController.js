@@ -27,7 +27,7 @@ exports.getHomePage = async (req, res) => {
     // Sort the feed based on creation dates
     notificationsFeed.sort((a, b) => new Date(b.TeamModifiedDate || b.ReviewModifiedDate) - new Date(a.TeamModifiedDate || a.ReviewModifiedDate));
 
-    const [projects] = await db.query('SELECT p.ProjectName, p.ProjectID, CONCAT(u.FirstName, " ", u.LastName) as TeamMember, u.UserID, CONCAT(u1.FirstName, " ", u1.LastName) as CreatedBy, p.ProjectCreatedDate FROM Project p INNER JOIN Team t ON t.ProjectID = p.ProjectID INNER JOIN User u ON u.UserID = t.UserID  INNER JOIN User u1 ON u1.UserID = p.ProjectCreatedBy WHERE t.TeamStatus = "Verified" AND p.ProjectStatus = "Enabled" ORDER BY p.ProjectCreatedDate DESC');
+    const [projects] = await db.query('SELECT p.ProjectName, p.ProjectID, CONCAT(u.FirstName, " ", u.LastName) as TeamMember, u.UserID, CONCAT(u1.FirstName, " ", u1.LastName) as CreatedBy, u1.UserID as CreatedByID, p.ProjectCreatedDate FROM Project p INNER JOIN Team t ON t.ProjectID = p.ProjectID INNER JOIN User u ON u.UserID = t.UserID  INNER JOIN User u1 ON u1.UserID = p.ProjectCreatedBy WHERE t.TeamStatus = "Verified" AND p.ProjectStatus = "Enabled" ORDER BY p.ProjectCreatedDate DESC');
 
     // Create an object to store grouped team members
     const groupedTeamMembers = {};
@@ -40,7 +40,11 @@ exports.getHomePage = async (req, res) => {
         if (!groupedTeamMembers[projectID]) {
             // If the project ID doesn't exist, initialize it with an empty array
             groupedTeamMembers[projectID] = {
+                ProjectCreatedByID: project.CreatedByID,
+                ProjectID: project.ProjectID,
                 ProjectName: project.ProjectName,
+                ProjectCreatedDate: project.ProjectCreatedDate,
+                ProjectCreatedBy: project.CreatedBy,
                 TeamMembers: []
             };
         }
