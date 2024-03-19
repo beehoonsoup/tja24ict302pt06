@@ -14,9 +14,32 @@ exports.getHomePage = async (req, res) => {
     let message = req.query.message || null;
     let fromProfileEditPage = false;
 
-    const [joinTeamNotifications] = await db.query('SELECT u.UserID, p.ProjectID, CONCAT(u.FirstName, " ", u.LastName) AS UserName, p.ProjectName, t.TeamStatus, t.TeamModifiedDate FROM Team t LEFT JOIN Project p ON p.ProjectID = t.ProjectID LEFT JOIN User u ON u.UserID = t.UserID WHERE t.ProjectID IN (SELECT DISTINCT ProjectID from Team t WHERE UserID = ? AND TeamStatus = "Verified") AND t.TeamStatus = "Requested"', [userId]);
+    const [bio] = await db.query('SELECT * FROM Biography WHERE UserID = ?', [userId]);
 
-    const [reviewNotifications] = await db.query('SELECT r.ReviewID, r.ReceiverID, r.ReviewerID, u.FirstName, u.LastName, CONCAT(u.FirstName, " ", u.LastName) as ReviewerName, pr.ProjectID, p.ProjectName, r.ReviewStatus, r.ReviewModifiedDate FROM Review r INNER JOIN ProjectReview pr ON r.ReviewID = pr.ReviewID INNER JOIN User u ON u.UserID = r.ReviewerID LEFT JOIN Project p ON p.ProjectID = pr.ProjectID WHERE r.ReceiverID = ? AND r.ReviewStatus = "Created"', [userId]);
+    const [projectTotal] = await db.query('SELECT COUNT(*) FROM Project p INNER JOIN Team t ON t.ProjectID = p.ProjectID WHERE t.UserID = ? AND p.ProjectStatus = "Enabled"', [userId]);
+    const projectCount = projectTotal[0]['COUNT(*)'];
+
+    const [reflectionTotal] = await db.query('SELECT COUNT(*) FROM Reflection WHERE UserID = ?', [userId]);
+    const reflectionCount = reflectionTotal[0]['COUNT(*)'];
+
+    const [evaluationTotal] = await db.query('SELECT COUNT(*) FROM (SELECT DISTINCT UserID, ProjectID FROM SelfEvaluation WHERE UserID = ?) a', [userId]);
+    const evaluationCount = evaluationTotal[0]['COUNT(*)'];
+
+    const [skillTotal] = await db.query('SELECT COUNT(*) FROM (SELECT DISTINCT SkillID FROM SelfEvaluation WHERE UserID = ?) a ', [userId]);
+    const skillCount = skillTotal[0]['COUNT(*)'];
+
+    const [reviewApprovedTotal] = await db.query('SELECT COUNT(*) FROM Review WHERE ReceiverID = ? AND ReviewStatus = "Approved"', [userId]);
+    const reviewApprovedCount = reviewApprovedTotal[0]['COUNT(*)'];
+
+    const [reviewRejecteddTotal] = await db.query('SELECT COUNT(*) FROM Review WHERE ReceiverID = ? AND ReviewStatus = "Rejected"', [userId]);
+    const reviewRejectedCount = reviewRejecteddTotal[0]['COUNT(*)'];
+
+    const [reviewCreatedTotal] = await db.query('SELECT COUNT(*) FROM Review WHERE ReceiverID = ? AND ReviewStatus = "Created"', [userId]);
+    const reviewCreatedCount = reviewCreatedTotal[0]['COUNT(*)'];
+
+    const [joinTeamNotifications] = await db.query('SELECT u.UserID, p.ProjectID, CONCAT(u.FirstName, " ", u.LastName) AS UserName, p.ProjectName, t.TeamStatus, t.TeamModifiedDate FROM Team t LEFT JOIN Project p ON p.ProjectID = t.ProjectID LEFT JOIN User u ON u.UserID = t.UserID WHERE t.ProjectID IN (SELECT DISTINCT ProjectID from Team t WHERE UserID = ? AND TeamStatus = "Verified") AND t.TeamStatus = "Requested" AND p.ProjectStatus = "Enabled"', [userId]);
+
+    const [reviewNotifications] = await db.query('SELECT r.ReviewID, r.ReceiverID, r.ReviewerID, u.FirstName, u.LastName, CONCAT(u.FirstName, " ", u.LastName) as ReviewerName, pr.ProjectID, p.ProjectName, r.ReviewStatus, r.ReviewModifiedDate FROM Review r INNER JOIN ProjectReview pr ON r.ReviewID = pr.ReviewID INNER JOIN User u ON u.UserID = r.ReviewerID LEFT JOIN Project p ON p.ProjectID = pr.ProjectID WHERE r.ReceiverID = ? AND r.ReviewStatus = "Created" AND p.ProjectStatus = "Enabled"', [userId]);
 
     // Combine join team and review notification into a single array
     const notificationsFeed = [...joinTeamNotifications, ...reviewNotifications];
@@ -27,7 +50,10 @@ exports.getHomePage = async (req, res) => {
     // Sort the feed based on creation dates
     notificationsFeed.sort((a, b) => new Date(b.TeamModifiedDate || b.ReviewModifiedDate) - new Date(a.TeamModifiedDate || a.ReviewModifiedDate));
 
-    const [projects] = await db.query('SELECT p.ProjectName, p.ProjectID, CONCAT(u.FirstName, " ", u.LastName) as TeamMember, u.UserID, CONCAT(u1.FirstName, " ", u1.LastName) as CreatedBy, u1.UserID as CreatedByID, p.ProjectCreatedDate FROM Project p INNER JOIN Team t ON t.ProjectID = p.ProjectID INNER JOIN User u ON u.UserID = t.UserID  INNER JOIN User u1 ON u1.UserID = p.ProjectCreatedBy WHERE t.TeamStatus = "Verified" AND p.ProjectStatus = "Enabled" ORDER BY p.ProjectCreatedDate DESC');
+    const [projects] = await db.query('SELECT p.ProjectName, p.ProjectID, CONCAT(u.FirstName, " ", u.LastName) as TeamMember, u.UserID, CONCAT(u1.FirstName, " ", u1.LastName) as CreatedBy, p.ProjectCreatedDate FROM Project p INNER JOIN Team t ON t.ProjectID = p.ProjectID INNER JOIN User u ON u.UserID = t.UserID  INNER JOIN User u1 ON u1.UserID = p.ProjectCreatedBy WHERE t.TeamStatus = "Verified" AND p.ProjectStatus = "Enabled" ORDER BY p.ProjectCreatedDate DESC');
+
+    // Sort projects by ProjectCreatedDate in descending order (newest to oldest)
+    projects.sort((a, b) => new Date(b.ProjectCreatedDate) - new Date(a.ProjectCreatedDate));
 
     // Create an object to store grouped team members
     const groupedTeamMembers = {};
@@ -40,7 +66,6 @@ exports.getHomePage = async (req, res) => {
         if (!groupedTeamMembers[projectID]) {
             // If the project ID doesn't exist, initialize it with an empty array
             groupedTeamMembers[projectID] = {
-                ProjectCreatedByID: project.CreatedByID,
                 ProjectID: project.ProjectID,
                 ProjectName: project.ProjectName,
                 ProjectCreatedDate: project.ProjectCreatedDate,
@@ -56,13 +81,12 @@ exports.getHomePage = async (req, res) => {
         });
     });
 
-    // Now 'groupedTeamMembers' contains team members grouped by project ID along with project names
-    //console.log(groupedTeamMembers);
-
     // Check if the message is from the profile edit page
     if (req.headers.referer && req.headers.referer.endsWith('/profile-edit')) {
         fromProfileEditPage = true;
     }
+
+    //console.log("projectCount", projectCount);
 
     // User is logged in, render the home page with the user object
     res.render('home', { user, 
@@ -70,7 +94,15 @@ exports.getHomePage = async (req, res) => {
                         fromProfileEditPage, 
                         notificationsFeed,
                         projects,
-                        groupedTeamMembers });
+                        bio,
+                        groupedTeamMembers,
+                        projectCount: projectCount,
+                        reflectionCount: reflectionCount,
+                        evaluationCount: evaluationCount,
+                        reviewApprovedCount: reviewApprovedCount,
+                        reviewRejectedCount: reviewRejectedCount,
+                        reviewCreatedCount: reviewCreatedCount,
+                        skillCount: skillCount});
 };
 
 /*

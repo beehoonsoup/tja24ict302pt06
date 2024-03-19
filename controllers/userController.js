@@ -18,14 +18,18 @@ exports.getProfilePage = (req, res) => {
 };
 
 
-exports.getEditProfilePage = (req, res) => {
+exports.getEditProfilePage = async (req, res) => {
   const user = req.session.user;
-  res.render('profile-edit', { user });
+  const userId = req.session.user.UserID;
+
+  const [bio] = await db.query('SELECT * FROM Biography WHERE UserID = ?', [userId]);
+
+  res.render('profile-edit', { user, bio });
 };
 
 exports.updateUserProfile = async (req, res) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, bioDescription } = req.body;
     let hashedPassword = null;
 
     // Check if the password is provided
@@ -52,11 +56,16 @@ exports.updateUserProfile = async (req, res) => {
     // Execute the update query
     await db.execute(sql, params);
 
+    await db.execute(
+      'UPDATE Biography SET Description = ?, DateModified = NOW() WHERE UserID = ?',
+      [bioDescription, userId]
+    );
+
     // Update the user object in the session with the new details
     req.session.user = { ...req.session.user, FirstName: firstName, LastName: lastName, EmailAddress: email };
 
     // Redirect back to the profile page with a success message
-    res.redirect('/profile?message=Profile%20has%20been%20updated');
+    res.redirect('/home');
   } catch (error) {
     console.error(error);
     res.status(500).send('An error occurred');

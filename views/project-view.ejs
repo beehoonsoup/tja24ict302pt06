@@ -178,16 +178,27 @@
           <form action="/selfEvaluation" method="get" style="display: inline;">
             <input type="hidden" name="projectId" value="<%= project.ProjectID %>">
             <input type="hidden" name="userId" value="<%= project.UserID %>">
-            <button type="submit">Add Self Evaluation</button>
+            <% if (evaluationCount> 0) { %>
+            <button type="submit">Edit Self Evaluation</button>
+            <% } else { %>
+              <button type="submit">Add Self Evaluation</button>
+              <% } %>
           </form> |
             <form action="/reflection-create" method="get" style="display: inline;">
               <input type="hidden" name="projectId" value="<%= project.ProjectID %>">
               <input type="hidden" name="userId" value="<%= project.UserID %>">
-              <button type="submit">Add Reflection</button>
-            </form> |
+              <% if (reflectionCount> 0) { %>
+              <button type="submit">Edit Reflection</button>
+              <% } else { %>
+                <button type="submit">Add Reflection</button>
+              <% } %>
+            </form> 
+            <% if (project.ProjectCreatedBy===user.UserID) { %> |
             <form action="/project-delete" method="POST" style="display: inline;">
               <input type="hidden" name="projectId" value="<%= project.ProjectID %>">
               <button type="submit">Delete Project</button>
+              <% } else { %>
+              <% } %>
             </form>
             <% } else if (teamRequestCount> 0) { %>
               <i>Join Team Request Pending Approval</i>

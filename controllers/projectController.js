@@ -23,12 +23,18 @@ exports.viewProject = async (req, res) => {
     const [teamRequest] = await db.query('SELECT COUNT(*) FROM Team WHERE TeamStatus = "Requested" AND ProjectID = ? AND UserID = ?', [projectId, currentUser]);
     const teamRequestCount = teamRequest[0]['COUNT(*)'];
 
-    const [teamLeader] = await db.query('SELECT COUNT(*) FROM Team WHERE ProjectID = ? AND TeamRole = "Leader"', [projectId, currentUser]);
+    const [teamLeader] = await db.query('SELECT COUNT(*) FROM Team WHERE ProjectID = ? AND TeamRole = "Leader"', [projectId]);
     const teamLeaderCount = teamLeader[0]['COUNT(*)'];
 
+    const [reflection] = await db.query('SELECT COUNT(*) FROM Reflection WHERE ProjectID = ? AND UserID = ?', [projectId, currentUser]);
+    const reflectionCount = reflection[0]['COUNT(*)'];
+
+    const [evaluation] = await db.query('SELECT COUNT(*) FROM SelfEvaluation WHERE ProjectID = ? AND UserID = ?', [projectId, currentUser]);
+    const evaluationCount = evaluation[0]['COUNT(*)'];
+
     // Log details to the console
-    //console.log('formattedProjectStartDate:', formattedProjectStartDate);
-    //console.log('teamLeaderCount:', teamLeaderCount);
+    //console.log('reflectionCount:', reflectionCount);
+    //console.log('evaluationCount:', evaluationCount);
 
     // Render the project view page with project details
     res.render('project-view', {
@@ -39,7 +45,9 @@ exports.viewProject = async (req, res) => {
       teamMemberCount: teamMemberCount,
       teamRequest: teamRequest[0],
       teamRequestCount: teamRequestCount,
-      teamLeaderCount: teamLeaderCount
+      teamLeaderCount: teamLeaderCount,
+      reflectionCount: reflectionCount,
+      evaluationCount: evaluationCount
     });
   } catch (error) {
     console.error(error);

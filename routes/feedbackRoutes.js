@@ -31,6 +31,7 @@ router.post('/hide-review', isLoggedIn, feedbackController.hideReview);
 router.get('/selfEvaluation', isLoggedIn, feedbackController.handleSelfEvaluation);
 router.get('/selfEvaluation-create', isLoggedIn, feedbackController.getSkills);
 router.get('/selfEvaluation-view', isLoggedIn, feedbackController.getSelectedSkills);
+router.get('/skill', isLoggedIn, feedbackController.searchSkills);
 router.get('/search-skills', isLoggedIn, feedbackController.searchSkills);
 router.post('/submit-skills', isLoggedIn, feedbackController.submitSkills);
 router.post('/update-skills', isLoggedIn, feedbackController.updateSkills);

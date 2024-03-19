@@ -35,15 +35,12 @@
     <form class="form-input" id="reflectionForm" action="/reflection-create" method="POST">
         <input type="hidden" name="projectId" value="<%= projectId %>">
         <input type="hidden" name="userId" value="<%= userId %>">
-        <textarea id="reflectionDescription" name="reflectionDescription" rows="4" cols="50"
-            placeholder="Enter reflection description"><%= existingReflection.length > 0 ? existingReflection[0].ReflectionDescription : '' %></textarea><br>
-            <p style="text-align: right; font-size: 12px;"><span id="charCount">0</span>/1500 characters</p>
-            <button type="submit">Submit</button>
-    </form>
-    <form action="/reflection-delete" method="POST" style="display: inline;">
-        <input type="hidden" name="projectId" value="<%= projectId %>">
-        <input type="hidden" name="userId" value="<%= userId %>">
-        <button type="submit">Delete Reflection</button>
+        <textarea id="reflectionDescription" name="reflectionDescription" rows="4" cols="50" placeholder="Enter reflection description"><%= existingReflection.length > 0 ? existingReflection[0].ReflectionDescription : '' %></textarea><br>
+        <p style="text-align: right; font-size: 12px;"><span id="charCount">0</span>/1500 characters</p>
+        <button type="submit" name="action" value="submit">Submit</button>
+        <% if (reflectionCount > 0) { %>
+            <button type="submit" formaction="/reflection-delete" name="action" value="delete">Delete</button>
+        <% } %>
     </form>
 
     <script>

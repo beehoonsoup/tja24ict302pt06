@@ -29,48 +29,30 @@
   </div>
 
   <h1>Edit Profile</h1>
-  <form class="form-input" action="/profile-edit" method="POST">
-    <table>
-      <tr>
-        <td>
-          <label for="firstName">First Name:</label>
-        </td>
-        <td>
-          <input type="text" id="firstName" name="firstName" value="<%= user.FirstName %>" required>
-        </td>
-      </tr>
-
-      <tr>
-        <td>
-          <label for="lastName">Last Name:</label>
-        </td>
-        <td>
-          <input type="text" id="lastName" name="lastName" value="<%= user.LastName %>" required>
-        </td>
-      </tr>
-
-      <tr>
-        <td>
-          <label for="email">Email:</label>
-        </td>
-      
-      <td>
-        <input type="email" id="email" name="email" value="<%= user.EmailAddress %>" required>
-      </td>
-    </tr>
-      
-      <tr>
-        <td>
-          <label for="password">Password:</label>
-        </td>
-        <td width="300">
-          <input type="password" id="password" name="password">
-        </td>
-      </tr>
-</table>
-        <button type="submit">Save Changes</button>
-      
+  <form class="form-input" id="profileForm" action="/profile-edit" method="POST">
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" name="firstName" value="<%= user.FirstName %>" required>
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" name="lastName" value="<%= user.LastName %>" required>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" value="<%= user.EmailAddress %>" required>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password">
+    <label for="bioDescription">Biography Description:</label>
+    <textarea id="bioDescription" name="bioDescription" rows="8" cols="50" maxlength="1500" required><%= bio[0].Description %></textarea>
+    <p style="text-align: right; font-size: 12px;"><span id="charCount">0</span>/1500 characters</p>
+    <br><button type="submit">Save Changes</button>
   </form>
+
+  <script>
+    const profileForm = document.getElementById('profileForm');
+    const bioDescription = document.getElementById('bioDescription');
+    const charCount = document.getElementById('charCount');
+
+    bioDescription.addEventListener('input', () => {
+      charCount.textContent = bioDescription.value.length;
+    });
+  </script>
 </body>
 
 </html>

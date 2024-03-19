@@ -34,17 +34,22 @@
         </a><br>
         You are viewing the review you wrote for <%= receiverName %><br>
             <% if (existingReview && existingReview.length> 0) { %>
-                <p>Review: <%= existingReview[0].ReviewDescription %>
-                </p>
-                <p>Review Status: <%= existingReview[0].ReviewStatus %>
-                </p>
-                <!-- Display additional review details if needed -->
+                <form class="form-input">
+                    <% if (existingReview[0].ReviewStatus=="Created" ) { %>
+                        <i>Review pending approval from <%= receiverName %></i>
+                    <% } else if (existingReview[0].ReviewStatus=="Approved") { %>
+                        <i>Review is approved by <%= receiverName %></i>
+                    <% } else { %>
+                        <i>Review is rejected by <%= receiverName %></i>
+                    <% } %>
+                        <p><%= existingReview[0].ReviewDescription %></p>
+            </form>
                 <% } else { %>
-                    <form class="form-input" action="/review-create" method="post">
+                    <form class="form-input" action="/review-create" method="post" style="width:500px;">
                         <input type="hidden" name="projectId" value="<%= projectId %>">
                         <input type="hidden" name="reviewerID" value="<%= reviewerID %>">
                         <input type="hidden" name="receiverID" value="<%= receiverID %>">
-                        <textarea name="reviewDescription" rows="4" cols="50"
+                        <textarea name="reviewDescription" rows="10" cols="100"
                             placeholder="Enter your review"></textarea><br>
                         <button type="submit">Submit Review</button>
                     </form>

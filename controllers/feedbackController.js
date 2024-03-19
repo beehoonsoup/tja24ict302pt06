@@ -11,10 +11,13 @@ exports.getCreateReflectionPage = async (req, res) => {
         // Fetch existing reflection for the given projectId and UserId
         const [existingReflection] = await db.query('SELECT ReflectionDescription FROM Reflection WHERE ProjectID = ? AND UserID = ?', [projectId, userId]);
 
+        const [reflection] = await db.query('SELECT COUNT(*) FROM Reflection WHERE ProjectID = ? AND UserID = ?', [projectId, userId]);
+        const reflectionCount = reflection[0]['COUNT(*)'];
+
         //console.log('projectName', projectName);
         //console.log('Userid', UserId);
 
-        res.render('reflection-create', { projectId, userId, projectName, existingReflection });
+        res.render('reflection-create', { projectId, userId, projectName, existingReflection, reflectionCount: reflectionCount });
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred');
