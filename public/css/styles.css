@@ -22,6 +22,11 @@
     /* Adding margin bottom */
 }
 
+/*login page logo*/
+.login_logo{
+    height: 80px;
+}
+
 /* Styling for logo */
 .logo {
     width: 100px;
@@ -305,12 +310,13 @@ input[type="reset"]:hover {
 /* selfEvalutation-create search skills layout */
 #projectSuggestionsContainer {
     position: fixed;
-    top: 40px;
+    top: 100%;
     left: 0;
-    width: 100%;
     background-color: white;
-    border: 1px solid #ccc;
-    z-index: 1000;
+    z-index: 99;
+    text-align: left;
+    margin-left: 50px;
+    width: 100%;
 }
 
 .projectSuggestion {
@@ -558,4 +564,64 @@ hr {
     background: #fff; /* Setting background color */
     border-radius: 8px; /* Adding border radius */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adding box shadow */
+}
+
+/*search bar styling*/
+.search_bar{
+    margin: 50px;
+}
+
+/*add project button*/
+.add_project{
+    background-color: #111;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    border-radius: 30px;
+    font-size: 16px;
+    
+}
+
+.add_project:hover{
+    background-color: #2b2b2b;
+}
+
+/*table styling*/
+.project_table .table_head{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: left;
+    background-color: #111;
+    color: white;
+}
+
+.project_table tbody tr:nth-child(even){
+    background-color: #ddd;
+}
+
+.project_table tbody tr:nth-child(odd){
+    background-color: #ededed;
+}
+
+.project_table tbody tr:hover{
+    background-color: #cdcdcd;
+}
+
+.project_table{
+    padding: 50px;
+}
+
+.table_border{
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid;
+}
+
+.project_border{
+    background-color: #c1c1c1;
+    padding: 50px;
+    margin: 50px;
+    border-radius: 15px;
 }

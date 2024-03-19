@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="/public/css/styles.css" rel="stylesheet" type="text/css"/>
+  <script src="https://kit.fontawesome.com/df899a6e31.js" crossorigin="anonymous"></script>
   <title>Projects</title>
   <style>
     table {
@@ -14,7 +15,7 @@
 
     th,
     td {
-      border: 1px solid black;
+      /*border: 1px solid black;*/
       padding: 8px;
       text-align: left;
     }
@@ -89,13 +90,19 @@
 </nav>
 </div>
   <h1>Projects</h1>
+  <div class="project_border">
+  <div class="search_bar">
   <input type="text" id="searchInput" placeholder="Search project..." oninput="getSuggestions(this.value)">
+  <div class="suggestions">
   <div id="projectSuggestionsContainer"></div><p>
-  <a href="/project-create">Add Project</a> |
+  </div>
+  </div>
+  <a href="/project-create"><button class="add_project">Add Project <i class="fa-solid fa-plus"></i></button></a>
   <p>
-  <table>
+  <div class="project_table">
+  <table class="table_border">
     <thead>
-      <tr>
+      <tr class="table_head">
         <th>Project Name</th>
         <th>Project Description</th>
         <th>Start Date</th>
@@ -143,6 +150,8 @@
         <% }) %>
     </tbody>
   </table>
+</div>
+</div>
 </body>
 
 </html>
