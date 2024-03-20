@@ -86,7 +86,7 @@ exports.getHomePage = async (req, res) => {
         fromProfileEditPage = true;
     }
 
-    //console.log("projectCount", projectCount);
+    //console.log("projects", projects);
 
     // User is logged in, render the home page with the user object
     res.render('home', { user, 
