@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/public/css/styles.css" rel="stylesheet" type="text/css" />
+
+  <script>
+    function viewBiography(reviewerID) {
+      // Make an AJAX POST request to the backend route with the reviewerID as a URL parameter
+      fetch(`/biography/${reviewerID}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (response.ok) {
+            // Redirect to the biography page if the request is successful
+            window.location.href = '/biography';
+          } else {
+            // Handle errors if needed
+            console.error('Error:', response.statusText);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+  </script>
+
+  <title>Biography</title>
+</head>
+
+<body>
+  <!-- Header section -->
+  <div class="header">
+    <!-- Company logo -->
+    <div class="company">
+      <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
+    </div>
+
+    <!-- Navigation bar -->
+    <nav class="nav-bar">
+      <ul class="nav-links">
+        <li class="nav-item"><a href="/home">Home</a></li>
+        <li class="nav-item"><a href="/biography">Biography</a></li>
+        <li class="nav-item"><a href="/profile">Profile</a></li>
+        <li class="nav-item"><a href="/project">Project</a></li>
+        <li class="nav-item"><a href="/notifications">Notifications</a></li>
+        <li class="nav-item"><a href="/logout">Logout</a></li>
+        <!-- Add more navigation links as needed -->
+      </ul>
+    </nav>
+  </div>
+  <h1>Hello!</h1>
+  <h2>My name is <%= user[0].FirstName %>
+      <%= user[0].LastName %>
+  </h2>
+  If you're interested to collab with me, contact me via <b><a href="mailto:<%= user[0].EmailAddress %>">
+      <%= user[0].EmailAddress %>
+    </a></b>
+  <p>
+    ________________________________________________________________________
+  <p>
+    Get me know more about me below:<br>
+  <div class="feed">
+    <% feed.forEach(item=> { %>
+      <div class="item">
+        <% if (item.ReflectionID) { %>
+          <p>
+            Reflection wrote for <b>
+              <a href="/project/<%= item.reflectionProjectID %>">
+                <%= item.reflectionProjectName %>
+              </a>
+            </b> on <b>
+              <%= new Date(item.ReflectionCreatedDate).toLocaleDateString() %>
+            </b>
+          </p>
+          <p>
+            <%= item.ReflectionDescription %>
+          </p>
+          ________________________________________________________________________
+          <% } else { %>
+            <p> Review wrote by <b>
+                <a href="/biography/<%= item.ReviewerID %>">
+                  <%= item.reviewerName %>
+                </a>
+              </b> for <b>
+                <a href="/project/<%= item.reviewProjectID %>">
+                  <%= item.reviewProjectName %>
+                </a>
+              </b> on <b>
+                <%= new Date(item.ReviewCreatedDate).toLocaleDateString() %>
+              </b>
+            </p>
+            <p>
+              <%= item.ReviewDescription %>
+            </p>
+            ________________________________________________________________________
+            <% } %>
+      </div>
+      <% }) %>
+  </div>
+  <p>
+  <div class="projectFeed">
+    Project I was involved in
+    <p>
+      <% projectFeed.forEach(projectItem=> { %>
+        <div class="projectItem">
+          <% if (projectItem.ProjectID) { %>
+            <a href="/project/<%= projectItem.ProjectID %>"><%= projectItem.ProjectName %></a><br>
+            <% } %>
+    </p>
+  </div>
+  <% }) %>
+    </div>
+    </p>
+</body>
+
+</html>

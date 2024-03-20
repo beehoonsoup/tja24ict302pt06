@@ -11,6 +11,13 @@ exports.registerUser = async (req, res) => {
     const { firstName, lastName, email, username, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     await db.execute('INSERT INTO User (FirstName, LastName, EmailAddress, UserName, UserPassword, RoleID, UserStatus) VALUES (?, ?, ?, ?, ?, ?, ?)', [firstName, lastName, email, username, hashedPassword, 2, 'enabled']);
+
+    // Get UserID
+    const [UserID] = await db.query('SELECT MAX(UserID) FROM User u');
+    const PID = UserID[0]['MAX(UserID)'];
+
+    await db.execute('INSERT INTO Biography (UserID, Description, DateCreated, DateModified) VALUES (?, "This is my bio, please edit here", NOW(), NOW())', [PID]);
+    
     res.redirect('/login?message=User%20registered%20successfully');
   } catch (error) {
     console.error(error);
