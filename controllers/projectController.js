@@ -231,6 +231,8 @@ exports.requestToJoin = async (req, res) => {
     // Insert the request to join into the team table
     await db.execute('INSERT INTO Team (UserID, ProjectID, TeamRole, TeamStatus, TeamCreatedDate, TeamModifiedDate) VALUES (?, ?, ?, "Requested", NOW(), NOW())', [userId, projectId, teamRole]);
 
+    console.log("teamRole", teamRole);
+    
     res.redirect(`/project/${projectId}`);
   } catch (error) {
     console.error(error);

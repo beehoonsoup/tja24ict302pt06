@@ -209,17 +209,19 @@
                     <input type="hidden" name="teamRole" value="Member">
                     <button type="submit">Request to Join as Member</button>
                     <% } else { %>
-                      <form action="/project-join-request/<%= project.ProjectID %>" method="POST"
-                        style="display: inline;">
-                        <input type="hidden" name="teamRole" value="Member">
-                        <button type="submit">Request to Join as Member</button>
-                        <form action="/project-join-request/<%= project.ProjectID %>" method="POST"
-                          style="display: inline;">
-                          <input type="hidden" name="teamRole" value="Leader">
-                          <button type="submit">Request to Join as Leader</button>
-                        </form>
+                      <form id="projectJoinForm" action="/project-join-request/<%= project.ProjectID %>" method="POST" style="display: inline;">
+                        <input type="hidden" name="teamRole" id="teamRoleInput" value="">
+                        <button type="button" onclick="setTeamRole('Member')">Request to Join as Member</button>
+                        <button type="button" onclick="setTeamRole('Leader')">Request to Join as Leader</button>
+                    </form>
                         <% } %>
   </div>
+  <script>
+    function setTeamRole(role) {
+        document.getElementById('teamRoleInput').value = role;
+        document.getElementById('projectJoinForm').submit();
+    }
+    </script>
 </body>
 
 </html>
