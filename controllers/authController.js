@@ -26,6 +26,23 @@ exports.registerUser = async (req, res) => {
   }
 };
 
+exports.checkExist = async (req, res) => {
+  try {
+    const { email, username } = req.body;
+
+    const [existingEmail] = await db.query('SELECT UserID FROM User WHERE EmailAddress = ?', [email]);
+    const [existingUsername] = await db.query('SELECT UserID FROM User WHERE UserName = ?', [username]);
+
+    const emailExists = existingEmail.length > 0;
+    const usernameExists = existingUsername.length > 0;
+
+    res.json({ emailExists: emailExists, usernameExists: usernameExists });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
 exports.getLoginPage = (req, res) => {
   let message = req.query.message || null;
   let fromRegisterPage = false;

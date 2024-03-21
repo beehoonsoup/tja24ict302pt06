@@ -170,7 +170,7 @@ exports.getAddMemberPage = async (req, res) => {
     const teamMemberCount = teamMember[0]['COUNT(*)'];
     const [project] = await db.query('SELECT * FROM Project WHERE ProjectID = ?', [projectId]);
 
-    const users = await db.query('SELECT DISTINCT u.UserID, CONCAT(u.FirstName, " ", u.LastName) AS UserName FROM User u LEFT JOIN Team t ON t.UserID = u.UserID WHERE u.UserID NOT IN (SELECT u.UserID FROM User u LEFT JOIN Team t ON t.UserID = u.UserID WHERE t.ProjectID = ?)', [projectId]);
+    const users = await db.query('SELECT DISTINCT u.UserID, CONCAT(u.FirstName, " ", u.LastName) AS UserName FROM User u LEFT JOIN Team t ON t.UserID = u.UserID WHERE u.UserID NOT IN (SELECT u.UserID FROM User u LEFT JOIN Team t ON t.UserID = u.UserID WHERE t.ProjectID = ?) OR u.UserID IN (SELECT u.UserID FROM User u LEFT JOIN Team t ON t.UserID = u.UserID WHERE t.ProjectID = ? AND t.TeamStatus = "Rejected")', [projectId,projectId]);
 
     const [memberCount] = await db.execute('SELECT p.*, CASE WHEN t.MemberCount IS NULL THEN 0 ELSE t.MemberCount END AS MemberCount, u.FirstName AS CreatedByFirstName, u.LastName AS CreatedByLastName FROM Project p INNER JOIN User u on p.ProjectCreatedBy = u.UserID LEFT JOIN (SELECT ProjectID, COUNT(*) as MemberCount FROM Team GROUP BY ProjectID) t ON t.ProjectID = p.ProjectID WHERE p.ProjectID = ?', [projectId]);
 
@@ -200,8 +200,16 @@ exports.addMemberToProject = async (req, res) => {
 
     // Check if adding the User will exceed the project size
 
-    // Insert the new member into the team table
-    await db.query('INSERT INTO Team (UserID, ProjectID, TeamRole, TeamStatus, TeamCreatedDate, TeamModifiedDate) VALUES (?, ?, ?, "Verified", NOW(), NOW())', [user, projectId, role]);
+    // Check if userid + projectid and TeamStatus = "Rejected" exist in the database
+    const [existingRejectedTeam] = await db.query('SELECT * FROM Team WHERE UserID = ? AND ProjectID = ? AND TeamStatus = "Rejected"', [user, projectId]);
+
+    if (existingRejectedTeam.length > 0) {
+      // Update TeamStatus to "Verified" if the condition is met
+      await db.query('UPDATE Team SET TeamStatus = "Verified", TeamModifiedDate = NOW() WHERE UserID = ? AND ProjectID = ?', [user, projectId]);
+    } else {
+      // Insert the new member into the team table
+      await db.query('INSERT INTO Team (UserID, ProjectID, TeamRole, TeamStatus, TeamCreatedDate, TeamModifiedDate) VALUES (?, ?, ?, "Verified", NOW(), NOW())', [user, projectId, role]);
+    }
 
     res.redirect(`/project/${projectId}`);
   } catch (error) {
@@ -209,6 +217,7 @@ exports.addMemberToProject = async (req, res) => {
     res.status(500).send('An error occurred');
   }
 };
+
 
 exports.searchProject = async (req, res) => {
   try {
@@ -232,7 +241,7 @@ exports.requestToJoin = async (req, res) => {
     await db.execute('INSERT INTO Team (UserID, ProjectID, TeamRole, TeamStatus, TeamCreatedDate, TeamModifiedDate) VALUES (?, ?, ?, "Requested", NOW(), NOW())', [userId, projectId, teamRole]);
 
     console.log("teamRole", teamRole);
-    
+
     res.redirect(`/project/${projectId}`);
   } catch (error) {
     console.error(error);

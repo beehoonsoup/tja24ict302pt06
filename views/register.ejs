@@ -1,77 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="/public/css/styles.css" rel="stylesheet" type="text/css"/>
+  <link href="/public/css/styles.css" rel="stylesheet" type="text/css" />
   <title>Register</title>
 </head>
+
 <body>
   <!-- Header section -->
   <div class="header">
     <!-- Company logo -->
     <div class="company">
-        <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
+      <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
     </div>
-</div>
-<div class="container">
-  <h1>Create an account</h1>
-  <form class="form-input" action="/register" method="POST">
-    <label for="firstName">First Name:</label>
-    <input type="text" name="firstName" required><br>
-
-    <label for="lastName">Last Name:</label>
-    <input type="text" name="lastName" required><br>
-
-    <label for="email">Email Address:</label>
-    <input type="email" name="email" required><br>
-
-    <label for="username">Username:</label>
-    <input type="text" name="username" required><br>
-
-    <label for="password">Password: 
-      <label class="tooltip" style="font-size:12px">?
-      <span class="tooltiptext">Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, and one number</span>
-    </label>
-    </label>
-    <input type="password" name="password" required><br>
-    <span id="passwordCriteriaError" class="error"></span><br>
-
-    <label for="confirmPassword">Confirm Password:</label>
-    <input type="password" name="confirmPassword" required><br>
-    <span id="passwordMatchError" class="error"></span><br>
-
-    <button type="submit">Register</button>
-  </form>
-</div>
-
-<!-- JavaScript -->
-<script>
-  document.getElementById('confirmPassword').addEventListener('input', function() {
-            var password = document.getElementById('password').value;
-            var confirmPassword = this.value;
-
-            if (password !== confirmPassword) {
-                document.getElementById('passwordMatchError').textContent = 'Passwords do not match!';
+  </div>
+  <div class="container">
+    <h1>Create an account</h1>
+    <form class="form-input" id="registrationForm" action="/register" method="POST">
+      <label for="firstName">First Name:</label>
+      <input type="text" name="firstName" required>
+    
+      <label for="lastName">Last Name:</label>
+      <input type="text" name="lastName" required>
+    
+      <label for="email">Email Address:</label>
+      <input type="email" name="email" id="email" required>
+      <span id="emailError" class="error"></span>
+    
+      <label for="username">Username:</label>
+      <input type="text" name="username" id="username" required>
+      <span id="usernameError" class="error"></span>
+    
+      <label for="password">Password:
+        <label class="tooltip" style="font-size:12px">?
+          <span class="tooltiptext">Password must be at least 8 characters long, contain one uppercase letter, one
+            lowercase letter, and one number</span>
+        </label>
+      </label>
+      <input type="password" name="password" id="password" required>
+      <span id="passwordCriteriaError" class="error"></span>
+    
+      <label for="confirmPassword">Confirm Password:</label>
+      <input type="password" name="confirmPassword" id="confirmPassword" required>
+      <span id="passwordMatchError" class="error"></span><br>
+    
+      <button type="button" onclick="validateRegistration()">Register</button>
+    </form>
+    
+    <script>
+      // Password validation for password field
+      document.getElementById('password').addEventListener('input', function () {
+        var password = this.value;
+    
+        var hasNumber = /\d/.test(password);
+        var hasLowerCase = /[a-z]/.test(password);
+        var hasUpperCase = /[A-Z]/.test(password);
+        var isValidLength = password.length >= 8;
+    
+        if (!isValidLength || !hasNumber || !hasLowerCase || !hasUpperCase) {
+          document.getElementById('passwordCriteriaError').textContent = 'Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, and one number';
+        } else {
+          document.getElementById('passwordCriteriaError').textContent = '';
+        }
+      });
+    
+      // Password match validation for confirm password field
+      document.getElementById('confirmPassword').addEventListener('input', function () {
+        var password = document.getElementById('password').value;
+        var confirmPassword = this.value;
+    
+        if (password !== confirmPassword) {
+          document.getElementById('passwordMatchError').textContent = 'Passwords do not match!';
+        } else {
+          document.getElementById('passwordMatchError').textContent = 'Passwords match.';
+        }
+      });
+    
+      // AJAX validation and form submission
+      function validateRegistration() {
+        const email = document.getElementById('email').value;
+        const username = document.getElementById('username').value;
+    
+        // Perform AJAX request to check if email or username already exists
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+              const response = JSON.parse(xhr.responseText);
+              if (response.emailExists) {
+                document.getElementById('emailError').textContent = 'Email already exists';
+              } else if (response.usernameExists) {
+                document.getElementById('usernameError').textContent = 'Username already exists';
+              } else {
+                document.getElementById('registrationForm').submit();
+              }
             } else {
-                document.getElementById('passwordMatchError').textContent = 'Passwords match.';
+              console.error('Error:', xhr.status);
             }
-        });
-
-        document.getElementById('password').addEventListener('input', function() {
-            var password = this.value;
-
-            var hasNumber = /\d/.test(password);
-            var hasLowerCase = /[a-z]/.test(password);
-            var hasUpperCase = /[A-Z]/.test(password);
-            var isValidLength = password.length >= 8;
-
-            if (!isValidLength || !hasNumber || !hasLowerCase || !hasUpperCase) {
-                document.getElementById('passwordCriteriaError').textContent = 'Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, and one number';
-            } else {
-                document.getElementById('passwordCriteriaError').textContent = '';
-            }
-        });
+          }
+        };
+        xhr.open('POST', '/check-email-username-exists', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({ email: email, username: username }));
+      }
     </script>
+    
 </body>
+
 </html>

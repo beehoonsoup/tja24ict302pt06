@@ -20,25 +20,25 @@
     <!-- Navigation bar -->
     <nav class="nav-bar">
       <ul class="nav-links">
-        <li class="nav-item"><a href="/home">Home</a></li>
-        <li class="nav-item"><a href="/biography">Biography</a></li>
-        <li class="nav-item"><a href="/project">Project</a></li>
-        <li class="nav-item"><a href="/skill/1">Skill</a></li>
-        <li class="nav-item"><a href="/logout">Logout</a></li>
+        <li class="nav-item"><a href="/home" id="home-link">Home</a></li>
+        <li class="nav-item"><a href="/biography" id="biography-link">Biography</a></li>
+        <li class="nav-item"><a href="/project" id="project-link">Project</a></li>
+        <li class="nav-item"><a href="/skill/1" id="skill-link">Skill</a></li>
+        <li class="nav-item"><a href="/logout" id="logout-link">Logout</a></li>
       </ul>
     </nav>
   </div>
   <div class="home-container">
     <div class="home-profile-container">
-      <% if (user.FirstName==='Mabelin' && user.LastName==='Kong' || user.FirstName==='Kelly' && user.LastName==='Chia'
-        || user.FirstName==='Amy' && user.LastName==='Weng' ) { %>
+      <% if (user[0].FirstName==='Mabelin' && user[0].LastName==='Kong' || user[0].FirstName==='Kelly' && user[0].LastName==='Chia'
+        || user[0].FirstName==='Amy' && user[0].LastName==='Weng' ) { %>
         <img class="rounded-image" src="/public/images/female.png">
         <% } else { %>
           <img class="rounded-image" src="/public/images/male.png">
           <% } %>
             <h1>
-              <%= user.FirstName %>
-                <%= user.LastName %>
+              <%= user[0].FirstName %>
+                <%= user[0].LastName %>
             </h1>
             <% if (message && fromProfileEditPage) { %>
               <div id="message">
@@ -48,40 +48,56 @@
               </div>
               <% } %></i>
                 <p>
-                  <%= user.EmailAddress %> <a href="/profile-edit" style="position: absolute; top: 10px; right: 10px;">
+                  <%= user[0].EmailAddress %> <a href="/profile-edit" style="position: absolute; top: 10px; right: 10px;">
                       <img src="/public/images/edit.png" width="15" height="15" alt="Edit Profile">
                     </a>
                 </p>
-                <p style="border:solid 1px; padding:10px;"><%= bio[0].Description %></p>
+                <p style="border:solid 1px; padding:10px;">
+                  <%= bio[0].Description %>
+                </p>
                 <table border="0" align="center">
-                <tr>
-                  <td align="left">Projects Involved</td>
-                  <td><%= projectCount %></td>
-                </tr>
-                <tr>
-                  <td align="left">Skills Accquired: 
-                  <td><%= skillCount %></td> 
-                </tr>
-                <tr>
-                  <td align="left">Reflections Written:</td>
-                  <td><%= reflectionCount %></td>
-                </tr>
-                <tr>
-                  <td align="left">Self Evaluation:</td>
-                  <td><%= evaluationCount %></td>
-                </tr>
-                <tr>
-                  <td align="left">Reviews Approved:</td> 
-                  <td><%= reviewApprovedCount %></td>
-                </tr>
-                <tr>
-                  <td align="left">Reviews Hidden:</td>
-                  <td><%= reviewRejectedCount %></td>
-                </tr>
-                <tr>
-                  <td align="left">Reviews Pending:</td> 
-                  <td><%= reviewCreatedCount %></td>
-                </tr>
+                  <tr>
+                    <td align="left">Projects Involved</td>
+                    <td>
+                      <%= projectCount %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="left">Skills Accquired:
+                    <td>
+                      <%= skillCount %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="left">Reflections Written:</td>
+                    <td>
+                      <%= reflectionCount %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="left">Self Evaluation:</td>
+                    <td>
+                      <%= evaluationCount %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="left">Reviews Approved:</td>
+                    <td>
+                      <%= reviewApprovedCount %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="left">Reviews Hidden:</td>
+                    <td>
+                      <%= reviewRejectedCount %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="left">Reviews Pending:</td>
+                    <td>
+                      <%= reviewCreatedCount %>
+                    </td>
+                  </tr>
                 </table>
     </div>
     <div class="home-content-container">
@@ -152,45 +168,155 @@
       </div>
       <div class="home-right-bottom">
         <h3>Feed</h3>
-        <% if (Object.keys(groupedTeamMembers).length > 0) {
-          // Sort project IDs based on ProjectCreatedDate in descending order
-          const sortedProjectIds = Object.keys(groupedTeamMembers).sort((a, b) => {
-              return new Date(groupedTeamMembers[b].ProjectCreatedDate) - new Date(groupedTeamMembers[a].ProjectCreatedDate);
-          });
-      
-          // Iterate over sorted project IDs
-          sortedProjectIds.forEach(projectId => {
-      %>
-              <div>
-                  <% const ProjectCreatedTime = groupedTeamMembers[projectId].ProjectCreatedDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }); %>
-                  <p style="font-size:12px;">
-                      <%= new Date(groupedTeamMembers[projectId].ProjectCreatedDate).toLocaleDateString() %>
-                      <%= ProjectCreatedTime %>
-                  </p>
-                  <p>New project <b><a href="/project/<%= groupedTeamMembers[projectId].ProjectID %>">
-                          <%= groupedTeamMembers[projectId].ProjectName %>
-                      </a></b> was created by <b><a href="/biography/<%= groupedTeamMembers[projectId].ProjectCreatedByID %>">
-                          <%= groupedTeamMembers[projectId].ProjectCreatedBy %>
-                      </a></b></p>
-                  <span style="font-size:12px;">Current Members:</span>
-                  <% if (groupedTeamMembers[projectId].TeamMembers.length > 0) { %>
-                      <% groupedTeamMembers[projectId].TeamMembers.forEach(member => { %>
-                          <div class="bubble" style="font-size:12px;">
-                              <%= member.TeamMember %>
-                          </div>
-                      <% }) %>
-                  <% } else { %>
-                  <% } %>
-              </div>
-      <% }) %>
-      <% } else { %>
-          <p>No projects available</p>
-      <% } %>
-      
-      </div>
+        <%
+feedback.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+feedback = feedback.slice(0, 50);
+feedback.sort((a, b) => b.ProjectID - a.ProjectID); // Sorting projects by ProjectID in descending order
+%>
+
+<% const projectsMap = new Map(); %>
+<% feedback.forEach(item => { %>
+    <% if (!projectsMap.has(item.ProjectID)) { %>
+        <% projectsMap.set(item.ProjectID, item); %>
+    <% } %>
+<% }) %>
+    <% const projects = [...projectsMap.values()]; %>
+    <% projects.forEach(project => { %>
+        <div class="project">
+            <!-- Display self-evaluations for the project -->
+            <% const uniqueSelfEvaluationsMap = new Map(); %>
+            <% const selfEvaluations = feedback.filter(item => item.SkillID && item.ProjectID === project.ProjectID); %>
+            <% if (selfEvaluations.length > 0) { %>
+                <div class="selfEvaluationItem">
+                    <p style="font-size:12px;">
+                        <% const SelfEvaluationCreatedTime = selfEvaluations[0].EvaluationCreatedDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }); %>
+                        <%= new Date(selfEvaluations[0].EvaluationCreatedDate).toLocaleDateString() %> <%= SelfEvaluationCreatedTime %>
+                    </p>
+                    New Self-Evaluation added by <b><a href="/biography/<%= selfEvaluations[0].SEUserID %>"><%= selfEvaluations[0].SEUserName %></a></b> in <b><a href="/project/<%= project.ProjectID %>"><%= project.ProjectName %></a></b>
+                    <div class="bubble-container">
+                        <% selfEvaluations.forEach(selfEvaluation => { %>
+                            <% if (!uniqueSelfEvaluationsMap.has(selfEvaluation.SkillID)) { %>
+                                <% uniqueSelfEvaluationsMap.set(selfEvaluation.SkillID, selfEvaluation); %>
+                            <% } %>
+                        <% }) %>
+                        <% const uniqueSelfEvaluations = [...uniqueSelfEvaluationsMap.values()]; %>
+                        <% uniqueSelfEvaluations.forEach(selfEvaluation => { %>
+                            <div class="bubble">
+                                <a href="/skill/<%= selfEvaluation.SkillID %>"><span style="font-size:12px;"><%= selfEvaluation.SkillName %></span></a>
+                            </div>
+                            <!-- Add any additional information you want to display -->                 
+                        <% }) %>
+                        <hr>
+                    </div>
+                    <hr>
+                </div>
+            <% } %>
+    
+            <!-- Display reflections for the project -->
+            <% const uniqueReflectionsMap = new Map(); %>
+            <% const reflections = feedback.filter(item => item.ReflectionID && item.ProjectID === project.ProjectID); %>
+            <% const uniqueReflections = []; %>
+            <% reflections.forEach(reflection => { %>
+                <% if (!uniqueReflectionsMap.has(reflection.ReflectionID)) { %>
+                    <% uniqueReflectionsMap.set(reflection.ReflectionID, reflection); %>
+                    <% uniqueReflections.push(reflection); %>
+                <% } %>
+            <% }) %>
+            <% if (uniqueReflections.length > 0) { %>
+                <div class="reflections">
+                    <% uniqueReflections.forEach(reflection => { %>
+                        <div class="reflection">
+                            <p style="font-size:12px;">
+                                <% const ReflectionCreatedTime = reflection.ReflectionCreatedDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }); %>
+                                <%= new Date(reflection.ReflectionCreatedDate).toLocaleDateString() %> <%= ReflectionCreatedTime %>
+                            </p>
+                            New Reflection added by <b><a href="/biography/<%= reflection.UserID %>"><%= reflection.UserName %></a></b> in <b><a href="/project/<%= project.ProjectID %>"><%= project.ProjectName %></a></b>
+                            <p><%= reflection.ReflectionDescription %></p>
+                            <hr>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } %>
+    
+            <!-- Display unique reviews for the project -->
+            <% const uniqueReviewsMap = new Map(); %>
+            <% const reviews = feedback.filter(item => item.ReviewID && item.ProjectID === project.ProjectID); %>
+            <% reviews.forEach(review => { %>
+                <% const key = `${review.ReviewerID}-${review.ReceiverID}-${review.ProjectID}`; %>
+                <% if (!uniqueReviewsMap.has(key)) { %>
+                    <% uniqueReviewsMap.set(key, review); %>
+                <% } %>
+            <% }) %>
+            <% const uniqueReviews = [...uniqueReviewsMap.values()]; %>
+            <% if (uniqueReviews.length > 0) { %>
+                <div class="reviews">
+                    <% uniqueReviews.forEach(review => { %>
+                        <div class="review">
+                            <p style="font-size:12px;">
+                                <% const ReviewCreatedTime = review.ReviewCreatedDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }); %>
+                                <%= new Date(review.ReviewCreatedDate).toLocaleDateString() %> <%= ReviewCreatedTime %>
+                            </p>
+                            <p>
+                                New Review wrote by <b><a href="/biography/<%= review.ReviewerID %>"><%= review.ReviewerName %></a></b> 
+                                for <b><a href="/biography/<%= review.ReceiverID %>"><%= review.ReceiverName %></a></b>
+                                in <b><a href="/project/<%= project.ProjectID %>"><%= project.ProjectName %></a></b>
+                            </p>
+                            <p class="<%= user[0].UserID === review.ReceiverID && review.ReviewStatus === 'Rejected' ? 'hidden-review' : '' %>">
+                              <%= review.ReviewDescription %>
+                          </p>
+                          <% if (user[0].UserID === review.ReceiverID) { %>
+                              <% if (review.ReviewStatus === "Rejected") { %>
+                                  <p>
+                                      <form action="/unhide-review" method="POST" style="display: inline;">
+                                          <input type="hidden" name="ReviewID" value="<%= review.ReviewID %>">
+                                          <button type="submit">Unhide Review</button>
+                                      </form>
+                                  </p>
+                              <% } else { %>
+                                  <p>
+                                      <form action="/hide-review" method="POST" style="display: inline;">
+                                          <input type="hidden" name="ReviewID" value="<%= review.ReviewID %>">
+                                          <button type="submit">Hide Review</button>
+                                      </form>
+                                  </p>
+                              <% } %>
+                          <% } %>
+                        </div>
+                        <hr>
+                    <% }) %>
+                   
+                </div>
+            <% } %>
+
+        <% const uniqueTeamMap = new Map(); %>
+<% const Team = feedback.filter(item => item.UserID && item.ProjectID === project.ProjectID); %>
+<% if (Team.length > 0) { %>
+    <div class="teamItem">
+      <p style="font-size:12px;">
+      <% const ProjectCreatedTime = Team[0].ProjectCreatedDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }); %>
+                        <%= new Date(Team[0].ProjectCreatedDate).toLocaleDateString() %> <%= ProjectCreatedTime %>
+                        </p>
+        New project <b><a href="/project/<%= Team[0].ProjectID %>"><%= Team[0].ProjectName %></a></b> created by <b><a href="/biography/<%= Team[0].UserID %>"><%= Team[0].SEUserName %></a></b>
+        <div class="bubble-container">
+            <% Team.forEach(Team => { %>
+                <% if (!uniqueTeamMap.has(Team.UserID)) { %>
+                    <% uniqueTeamMap.set(Team.UserID, Team); %>
+                <% } %>
+            <% }) %>
+            <% const uniqueTeam = [...uniqueTeamMap.values()]; %>
+            <% uniqueTeam.forEach(Team => { %>
+                <div class="bubble">
+                    <a href="/biography/<%= Team.UserID %>"><span style="font-size:12px;"><%= Team.UserName %></span></a>
+                </div>
+                <!-- Add any additional information you want to display -->                 
+            <% }) %>
+            <hr>
+        </div>
+        <hr>
     </div>
+<% } %>
+<% }) %>
   </div>
-  </script>
 </body>
 
 </html>

@@ -108,6 +108,7 @@ body {
 /* Styling for error message */
 .error {
     color: red;
+    font-size: 12px;
 }
 
 /* Styling for text input, email input, and password input fields */
@@ -637,3 +638,12 @@ hr {
     border-radius: 15px;
 }
 
+.nav-links a.active {
+    background-color: #777;
+    font-weight: bold; 
+  }
+
+  .hidden-review {
+    color: #949494; /* Light grey color */
+    font-style: italic; /* Italic font style */
+}
