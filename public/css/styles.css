@@ -23,7 +23,7 @@
 }
 
 /*login page logo*/
-.login_logo{
+.login_logo {
     height: 80px;
 }
 
@@ -193,27 +193,31 @@ input[type="email"] {
     /* Centering the form horizontally */
     padding: 20px;
     /* Adding padding */
-    background: #fff; /* Setting background color */
-    border-radius: 8px; /* Adding border radius */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adding box shadow */
+    background: #fff;
+    /* Setting background color */
+    border-radius: 8px;
+    /* Adding border radius */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* Adding box shadow */
 }
 
 .form-input label {
-    text-align: left; /* Align labels to the left */
+    text-align: left;
+    /* Align labels to the left */
 }
 
 .form-input button {
     padding: 10px 20px;
-    background-color: #333; 
+    background-color: #333;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-right: 5px; 
+    margin-right: 5px;
 }
 
 .form-input button:hover {
-    background-color: #aaa; 
+    background-color: #aaa;
 }
 
 /* Styling for heading */
@@ -333,11 +337,11 @@ input[type="reset"]:hover {
 .projectSuggestion {
     padding: 10px;
     cursor: pointer;
-    transition: background-color 0.3s; 
+    transition: background-color 0.3s;
 }
 
 .projectSuggestion:hover {
-    background-color: #f0f0f0; 
+    background-color: #f0f0f0;
 }
 
 #skillSuggestionsContainer {
@@ -349,11 +353,11 @@ input[type="reset"]:hover {
 .skillSuggestion {
     padding: 10px;
     cursor: pointer;
-    transition: background-color 0.3s; 
+    transition: background-color 0.3s;
 }
 
 .skillSuggestion:hover {
-    background-color: #f0f0f0; 
+    background-color: #f0f0f0;
 }
 
 /* Styles for selected skills */
@@ -406,9 +410,9 @@ input[type="reset"]:hover {
 }
 
 .bubble a:hover {
-    background-color: #aaa; 
-    border-radius: 20px; 
-    padding: 5px 10px; 
+    background-color: #aaa;
+    border-radius: 20px;
+    padding: 5px 10px;
     padding: 5px 10px;
 }
 
@@ -452,16 +456,21 @@ input[type="reset"]:hover {
 }
 
 .rounded-image {
-    border-radius: 50%; /* Makes the border round */
-    overflow: hidden; /* Ensures the image stays within the rounded border */
-    width: 200px; /* Adjust width as needed */
-    height: 200px; /* Adjust height as needed */
+    border-radius: 50%;
+    /* Makes the border round */
+    overflow: hidden;
+    /* Ensures the image stays within the rounded border */
+    width: 200px;
+    /* Adjust width as needed */
+    height: 200px;
+    /* Adjust height as needed */
 }
 
 .home-container {
     display: flex;
     flex-direction: row;
-    height: 80vh; /* Full height of the viewport */
+    height: 80vh;
+    /* Full height of the viewport */
 }
 
 .home-profile-container {
@@ -469,8 +478,8 @@ input[type="reset"]:hover {
     margin: 20px;
     padding: 20px;
     background-color: #e7e7e7;
-    text-align: center; 
-    padding-left: 10px; 
+    text-align: center;
+    padding-left: 10px;
     flex: 25%;
     border-radius: 20px;
     position: relative;
@@ -481,15 +490,18 @@ input[type="reset"]:hover {
     height: 740px;
     display: flex;
     flex-direction: column;
-    flex: 75%; /* Take up remaining space */
+    flex: 75%;
+    /* Take up remaining space */
     padding-top: 20px;
 }
 
-.home-right-top, .home-right-bottom {
-    padding-left: 20px; 
+.home-right-top,
+.home-right-bottom {
+    padding-left: 20px;
     background-color: #e7e7e7;
-    text-align: left; 
-    margin-bottom: 20px; /* Space between top and bottom containers */
+    text-align: left;
+    margin-bottom: 20px;
+    /* Space between top and bottom containers */
     overflow: auto;
     border-radius: 20px;
     margin-right: 20px;
@@ -505,59 +517,68 @@ input[type="reset"]:hover {
 
 .home-right-top button {
     padding: 10px 20px;
-    background-color: #333; 
+    background-color: #333;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-right: 5px; 
+    margin-right: 5px;
 }
 
 .home-right-top button:hover {
-    background-color: #aaa; 
+    background-color: #aaa;
 }
 
 /* WebKit scrollbar */
 .home-profile-container::-webkit-scrollbar,
 .home-right-top::-webkit-scrollbar,
 .home-right-bottom::-webkit-scrollbar {
-    width: 10px; /* Set the width of the scrollbar */
+    width: 10px;
+    /* Set the width of the scrollbar */
 }
 
 /* Track */
 .home-profile-container::-webkit-scrollbar-track,
 .home-right-top::-webkit-scrollbar-track,
 .home-right-bottom::-webkit-scrollbar-track {
-    background: #e7e7e7; /* Set the background color of the scrollbar track */
+    background: #e7e7e7;
+    /* Set the background color of the scrollbar track */
 }
 
 /* Handle */
 .home-profile-container::-webkit-scrollbar-thumb,
 .home-right-top::-webkit-scrollbar-thumb,
 .home-right-bottom::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2); /* Set the background color of the scrollbar thumb */
-    border-radius: 5px; /* Set the border radius of the scrollbar thumb */
+    background: rgba(0, 0, 0, 0.2);
+    /* Set the background color of the scrollbar thumb */
+    border-radius: 5px;
+    /* Set the border radius of the scrollbar thumb */
 }
 
 /* Handle on hover */
 .home-right-top::-webkit-scrollbar-thumb:hover,
 .home-right-bottom::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.4); /* Set the background color of the scrollbar thumb on hover */
+    background: rgba(0, 0, 0, 0.4);
+    /* Set the background color of the scrollbar thumb on hover */
 }
 
 .home-container a {
-    color: #007bff; /* Set the default color */
-    text-decoration: none; /* Remove underline by default */
+    color: #007bff;
+    /* Set the default color */
+    text-decoration: none;
+    /* Remove underline by default */
 }
 
 /* Hover effect */
 .home-container a:hover {
-    text-decoration: underline; /* Add underline on hover */
+    text-decoration: underline;
+    /* Add underline on hover */
 }
 
 /* Visited link style */
 .home-container a:visited {
-    color: #000000; /* Set the color for visited links */
+    color: #000000;
+    /* Set the color for visited links */
 }
 
 hr {
@@ -573,18 +594,21 @@ hr {
     /* Centering the form horizontally */
     padding: 20px;
     /* Adding padding */
-    background: #fff; /* Setting background color */
-    border-radius: 8px; /* Adding border radius */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adding box shadow */
+    background: #fff;
+    /* Setting background color */
+    border-radius: 8px;
+    /* Adding border radius */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* Adding box shadow */
 }
 
 /*search bar styling*/
-.search_bar{
+.search_bar {
     margin: 50px;
 }
 
 /*add project button*/
-.add_project{
+.add_project {
     background-color: #111;
     color: white;
     padding: 14px 20px;
@@ -593,15 +617,15 @@ hr {
     cursor: pointer;
     border-radius: 30px;
     font-size: 16px;
-    
+
 }
 
-.add_project:hover{
+.add_project:hover {
     background-color: #2b2b2b;
 }
 
 /*table styling*/
-.project_table .table_head{
+.project_table .table_head {
     padding-top: 10px;
     padding-bottom: 10px;
     text-align: left;
@@ -609,29 +633,29 @@ hr {
     color: white;
 }
 
-.project_table tbody tr:nth-child(even){
+.project_table tbody tr:nth-child(even) {
     background-color: #ddd;
 }
 
-.project_table tbody tr:nth-child(odd){
+.project_table tbody tr:nth-child(odd) {
     background-color: #ededed;
 }
 
-.project_table tbody tr:hover{
+.project_table tbody tr:hover {
     background-color: #cdcdcd;
 }
 
-.project_table{
+.project_table {
     padding: 50px;
 }
 
-.table_border{
+.table_border {
     overflow: hidden;
     border-radius: 8px;
     border: 1px solid;
 }
 
-.project_border{
+.project_border {
     background-color: #c1c1c1;
     padding: 50px;
     margin: 50px;
@@ -640,10 +664,59 @@ hr {
 
 .nav-links a.active {
     background-color: #777;
-    font-weight: bold; 
-  }
+    font-weight: bold;
+}
 
-  .hidden-review {
-    color: #949494; /* Light grey color */
-    font-style: italic; /* Italic font style */
+.hidden-review {
+    color: #949494;
+    /* Light grey color */
+    font-style: italic;
+    /* Italic font style */
+}
+
+/* Biography container */
+.biography-container {
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+}
+
+/* Styling for biography containers */
+.biography-top-container,
+.biography-middle-container {
+    height: 250px;
+    margin: 20px;
+    padding: 20px;
+    background-color: #e7e7e7;
+    text-align: center; 
+    padding-left: 10px; 
+    flex: 10%;
+    border-radius: 20px;
+    overflow: auto;
+}
+
+/* Styling for the bottom container */
+.biography-bottom-container {
+    display: flex;
+    justify-content: space-between; 
+    margin: 20px;
+}
+
+/* Styling for bottom-left container */
+.biography-bottom-left {
+    flex-basis: 30%; 
+    padding: 20px;
+    background-color: #e7e7e7;
+    border-radius: 20px;
+    overflow: auto;
+    margin-right: 20px; 
+}
+
+/* Styling for bottom-right container */
+.biography-bottom-right {
+    flex-basis: 65%; 
+    padding: 20px;
+    background-color: #e7e7e7;
+    border-radius: 20px;
+    overflow: auto;
 }

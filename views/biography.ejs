@@ -28,120 +28,42 @@
       </ul>
     </nav>
   </div>
-  <h1>Hello!</h1>
-  <h2>My name is <%= user[0].FirstName %>
-      <%= user[0].LastName %>
-  </h2>
-  If you're interested to collab with me, contact me via <b><a href="mailto:<%= user[0].EmailAddress %>">
-      <%= user[0].EmailAddress %>
-    </a></b>
-<hr>
-    Get me know more about me below:<br>
-    <% const projectsMap = new Map(); %>
-<% feedback.forEach(item => { %>
-    <% if (!projectsMap.has(item.ProjectID)) { %>
-        <% projectsMap.set(item.ProjectID, item); %>
-    <% } %>
-<% }) %>
 
-<% const projects = [...projectsMap.values()]; %>
-<% projects.forEach(project => { %>
-    <div class="project">
-        <h3><a href="/project/<%= project.ProjectID %>"><%= project.ProjectName %></a></h3>
+  <div class="biography-container">
 
-        <!-- Display self-evaluations for the project -->
-        <% const uniqueSelfEvaluationsMap = new Map(); %>
-        <% const selfEvaluations = feedback.filter(item => item.SkillID && item.ProjectID === project.ProjectID); %>
-        <% selfEvaluations.forEach(selfEvaluation => { %>
-            <% if (!uniqueSelfEvaluationsMap.has(selfEvaluation.SkillID)) { %>
-                <% uniqueSelfEvaluationsMap.set(selfEvaluation.SkillID, selfEvaluation); %>
-            <% } %>
-        <% }) %>
-        <% const uniqueSelfEvaluations = [...uniqueSelfEvaluationsMap.values()]; %>
-        <% if (uniqueSelfEvaluations.length > 0) { %>
-            <div class="selfEvaluationItem">
-                <h4>Self-Evaluation:</h4>
-                <div class="bubble-container">
-                    <% uniqueSelfEvaluations.forEach(selfEvaluation => { %>
-                        <div class="bubble">
-                            <a href="/skill/<%= selfEvaluation.SkillID %>"><%= selfEvaluation.SkillName %></a>
-                        </div>
-                        <!-- Add any additional information you want to display -->                 
-                    <% }) %>
-                </div>
-            </div>
-        <% } %>
+    <!-- Display profile -->
+    <div class="biography-top-container">
+      Top Container
+      <p>This is to display the user profile.</p>
     </div>
 
-        <!-- Display reflections for the project -->
-        <% const uniqueReflectionsMap = new Map(); %>
-        <% const reflections = feedback.filter(item => item.ReflectionID && item.ProjectID === project.ProjectID); %>
-        <% reflections.forEach(reflection => { %>
-            <% if (!uniqueReflectionsMap.has(reflection.ReflectionID)) { %>
-                <% uniqueReflectionsMap.set(reflection.ReflectionID, reflection); %>
-            <% } %>
-        <% }) %>
-        <% const uniqueReflections = [...uniqueReflectionsMap.values()]; %>
-        <% if (uniqueReflections.length > 0) { %>
-            <div class="reflections">
-                <h4>Reflections:</h4>
-                <% uniqueReflections.forEach(reflection => { %>
-                    <div class="reflection">
-                        <p>Reflection: <%= reflection.ReflectionDescription %></p>
-                        <% const ReflectionCreatedTime = reflection.ReflectionCreatedDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }); %>
-                        <p>Created Date: <%= new Date(reflection.ReflectionCreatedDate).toLocaleDateString() %> <%= ReflectionCreatedTime %></p>
-                    </div>
-                <% }) %>
-            </div>
-        <% } %>
 
-         <!-- Display unique reviews for the project -->
-        <% const uniqueReviewsMap = new Map(); %>
-        <% const reviews = feedback.filter(item => item.ReviewID && item.ProjectID === project.ProjectID); %>
-        <% reviews.forEach(review => { %>
-            <% const key = `${review.ReviewerID}-${review.ReceiverID}-${review.ProjectID}`; %>
-            <% if (!uniqueReviewsMap.has(key)) { %>
-                <% uniqueReviewsMap.set(key, review); %>
-            <% } %>
-        <% }) %>
-        <% const uniqueReviews = [...uniqueReviewsMap.values()]; %>
-        <% if (uniqueReviews.length > 0) { %>
-            <div class="reviews">
-                <h4>Reviews:</h4>
-                <% uniqueReviews.forEach(review => { %>
-                    <div class="review">
-                        <p> Review wrote by <b>
-                          <a href="/biography/<%= review.ReviewerID %>">
-                            <%= review.ReviewerName %> </b> 
-                          </a> on 
-                          <% const ReviewCreatedTime = review.ReviewCreatedDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }); %>
-                          <%= new Date(review.ReviewCreatedDate).toLocaleDateString() %> <%= ReviewCreatedTime %>
-                        </p>
-                        <p><%= review.ReviewDescription %></p>
+    <!-- Display list of skills -->
+    <div class="biography-middle-container">
+      Middle Container
+      <p>This is to list all of the skills that the user has.</p>
+    </div>
 
-                    <% if (userId!=review.ReceiverID) { %>
-                      <!--<p>peers</p>-->
-                      <% } else { %>
-                        <% if (review.ReviewStatus==="Rejected" ) { %>
-                          <p>
-                          <form action="/unhide-review" method="POST" style="display: inline;">
-                            <input type="hidden" name="ReviewID" value="<%= review.ReviewID %>">
-                            <button type="submit">Unhide Review</button>
-                          </form>
-                          </p>
-                          <% } else { %>
-                            <p>
-                            <form action="/hide-review" method="POST" style="display: inline;">
-                              <input type="hidden" name="ReviewID" value="<%= review.ReviewID %>">
-                              <button type="submit">Hide Review</button>
-                            </form>
-                            </p>
-                            <% } %>
-                              <% } %>
-                            </div>
-                <% }) %>
-            </div>
-        <% } %>
-<% }) %>
-  </body>
+
+    <!-- Display list of projects, self evaluation, reviews -->
+    <div class="biography-bottom-container">
+
+      <!-- Display list of projects -->
+      <div class="biography-bottom-left">
+        Left Container
+        <p>This is for list of all of the projects.</p>
+      </div>
+
+      <!-- Display self-evaluations + reviews for the project -->
+      <div class="biography-bottom-right">
+        Right Container
+        <p>This is to list the self-evaluations + reviews of the project.</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+
 </html>
