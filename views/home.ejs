@@ -169,7 +169,7 @@
       <div class="home-right-bottom">
         <h3>Feed</h3>
         <%
-feedback.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+        feedback.sort((a, b) => new Date(b.ReflectionCreatedDate || b.ReviewCreatedDate || b.ProjectCreatedDate) - new Date(a.ReflectionCreatedDate || a.ReviewCreatedDate || a.ProjectCreatedDate));
 feedback = feedback.slice(0, 50);
 feedback.sort((a, b) => b.ProjectID - a.ProjectID); // Sorting projects by ProjectID in descending order
 %>
