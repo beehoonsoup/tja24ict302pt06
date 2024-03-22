@@ -83,22 +83,24 @@
     <ul class="nav-links">
       <li class="nav-item"><a href="/home">Home</a></li>
       <li class="nav-item"><a href="/biography">Biography</a></li>
-      <li class="nav-item"><a href="/project">Project</a></li>
+      <li class="nav-item" style="background-color: #777; border-radius: 4px; padding: 5px 0px;"><a href="/project">Project</a></li>
       <li class="nav-item"><a href="/skill/1">Skill</a></li>
       <li class="nav-item"><a href="/logout">Logout</a></li>
     </ul>
   </nav>
 </div>
-  <h1>Projects</h1>
-  <div class="project_border">
+
+<div class="search_container">
+  <a href="/project-create"><button class="add_project">Add Project <i class="fa-solid fa-plus"></i></button></a>
   <div class="search_bar">
   <input type="text" id="searchInput" placeholder="Search project..." oninput="getSuggestions(this.value)">
   <div class="suggestions">
   <div id="projectSuggestionsContainer"></div><p>
   </div>
   </div>
-  <a href="/project-create"><button class="add_project">Add Project <i class="fa-solid fa-plus"></i></button></a>
   <p>
+  </div>
+  <div class="project_border">
   <div class="project_table">
   <table class="table_border">
     <thead>
@@ -119,32 +121,32 @@
           <td><a href="/project/<%= project.ProjectID %>">
               <%= project.ProjectName %>
             </a></td>
-          <td>
-            <%= project.ProjectDescription %>
+          <td><a href="/project/<%= project.ProjectID %>">
+            <%= project.ProjectDescription %></a>
           </td>
-          <td>
-            <%= project.ProjectStartDate %>
+          <td><a href="/project/<%= project.ProjectID %>">
+            <%= project.ProjectStartDate %></a>
           </td>
-          <td>
+          <td><a href="/project/<%= project.ProjectID %>">
             <% if (new Date(project.ProjectEndDate).toDateString()==='Thu Jan 01 1970' ) { %>
               <!-- Display blank if ProjectEndDate is 1/1/1970 -->
               <%= '' %>
                 <% } else { %>
-                  <%= project.ProjectEndDate %>
+                  <%= project.ProjectEndDate %></a>
                     <% } %>
           </td>
-          <td>
-            <%= project.ProjectGrade %>
+          <td><a href="/project/<%= project.ProjectID %>">
+            <%= project.ProjectGrade %></a>
           </td>
-          <td>
-            <%= project.MemberCount %>/<%= project.ProjectSize %>
+          <td><a href="/project/<%= project.ProjectID %>">
+            <%= project.MemberCount %>/<%= project.ProjectSize %></a>
           </td>
-          <td>
+          <td><a href="/project/<%= project.ProjectID %>">
             <%= project.CreatedByFirstName %>
-              <%= project.CreatedByLastName %>
+              <%= project.CreatedByLastName %></a>
           </td>
-          <td>
-            <%= project.ProjectCreatedDate %>
+          <td><a href="/project/<%= project.ProjectID %>">
+            <%= project.ProjectCreatedDate %></a>
           </td>
         </tr>
         <% }) %>

@@ -324,14 +324,16 @@ input[type="reset"]:hover {
 
 /* selfEvalutation-create search skills layout */
 #projectSuggestionsContainer {
-    position: fixed;
+    position: static;
     top: 100%;
     left: 0;
     background-color: white;
-    z-index: 99;
+    z-index: 9999;
     text-align: left;
-    margin-left: 50px;
+    margin-left: auto;
     width: 100%;
+    opacity: 1;
+    overflow: hidden;
 }
 
 .projectSuggestion {
@@ -347,7 +349,9 @@ input[type="reset"]:hover {
 #skillSuggestionsContainer {
     max-height: 200px;
     overflow-y: auto;
-    border: 1px solid #ccc;
+    background-color: white;
+    z-index: 9999;
+    position: static;
 }
 
 .skillSuggestion {
@@ -604,19 +608,39 @@ hr {
 
 /*search bar styling*/
 .search_bar {
-    margin: 50px;
+    margin: 20px;
+    margin-bottom: 10px;
+    margin-top: 0px;
+    width: 40%;
+    margin-left: auto;
+}
+
+/*search container styling*/
+.search_container{
+    background-color: #e7e7e7;
+    padding: 20px;
+    padding-bottom: 0%;
+    margin: 20px;
+    border-radius: 15px;
+    display: flex;
+    max-height: 55px;
+}
+
+.suggestions{
+    position: relative;
 }
 
 /*add project button*/
 .add_project {
     background-color: #111;
     color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
+    padding: 10px 20px;
     border: none;
     cursor: pointer;
     border-radius: 30px;
-    font-size: 16px;
+    font-size: 14px;
+    flex: 1;
+    margin-left: 20px;
 
 }
 
@@ -645,8 +669,9 @@ hr {
     background-color: #cdcdcd;
 }
 
-.project_table {
-    padding: 50px;
+.project_table{
+    padding: 20px;
+    padding-top: 10px;
 }
 
 .table_border {
@@ -655,10 +680,18 @@ hr {
     border: 1px solid;
 }
 
-.project_border {
-    background-color: #c1c1c1;
-    padding: 50px;
-    margin: 50px;
+.table_border tbody td a{
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+}
+
+.project_border{
+    background-color: #e7e7e7;
+    padding: 20px;
+    margin: 20px;
     border-radius: 15px;
 }
 
@@ -719,4 +752,158 @@ hr {
     background-color: #e7e7e7;
     border-radius: 20px;
     overflow: auto;
+}
+
+/*project detail page style*/
+
+.project_name{
+    margin-top: 10px;
+}
+
+/*container for project buttons*/
+.project_details_buttons{
+    background-color: #e7e7e7;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 8px;
+}
+
+.project_buttons{
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 14px;
+    margin: 0 20px;
+}
+
+.project_buttons:hover{
+    background-color: #aaa;
+}
+
+.review_button{
+    background-color: #333;
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 10px;
+    margin: 0 10px;
+}
+
+.review_button:hover{
+    background-color: #aaa;
+}
+
+/*container containing members and details*/
+.details_container
+{
+    display: flex;
+    height: 100%;
+}
+
+/*container for displaying members*/
+.member_container{
+    background-color: #e7e7e7;
+    padding: 20px;
+    margin: 5px 10px 10px 20px;
+    border-radius: 8px;
+    flex: 23%;
+    min-height: 500px;
+    height: auto;
+}
+
+/*container for displaying project details*/
+.project_detail_container{
+    background-color: #e7e7e7;
+    padding: 20px;
+    margin: 5px 20px 10px 10px;
+    border-radius: 8px;
+    flex: 77%;
+    text-align: left;
+    min-height: 500px;
+    height: auto;
+}
+
+.project_detail_container td{
+    padding: 5px;
+}
+
+.member_container td{
+    padding: 1px;
+}
+
+/*skills page styling*/
+
+/*skills header*/
+.skills_header{
+    background-color: #e7e7e7;
+    padding: 20px;
+    padding-bottom: 0%;
+    margin: 20px;
+    border-radius: 15px;
+    display: flex;
+    max-height: 55px;
+}
+
+.skills_header h2{
+    text-align: left;
+    margin: 0 0 0 20px;
+    flex: 1;
+}
+
+.skills_search_container{
+    margin: 20px;
+    margin-bottom: 10px;
+    margin-top: 0px;
+    width: 20%;
+    margin-left: auto;
+    position: relative;
+}
+
+/*skills container*/
+.skills_container{
+        padding-left: 20px; 
+        background-color: #e7e7e7;
+        text-align: left; 
+        margin-bottom: 20px;
+        overflow: auto;
+        border-radius: 20px;
+        margin-right: 20px;
+        margin-left: 20px;
+}
+
+.project_skill_container{
+    display: flex;
+}
+
+.project_skill_container b{
+    flex: 20%;
+}
+
+.project_bubble{
+    background-color: #ccc;
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    display: inline-block;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.project_bubble:hover {
+    background-color: #aaa; 
+    border-radius: 20px; 
+    padding: 5px 10px; 
+    padding: 5px 10px;
+}
+
+.bubble_container{
+    flex: 80%;
 }

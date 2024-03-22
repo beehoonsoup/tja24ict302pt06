@@ -54,6 +54,108 @@
 </div>
 
   <h1>Project Details</h1>
+  <h2 class="project_name"><%= project.ProjectName %></h2>
+  
+  <div class="project_details_buttons">
+    <div style="display: inline;">
+      <% if (project.ProjectCreatedBy===user.UserID || teamMemberCount> 0) { %>
+        <!-- Display the Modify button only if ProjectCreatedBy matches UserID -->
+        <form action="/project-edit/<%= project.ProjectID %>" method="get" style="display: inline;">
+          <button type="submit" class="project_buttons">Modify</button>
+        </form> 
+        <% if (memberCount.ProjectSize===memberCount.MemberCount) { %>
+          <!-- edit or remove?-->
+          <% } else { %>
+            <form action="/project-member-add/<%= project.ProjectID %>" method="get" style="display: inline;">
+              <button type="submit" class="project_buttons">Add Member</button>
+            </form> 
+            <% } %>
+            <form action="/selfEvaluation" method="get" style="display: inline;">
+              <input type="hidden" name="projectId" value="<%= project.ProjectID %>">
+              <input type="hidden" name="userId" value="<%= project.UserID %>">
+              <% if (evaluationCount> 0) { %>
+              <button type="submit" class="project_buttons">Edit Self Evaluation</button>
+              <% } else { %>
+                <button type="submit" class="project_buttons">Add Self Evaluation</button>
+                <% } %>
+            </form> 
+              <form action="/reflection-create" method="get" style="display: inline;">
+                <input type="hidden" name="projectId" value="<%= project.ProjectID %>">
+                <input type="hidden" name="userId" value="<%= project.UserID %>">
+                <% if (reflectionCount> 0) { %>
+                <button type="submit" class="project_buttons">Edit Reflection</button>
+                <% } else { %>
+                  <button type="submit" class="project_buttons">Add Reflection</button>
+                <% } %>
+              </form> 
+              <% if (project.ProjectCreatedBy===user.UserID) { %> 
+              <form action="/project-delete" method="POST" style="display: inline;">
+                <input type="hidden" name="projectId" value="<%= project.ProjectID %>">
+                <button type="submit" class="project_buttons">Delete Project</button>
+                <% } else { %>
+                <% } %>
+              </form>
+              <% } else if (teamRequestCount> 0) { %>
+                <i>Join Team Request Pending Approval</i>
+                <% } else if (memberCount.ProjectSize===memberCount.MemberCount) { %>
+                  <!-- Team is full, no options available -->
+                  <% } else if (teamLeaderCount> 0) { %>
+                    <form action="/project-join-request/<%= project.ProjectID %>" method="POST" style="display: inline;">
+                      <input type="hidden" name="teamRole" value="Member">
+                      <button type="submit" class="project_buttons">Request to Join as Member</button>
+                      <% } else { %>
+                        <form id="projectJoinForm" action="/project-join-request/<%= project.ProjectID %>" method="POST" style="display: inline;">
+                          <input type="hidden" name="teamRole" id="teamRoleInput" value="">
+                          <button type="button" onclick="setTeamRole('Member')" class="project_buttons">Request to Join as Member</button>
+                          <button type="button" onclick="setTeamRole('Leader')" class="project_buttons">Request to Join as Leader</button>
+                      </form>
+                          <% } %>
+    </div>
+  </div>
+
+  <div class="details_container">
+  <div class="member_container">
+  <table>
+    <tr>
+      <td><b>Member Name</b></td>
+      <td><b>Member Role</b></td>
+      <td><b></b></td>
+    </tr>
+    <% memberRows.forEach(member => { %>
+      <tr>
+          <td>
+            <a href="/biography/<%= member.UserID %>"><%= member.UserName %></a>
+          </td>
+          <td>
+            <%= member.TeamRole %>
+          </td>
+          <% if (teamMemberCount > 0) { %>
+              <% if (member.UserID === user.UserID) { %>
+                  <!-- Not allowed to review -->
+                  <td></td>
+              <% } else { %>
+                  <!-- Allow to review -->
+                  <td>
+                      <form action="/review-create" method="get" style="display: inline;">
+                          <input type="hidden" name="projectId" value="<%= project.ProjectID %>">
+                          <input type="hidden" name="reviewer" value="<%= user.UserID %>">
+                          <input type="hidden" name="receiverName" value="<%= member.UserName %>">
+                          <input type="hidden" name="receiverID" value="<%= member.UserID %>">
+                          <button type="submit" class="review_button">Review</button>
+                      </form>
+                  </td>
+              <% } %>
+          <% } else { %>
+              <!-- Team member count is 0 -->
+              <td></td>
+          <% } %>
+      </tr>
+  <% }) %>
+  </table>
+</div>
+  <p></p>
+
+  <div class="project_detail_container">
   <table>
     <tr>
       <td><b>Project Name:</b></td>
@@ -122,100 +224,10 @@
       </td>
     </tr>
   </table>
+</div>
+</div>
   <p></p>
-
-  <table>
-    <tr>
-      <td><b>Member Name</b></td>
-      <td><b>Member Role</b></td>
-      <td><b></b></td>
-    </tr>
-    <% memberRows.forEach(member => { %>
-      <tr>
-          <td>
-            <a href="/biography/<%= member.UserID %>"><%= member.UserName %></a>
-          </td>
-          <td>
-            <%= member.TeamRole %>
-          </td>
-          <% if (teamMemberCount > 0) { %>
-              <% if (member.UserID === user.UserID) { %>
-                  <!-- Not allowed to review -->
-                  <td></td>
-              <% } else { %>
-                  <!-- Allow to review -->
-                  <td>
-                      <form action="/review-create" method="get" style="display: inline;">
-                          <input type="hidden" name="projectId" value="<%= project.ProjectID %>">
-                          <input type="hidden" name="reviewer" value="<%= user.UserID %>">
-                          <input type="hidden" name="receiverName" value="<%= member.UserName %>">
-                          <input type="hidden" name="receiverID" value="<%= member.UserID %>">
-                          <button type="submit">Review</button>
-                      </form>
-                  </td>
-              <% } %>
-          <% } else { %>
-              <!-- Team member count is 0 -->
-              <td></td>
-          <% } %>
-      </tr>
-  <% }) %>
-  </table>
-  <p></p>
-  <div style="display: inline;">
-    <% if (project.ProjectCreatedBy===user.UserID || teamMemberCount> 0) { %>
-      <!-- Display the Modify button only if ProjectCreatedBy matches UserID -->
-      <form action="/project-edit/<%= project.ProjectID %>" method="get" style="display: inline;">
-        <button type="submit">Modify</button>
-      </form> |
-      <% if (memberCount.ProjectSize===memberCount.MemberCount) { %>
-        <!-- edit or remove?-->
-        <% } else { %>
-          <form action="/project-member-add/<%= project.ProjectID %>" method="get" style="display: inline;">
-            <button type="submit">Add Member</button>
-          </form> |
-          <% } %>
-          <form action="/selfEvaluation" method="get" style="display: inline;">
-            <input type="hidden" name="projectId" value="<%= project.ProjectID %>">
-            <input type="hidden" name="userId" value="<%= project.UserID %>">
-            <% if (evaluationCount> 0) { %>
-            <button type="submit">Edit Self Evaluation</button>
-            <% } else { %>
-              <button type="submit">Add Self Evaluation</button>
-              <% } %>
-          </form> |
-            <form action="/reflection-create" method="get" style="display: inline;">
-              <input type="hidden" name="projectId" value="<%= project.ProjectID %>">
-              <input type="hidden" name="userId" value="<%= project.UserID %>">
-              <% if (reflectionCount> 0) { %>
-              <button type="submit">Edit Reflection</button>
-              <% } else { %>
-                <button type="submit">Add Reflection</button>
-              <% } %>
-            </form> 
-            <% if (project.ProjectCreatedBy===user.UserID) { %> |
-            <form action="/project-delete" method="POST" style="display: inline;">
-              <input type="hidden" name="projectId" value="<%= project.ProjectID %>">
-              <button type="submit">Delete Project</button>
-              <% } else { %>
-              <% } %>
-            </form>
-            <% } else if (teamRequestCount> 0) { %>
-              <i>Join Team Request Pending Approval</i>
-              <% } else if (memberCount.ProjectSize===memberCount.MemberCount) { %>
-                <!-- Team is full, no options available -->
-                <% } else if (teamLeaderCount> 0) { %>
-                  <form action="/project-join-request/<%= project.ProjectID %>" method="POST" style="display: inline;">
-                    <input type="hidden" name="teamRole" value="Member">
-                    <button type="submit">Request to Join as Member</button>
-                    <% } else { %>
-                      <form id="projectJoinForm" action="/project-join-request/<%= project.ProjectID %>" method="POST" style="display: inline;">
-                        <input type="hidden" name="teamRole" id="teamRoleInput" value="">
-                        <button type="button" onclick="setTeamRole('Member')">Request to Join as Member</button>
-                        <button type="button" onclick="setTeamRole('Leader')">Request to Join as Leader</button>
-                    </form>
-                        <% } %>
-  </div>
+  
   <script>
     function setTeamRole(role) {
         document.getElementById('teamRoleInput').value = role;

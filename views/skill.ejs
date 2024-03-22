@@ -22,27 +22,38 @@
               <li class="nav-item"><a href="/home">Home</a></li>
               <li class="nav-item"><a href="/biography">Biography</a></li>
               <li class="nav-item"><a href="/project">Project</a></li>
-              <li class="nav-item"><a href="/skill/1">Skill</a></li>
+              <li class="nav-item" style="background-color: #777; border-radius: 4px; padding: 5px 0px;"><a href="/skill/1">Skill</a></li>
               <li class="nav-item"><a href="/logout">Logout</a></li>
             </ul>
           </nav>
     </div>
     <div class="ctnSearchSkills">
-        <h1>Search Skills</h1>
+        <div class="skills_header">
+        <h2>Search Skills</h2>
+
+        <div class="skills_search_container">
         <input type="text" id="searchInput" placeholder="Search skill..." oninput="getSuggestions(this.value)">
-  <div id="skillSuggestionsContainer"></div>
+    <div id="skillSuggestionsContainer"></div>
+        </div>
+    </div>
+    
         <% users.forEach(user=> { %>
-            <h2>
+        <div class="skills_container">
+        <div class="skills_name">
+            <h3>
                 <%= user.UserName %>
-            </h2>
+            </h3>
             <% user.projects.forEach(project=> { %>
-                <div>
+            </div>
+                <div class="project_skill_container">
                     <b>
-                        <a href="/project/<%= project.ProjectID %>"><%= project.ProjectName %></a>
+                        <span>Project Name: </span><a href="/project/<%= project.ProjectID %>" class="project_bubble"><%= project.ProjectName %></a>
                     </b>
                     
                     <!-- Display skills for the project -->
-                    <div class="bubble-container">
+                    <div class="bubble_container">
+                        <b>Skill: </b>
+
                     <% project.skills.forEach(skill=> { %>
                         <% if (skill.SkillID==selectedSkillId) { %>
                             <span class="ctnSearchSkills-selected-skill">
@@ -52,12 +63,17 @@
                             <% } else { %>
                                 <div class="bubble"><a href="/skill/<%= skill.SkillID %>"><%= skill.SkillName %></a></div>
                                     <% } %>
+                                    
                                         <% }) %>
                             </div>
+                            <% }) %>
                         </div>
-                <% }) %>
-                    <% }) %>
+                
+                    
+                    
     </div>
+    <% }) %>
+</div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/js/select2.min.js"></script>
