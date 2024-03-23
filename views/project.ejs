@@ -101,59 +101,61 @@
   <p>
   </div>
   <div class="project_border">
-  <div class="project_table">
-  <table class="table_border">
-    <thead>
-      <tr class="table_head">
-        <th>Project Name</th>
-        <th>Project Description</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-        <th>Grade</th>
-        <th>Size</th>
-        <th>Created By</th>
-        <th>Create Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% projects.forEach(project=> { %>
-        <tr>
-          <td><a href="/project/<%= project.ProjectID %>">
-              <%= project.ProjectName %>
-            </a></td>
-          <td><a href="/project/<%= project.ProjectID %>">
-            <%= project.ProjectDescription %></a>
-          </td>
-          <td><a href="/project/<%= project.ProjectID %>">
-            <%= project.ProjectStartDate %></a>
-          </td>
-          <td><a href="/project/<%= project.ProjectID %>">
-            <% if (new Date(project.ProjectEndDate).toDateString()==='Thu Jan 01 1970' ) { %>
-              <!-- Display blank if ProjectEndDate is 1/1/1970 -->
-              <%= '' %>
+    <div class="project_table">
+      <table class="table_border">
+        <thead>
+          <tr class="table_head">
+            <th>Project Name</th>
+            <th>Project Description</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Grade</th>
+            <th>Size</th>
+            <th>Created By</th>
+            <th>Create Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% projects
+              .sort((a, b) => new Date(b.ProjectCreatedDate) - new Date(a.ProjectCreatedDate))
+              .forEach(project => { %>
+            <tr>
+              <td><a href="/project/<%= project.ProjectID %>">
+                  <%= project.ProjectName %>
+                </a></td>
+              <td><a href="/project/<%= project.ProjectID %>">
+                <%= project.ProjectDescription %></a>
+              </td>
+              <td><a href="/project/<%= project.ProjectID %>">
+                <%= project.ProjectStartDate %></a>
+              </td>
+              <td><a href="/project/<%= project.ProjectID %>">
+                <% if (new Date(project.ProjectEndDate).toDateString() === 'Thu Jan 01 1970') { %>
+                  <%= '' %>
                 <% } else { %>
-                  <%= project.ProjectEndDate %></a>
-                    <% } %>
-          </td>
-          <td><a href="/project/<%= project.ProjectID %>">
-            <%= project.ProjectGrade %></a>
-          </td>
-          <td><a href="/project/<%= project.ProjectID %>">
-            <%= project.MemberCount %>/<%= project.ProjectSize %></a>
-          </td>
-          <td><a href="/project/<%= project.ProjectID %>">
-            <%= project.CreatedByFirstName %>
-              <%= project.CreatedByLastName %></a>
-          </td>
-          <td><a href="/project/<%= project.ProjectID %>">
-            <%= project.ProjectCreatedDate %></a>
-          </td>
-        </tr>
-        <% }) %>
-    </tbody>
-  </table>
-</div>
-</div>
+                  <%= project.ProjectEndDate %>
+                <% } %>
+                </a>
+              </td>
+              <td><a href="/project/<%= project.ProjectID %>">
+                <%= project.ProjectGrade %></a>
+              </td>
+              <td><a href="/project/<%= project.ProjectID %>">
+                <%= project.MemberCount %>/<%= project.ProjectSize %></a>
+              </td>
+              <td><a href="/project/<%= project.ProjectID %>">
+                <%= project.CreatedByFirstName %> <%= project.CreatedByLastName %></a>
+              </td>
+              <td><a href="/project/<%= project.ProjectID %>">
+                <%= project.ProjectCreatedDate %></a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
 </body>
 
 </html>
