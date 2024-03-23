@@ -109,14 +109,10 @@
             <% notificationsFeed.forEach(item=> { %>
               <div class="item">
                 <% if (item.ReviewID) { %>
-                  <% const reviewDate=new Date(item.ReviewModifiedDate); const
-                    formattedDate=reviewDate.toLocaleDateString('en-US', { day: '2-digit' , month: 'short' ,
-                    year: 'numeric' }); const formattedTime=reviewDate.toLocaleTimeString('en-US', { hour12: false });
-                    %>
-                    <p>
-                      <%= formattedDate %>
-                        <%= formattedTime %>
-                    </p>
+                  <p style="font-size:12px;">
+                    <% const reviewDate = item.ReviewModifiedDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }); %>
+                    <%= new Date(item.ReviewModifiedDate).toLocaleDateString() %> <%= reviewDate %>
+                  </p>
                     <a href="/biography/<%= item.ReviewerID %>"><b>
                         <%= item.ReviewerName %>
                       </b></a>
@@ -134,13 +130,9 @@
                     </form>
                     <hr>
                     <% } else { %>
-                      <% const reviewDate=new Date(item.TeamModifiedDate); const
-                        TeamformattedDate=reviewDate.toLocaleDateString('en-US', { day: '2-digit' , month: 'short' ,
-                        year: 'numeric' }); const TeamformattedTime=reviewDate.toLocaleTimeString('en-US', { hour12:
-                        false }); %>
-                        <p>
-                          <%= TeamformattedDate %>
-                            <%= TeamformattedTime %>
+                        <p style="font-size:12px;">
+                          <% const joinDate = item.TeamModifiedDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }); %>
+                          <%= new Date(item.TeamModifiedDate).toLocaleDateString() %> <%= joinDate %>
                         </p>
                         <a href="/biography/<%= item.UserID %>"><b>
                             <%= item.UserName %>
@@ -169,7 +161,7 @@
       <div class="home-right-bottom">
         <h3>Feed</h3>
         <%
-        feedback.sort((a, b) => new Date(b.ReflectionCreatedDate || b.ReviewCreatedDate || b.ReviewCreatedDate || b.ProjectCreatedDate) - new Date(a.ReflectionCreatedDate || a.ReviewCreatedDate || a.ProjectCreatedDate));
+        feedback.sort((a, b) => new Date(b.ReflectionCreatedDate || b.ReviewCreatedDate || b.EvaluationCreatedDate || b.ProjectCreatedDate) - new Date(a.ReflectionCreatedDate || a.ReviewCreatedDate || a.EvaluationCreatedDate || a.ProjectCreatedDate));
 feedback = feedback.slice(0, 50);
 feedback.sort((a, b) => b.ProjectID - a.ProjectID); // Sorting projects by ProjectID in descending order
 %>
