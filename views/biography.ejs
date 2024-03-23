@@ -203,7 +203,7 @@ feedback.sort((a, b) => b.ProjectID - a.ProjectID); // Sorting projects by Proje
                                   </p>
                               <% } else { %>
                                   <p>
-                                      <form action="/hide-review-" method="POST" style="display: inline;">
+                                      <form action="/hide-review-bio" method="POST" style="display: inline;">
                                           <input type="hidden" name="ReviewID" value="<%= review.ReviewID %>">
                                           <button type="submit">Hide Review</button>
                                       </form>
