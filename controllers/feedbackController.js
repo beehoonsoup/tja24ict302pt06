@@ -24,6 +24,126 @@ exports.getCreateReflectionPage = async (req, res) => {
     }
 };
 
+exports.getReflectionPage = async (req, res) => {
+    try {
+        const projectId = req.params.projectId;
+        const userId = req.session.user.UserID;
+        const userURL = req.params.userId;
+
+        // Fetch project name
+        const [projects] = await db.query('SELECT p.ProjectName, p.ProjectID, CONCAT(u.FirstName, " ", u.LastName) as TeamMember, u.UserID, CONCAT(u1.FirstName, " ", u1.LastName) as CreatedBy, p.ProjectCreatedDate, p.ProjectCreatedBy FROM Project p INNER JOIN Team t ON t.ProjectID = p.ProjectID INNER JOIN User u ON u.UserID = t.UserID INNER JOIN User u1 ON u1.UserID = p.ProjectCreatedBy WHERE t.TeamStatus = "Verified" AND p.ProjectStatus = "Enabled" AND p.ProjectID = ? ORDER BY p.ProjectCreatedDate DESC', [projectId]);
+
+
+        // Fetch existing reflection for the given projectId and UserId
+        const [existingReflection] = await db.query('SELECT * FROM Reflection WHERE ProjectID = ? AND UserID = ?', [projectId, userId]);
+
+        const [reflection] = await db.query('SELECT COUNT(*) FROM Reflection WHERE ProjectID = ? AND UserID = ?', [projectId, userId]);
+        const reflectionCount = reflection[0]['COUNT(*)'];
+
+        // Fetch existing reviews for the given projectId and UserId
+        const [existingReview] = await db.query('SELECT p.ProjectID, p.ProjectName, r.ReviewID, r.ReviewerID, r.ReceiverID, r.ReviewDescription, r.ReviewStatus, r.ReviewCreatedDate, CONCAT(u.FirstName, " ", u.LastName) as ReviewerName, CONCAT(u1.FirstName, " ", u1.LastName) as ReceiverName FROM Project p INNER JOIN ProjectReview pr ON pr.ProjectID = p.ProjectID INNER JOIN Review r ON r.ReviewID = pr.ReviewID INNER JOIN User u ON u.UserID = r.ReviewerID INNER JOIN User u1 ON u1.UserID = r.ReceiverID WHERE p.ProjectStatus = "Enabled" AND r.ReviewStatus = "Approved" AND p.ProjectID = ? AND r.ReceiverID = ?', [projectId, userId]);
+
+        const [review] = await db.query('SELECT COUNT(*) FROM Review r INNER JOIN ProjectReview pr ON pr.ReviewID = r.ReviewID WHERE pr.ProjectID = ? AND r.ReceiverID = ? AND r.ReviewStatus = "Approved"', [projectId, userId]);
+        const reviewCount = review[0]['COUNT(*)'];
+
+        // Create an object to store grouped team members
+    const groupedTeamMembers = {};
+
+    // Iterate over each project
+    projects.forEach(project => {
+        const projectID = project.ProjectID;
+    
+        // Check if the project ID exists in the groupedTeamMembers object
+        if (!groupedTeamMembers[projectID]) {
+            // If the project ID doesn't exist, initialize it with an empty array
+            groupedTeamMembers[projectID] = { 
+                ProjectID: project.ProjectID,
+                ProjectName: project.ProjectName,
+                ProjectCreatedDate: project.ProjectCreatedDate,
+                ProjectCreatedBy: project.CreatedBy,
+                ProjectCreatedByID : project.ProjectCreatedBy,
+                TeamMembers: []
+            };
+        }
+    
+        // Push the current project's team member to the corresponding array
+        groupedTeamMembers[projectID].TeamMembers.push({
+            UserID: project.UserID,
+            TeamMember: project.TeamMember,
+            // Add other properties of team members as needed
+        });
+    });
+
+        console.log('userURL', userURL);
+        //console.log('Userid', userId);
+
+        res.render('reflection', { projectId, userId, projects, existingReflection, reflectionCount: reflectionCount, existingReview, reviewCount, groupedTeamMembers });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred');
+    }
+};
+
+exports.viewReflectionPage = async (req, res) => {
+    try {
+        const projectId = req.params.projectId;
+        const userId = req.session.user.UserID;
+        const reviewerID = req.params.reviewerID;
+
+        // Fetch project name
+        const [projects] = await db.query('SELECT p.ProjectName, p.ProjectID, CONCAT(u.FirstName, " ", u.LastName) as TeamMember, u.UserID, CONCAT(u1.FirstName, " ", u1.LastName) as CreatedBy, p.ProjectCreatedDate, p.ProjectCreatedBy FROM Project p INNER JOIN Team t ON t.ProjectID = p.ProjectID INNER JOIN User u ON u.UserID = t.UserID INNER JOIN User u1 ON u1.UserID = p.ProjectCreatedBy WHERE t.TeamStatus = "Verified" AND p.ProjectStatus = "Enabled" AND p.ProjectID = ? ORDER BY p.ProjectCreatedDate DESC', [projectId]);
+
+
+        // Fetch existing reflection for the given projectId and UserId
+        const [existingReflection] = await db.query('SELECT * FROM Reflection WHERE ProjectID = ? AND UserID = ?', [projectId, reviewerID]);
+
+        const [reflection] = await db.query('SELECT COUNT(*) FROM Reflection WHERE ProjectID = ? AND UserID = ?', [projectId, reviewerID]);
+        const reflectionCount = reflection[0]['COUNT(*)'];
+
+        // Fetch existing reviews for the given projectId and UserId
+        const [existingReview] = await db.query('SELECT p.ProjectID, p.ProjectName, r.ReviewID, r.ReviewerID, r.ReceiverID, r.ReviewDescription, r.ReviewStatus, r.ReviewCreatedDate, CONCAT(u.FirstName, " ", u.LastName) as ReviewerName, CONCAT(u1.FirstName, " ", u1.LastName) as ReceiverName FROM Project p INNER JOIN ProjectReview pr ON pr.ProjectID = p.ProjectID INNER JOIN Review r ON r.ReviewID = pr.ReviewID INNER JOIN User u ON u.UserID = r.ReviewerID INNER JOIN User u1 ON u1.UserID = r.ReceiverID WHERE p.ProjectStatus = "Enabled" AND r.ReviewStatus = "Approved" AND p.ProjectID = ? AND r.ReceiverID = ?', [projectId, reviewerID]);
+
+        const [review] = await db.query('SELECT COUNT(*) FROM Review r INNER JOIN ProjectReview pr ON pr.ReviewID = r.ReviewID WHERE pr.ProjectID = ? AND r.ReceiverID = ? AND r.ReviewStatus = "Approved"', [projectId, reviewerID]);
+        const reviewCount = review[0]['COUNT(*)'];
+
+        // Create an object to store grouped team members
+    const groupedTeamMembers = {};
+
+    // Iterate over each project
+    projects.forEach(project => {
+        const projectID = project.ProjectID;
+    
+        // Check if the project ID exists in the groupedTeamMembers object
+        if (!groupedTeamMembers[projectID]) {
+            // If the project ID doesn't exist, initialize it with an empty array
+            groupedTeamMembers[projectID] = { 
+                ProjectID: project.ProjectID,
+                ProjectName: project.ProjectName,
+                ProjectCreatedDate: project.ProjectCreatedDate,
+                ProjectCreatedBy: project.CreatedBy,
+                ProjectCreatedByID : project.ProjectCreatedBy,
+                TeamMembers: []
+            };
+        }
+    
+        // Push the current project's team member to the corresponding array
+        groupedTeamMembers[projectID].TeamMembers.push({
+            UserID: project.UserID,
+            TeamMember: project.TeamMember,
+            // Add other properties of team members as needed
+        });
+    });
+
+        //console.log('projectId', projectId);
+        //console.log('Userid', userId);
+
+        res.render('/reflection', { reviewerID, projectId, userId, projects, existingReflection, reflectionCount: reflectionCount, existingReview, reviewCount, groupedTeamMembers });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred');
+    }
+};
+
 
 exports.createReflection = async (req, res) => {
     try {
@@ -212,6 +332,94 @@ exports.unhideReview = async (req, res) => {
 }
 
 exports.hideReview = async (req, res) => {
+    try {
+        // Extract ReviewID from the request body
+        const { ReviewID } = req.body;
+
+        //console.log('ReviewID:', ReviewID);
+        //console.log('projectId:', projectId);
+
+        // Update the review table to mark the created as approved
+        await db.query('UPDATE Review SET ReviewStatus = "Rejected", ReviewModifiedDate = NOW() WHERE ReviewID = ? AND ReviewStatus = "Approved"', [ReviewID]);
+
+        // Update the projectreview table to mark the created as approved
+        await db.query('UPDATE ProjectReview SET PRModifiedDate = NOW() WHERE ReviewID = ?', [ReviewID]);
+
+        // Redirect the User to the notifications page or any other desired page
+        res.redirect('/biography');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred');
+    }
+}
+
+exports.unhideReviewHome = async (req, res) => {
+    try {
+        // Extract ReviewID from the request body
+        const { ReviewID } = req.body;
+
+        //console.log('ReviewID:', ReviewID);
+        //console.log('projectId:', projectId);
+
+        // Update the review table to mark the created as approved
+        await db.query('UPDATE Review SET ReviewStatus = "Approved", ReviewModifiedDate = NOW() WHERE ReviewID = ? AND ReviewStatus = "Rejected"', [ReviewID]);
+
+        // Update the projectreview table to mark the created as approved
+        await db.query('UPDATE ProjectReview SET PRModifiedDate = NOW() WHERE ReviewID = ?', [ReviewID]);
+
+        // Redirect the User to the notifications page or any other desired page
+        res.redirect('/home');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred');
+    }
+}
+
+exports.hideReviewHome = async (req, res) => {
+    try {
+        // Extract ReviewID from the request body
+        const { ReviewID } = req.body;
+
+        //console.log('ReviewID:', ReviewID);
+        //console.log('projectId:', projectId);
+
+        // Update the review table to mark the created as approved
+        await db.query('UPDATE Review SET ReviewStatus = "Rejected", ReviewModifiedDate = NOW() WHERE ReviewID = ? AND ReviewStatus = "Approved"', [ReviewID]);
+
+        // Update the projectreview table to mark the created as approved
+        await db.query('UPDATE ProjectReview SET PRModifiedDate = NOW() WHERE ReviewID = ?', [ReviewID]);
+
+        // Redirect the User to the notifications page or any other desired page
+        res.redirect('/home');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred');
+    }
+}
+
+exports.unhideReviewBio = async (req, res) => {
+    try {
+        // Extract ReviewID from the request body
+        const { ReviewID } = req.body;
+
+        //console.log('ReviewID:', ReviewID);
+        //console.log('projectId:', projectId);
+
+        // Update the review table to mark the created as approved
+        await db.query('UPDATE Review SET ReviewStatus = "Approved", ReviewModifiedDate = NOW() WHERE ReviewID = ? AND ReviewStatus = "Rejected"', [ReviewID]);
+
+        // Update the projectreview table to mark the created as approved
+        await db.query('UPDATE ProjectReview SET PRModifiedDate = NOW() WHERE ReviewID = ?', [ReviewID]);
+
+        // Redirect the User to the notifications page or any other desired page
+        res.redirect('/biography');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred');
+    }
+}
+
+exports.hideReviewBio = async (req, res) => {
     try {
         // Extract ReviewID from the request body
         const { ReviewID } = req.body;

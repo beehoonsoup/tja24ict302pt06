@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/public/css/styles.css" rel="stylesheet" type="text/css" />
+  <title>Reflection</title>
+</head>
+
+<body>
+  <% Object.values(groupedTeamMembers).forEach(project => { %>
+    <div class="reflection" style="text-align: left;">
+      <% const ProjectCreatedTime=project.ProjectCreatedDate.toLocaleTimeString('en-US', { hour: '2-digit' ,
+          minute: '2-digit' , hour12: true }); %>
+        <h3><a href="/project/<%= project.ProjectID %>"><%= project.ProjectName %></a></h3>
+        <p>Project created by <b><a href="/biography/<%= project.ProjectCreatedByID %>"><%= project.ProjectCreatedBy %></a></b> on <%= new Date(project.ProjectCreatedDate).toLocaleDateString() %>
+          <%= ProjectCreatedTime %></p>
+        <b>Team Members:</b>
+            <% project.TeamMembers.forEach(teamMember => { %>
+              <div class="bubble">
+                <a href="/biography/<%= teamMember.UserID %>"><span style="font-size:12px;"><%= teamMember.TeamMember %></span></a>
+              </div>        
+            <% }) %>
+    </div>
+<% }) %>
+<hr>
+  <% if (reflectionCount> 0) { %>
+    <!-- Reflection exists -->
+    <div class="reflection" style="text-align: left;">
+      <!-- Display existing reflection -->
+      <h4>Reflection</h4>
+      <p style="font-size:12px;">
+        <% const ReflectionCreatedTime=existingReflection[0].ReflectionCreatedDate.toLocaleTimeString('en-US', { hour: '2-digit' ,
+          minute: '2-digit' , hour12: true }); %>
+          <%= new Date(existingReflection[0].ReflectionCreatedDate).toLocaleDateString() %>
+            <%= ReflectionCreatedTime %>
+      </p>
+      <p>
+        <%= existingReflection[0].ReflectionDescription %>
+      </p>
+    </div>
+    <% } else { %>
+      <!-- Reflection does not exist -->
+      <div>
+        <div style="text-align: left;">
+        <p><i>No reflection found for this project.</i></p>
+      </div>
+      </div>
+      <% } %>
+<hr>
+      <% if (reviewCount > 0) { %>
+        <!-- Display review content here -->
+        <div class="reflection" style="text-align: left;">
+            <h4>Review</h4>
+            <% existingReview.forEach(review => { %>
+                <!-- Display review details -->
+                <p style="font-size:12px;">
+                <% const ReviewCreatedTime=existingReview[0].ReviewCreatedDate.toLocaleTimeString('en-US', { hour: '2-digit' ,
+          minute: '2-digit' , hour12: true }); %>
+          <%= new Date(existingReview[0].ReviewCreatedDate).toLocaleDateString() %>
+            <%= ReviewCreatedTime %>
+          </p>
+                <p><strong>Reviewer:</strong> <a href="/biography/<%= review.ReviewerID %>"><%= review.ReviewerName %></p></a>
+                <p><%= review.ReviewDescription %></p>
+                <hr>
+            <% }) %>
+        </div>
+    <% } else { %>
+        <!-- If no review exists -->
+        <div style="text-align: left;">
+        <p><i>No review found for this project.</i></p>
+      </div>
+    <% } %>
+    
+
+</body>
+
+</html>

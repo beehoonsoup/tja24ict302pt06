@@ -28,18 +28,77 @@
       </ul>
     </nav>
   </div>
-  <h1>Hello!</h1>
-  <h2>My name is <%= user[0].FirstName %>
-      <%= user[0].LastName %>
-  </h2>
-  If you're interested to collab with me, contact me via <b><a href="mailto:<%= user[0].EmailAddress %>">
-      <%= user[0].EmailAddress %>
-    </a></b>
-<hr>
-    Get me know more about me below:<br>
-    <%
-feedback.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+
+  <div class="biography-container">
+
+    <!-- Display profile -->
+    <div class="biography-top-container">
+      <div class="profile-image">
+        <% if (user[0].FirstName==='Mabelin' && user[0].LastName==='Kong' || user[0].FirstName==='Kelly' && user[0].LastName==='Chia'
+            || user[0].FirstName==='Amy' && user[0].LastName==='Weng' ) { %>
+          <img class="rounded-image" src="/public/images/female.png">
+        <% } else { %>
+          <img class="rounded-image" src="/public/images/male.png">
+        <% } %>
+      </div>
+      <div class="profile-details">
+        <h1>
+          <%= user[0].FirstName %>
+          <%= user[0].LastName %>
+        </h1>
+        <p>
+          <b><a href="mailto:<%= user[0].EmailAddress %>">
+            <%= user[0].EmailAddress %></a></b> 
+        </p>
+        <p style="padding:5px;">
+          "<i><%= bio[0].Description %></i>"
+        </p>
+      </div>
+    </div>
+
+
+    <!-- Display list of skills -->
+    <div class="biography-middle-container">
+      <div class="bubble-container">
+      <% if (skills && skills.length > 0) { %>
+            <% skills.forEach(skill => { %>
+              <div class="bubble">
+                <a href="/skill/<%= skill.SkillID %>"><%= skill.SkillName %> (<%= skill['COUNT(*)'] %>)</a>
+              </div>
+            <% }) %>
+    <% } else { %>
+        <p><i>No skill found.</i></p>
+    <% } %>
+  </div>
+    </div>
+
+
+    <!-- Display list of projects, self evaluation, reviews -->
+    <div class="biography-bottom-container">
+
+      <!-- Display list of projects -->
+      <div class="biography-bottom-left">
+        <h4 style="text-align: left;">Involved Projects</h4>
+        <hr>
+        <p style="text-align: left;">
+            <% if (project && project.length > 0) { %>
+                <% project.forEach(project => { %>
+                  <p class="reflection" style="text-align: left;">
+                    <a href="#" onclick="showProjectDetails('<%= project.ProjectID %>')"><%= project.ProjectName %></a>
+                  </p>
+                <% }) %>
+            <% } else { %>
+                <p><i>No project found.</i></p>
+            <% } %>
+        </p>
+    </div>
+    
+    <!-- Display self-evaluations + reviews for the project -->
+    <div class="biography-bottom-right" id="projectDetailsContainer">
+                <%
+        feedback.sort((a, b) => new Date(b.ReflectionCreatedDate || b.ReviewCreatedDate || b.ReviewCreatedDate || b.ProjectCreatedDate) - new Date(a.ReflectionCreatedDate || a.ReviewCreatedDate || a.ProjectCreatedDate));
 feedback = feedback.slice(0, 50);
+feedback.sort((a, b) => b.ProjectID - a.ProjectID); // Sorting projects by ProjectID in descending order
 %>
 
 <% const projectsMap = new Map(); %>
@@ -50,7 +109,7 @@ feedback = feedback.slice(0, 50);
 <% }) %>
     <% const projects = [...projectsMap.values()]; %>
     <% projects.forEach(project => { %>
-        <div class="project">
+        <div class="reflection" style="text-align: left;">
             <!-- Display self-evaluations for the project -->
             <% const uniqueSelfEvaluationsMap = new Map(); %>
             <% const selfEvaluations = feedback.filter(item => item.SkillID && item.ProjectID === project.ProjectID); %>
@@ -60,7 +119,7 @@ feedback = feedback.slice(0, 50);
                         <% const SelfEvaluationCreatedTime = selfEvaluations[0].EvaluationCreatedDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }); %>
                         <%= new Date(selfEvaluations[0].EvaluationCreatedDate).toLocaleDateString() %> <%= SelfEvaluationCreatedTime %>
                     </p>
-                    New Self-Evaluation added by <a href="/biography/<%= selfEvaluations[0].SEUserID %>"><%= selfEvaluations[0].SEUserName %></a> in <a href="/project/<%= project.ProjectID %>"><%= project.ProjectName %></a>
+                    New Self-Evaluation added by <b><a href="/biography/<%= selfEvaluations[0].SEUserID %>"><%= selfEvaluations[0].SEUserName %></a></b> in <b><a href="/project/<%= project.ProjectID %>"><%= project.ProjectName %></a></b>
                     <div class="bubble-container">
                         <% selfEvaluations.forEach(selfEvaluation => { %>
                             <% if (!uniqueSelfEvaluationsMap.has(selfEvaluation.SkillID)) { %>
@@ -70,11 +129,13 @@ feedback = feedback.slice(0, 50);
                         <% const uniqueSelfEvaluations = [...uniqueSelfEvaluationsMap.values()]; %>
                         <% uniqueSelfEvaluations.forEach(selfEvaluation => { %>
                             <div class="bubble">
-                                <a href="/skill/<%= selfEvaluation.SkillID %>"><%= selfEvaluation.SkillName %></a>
+                                <a href="/skill/<%= selfEvaluation.SkillID %>"><span style="font-size:12px;"><%= selfEvaluation.SkillName %></span></a>
                             </div>
                             <!-- Add any additional information you want to display -->                 
                         <% }) %>
+                        <hr>
                     </div>
+                    <hr>
                 </div>
             <% } %>
     
@@ -96,8 +157,9 @@ feedback = feedback.slice(0, 50);
                                 <% const ReflectionCreatedTime = reflection.ReflectionCreatedDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }); %>
                                 <%= new Date(reflection.ReflectionCreatedDate).toLocaleDateString() %> <%= ReflectionCreatedTime %>
                             </p>
-                            New Reflection added by <a href="/biography/<%= reflection.UserID %>"><%= reflection.UserName %></a> in <a href="/project/<%= project.ProjectID %>"><%= project.ProjectName %></a>
+                            New Reflection added by <b><a href="/biography/<%= reflection.UserID %>"><%= reflection.UserName %></a></b> in <b><a href="/project/<%= project.ProjectID %>"><%= project.ProjectName %></a></b>
                             <p><%= reflection.ReflectionDescription %></p>
+                            <hr>
                         </div>
                     <% }) %>
                 </div>
@@ -123,57 +185,60 @@ feedback = feedback.slice(0, 50);
                             </p>
                             <p>
                                 New Review wrote by <b><a href="/biography/<%= review.ReviewerID %>"><%= review.ReviewerName %></a></b> 
-                                for <a href="/biography/<%= review.ReceiverID %>"><%= review.ReceiverName %></a>
-                                in <a href="/project/<%= project.ProjectID %>"><%= project.ProjectName %></a>
+                                for <b><a href="/biography/<%= review.ReceiverID %>"><%= review.ReceiverName %></a></b>
+                                in <b><a href="/project/<%= project.ProjectID %>"><%= project.ProjectName %></a></b>
                             </p>
-                            <p><%= review.ReviewDescription %></p>
-                            <% if (user[0].UserID === review.ReceiverID) { %>
-                                <% if (review.ReviewStatus === "Rejected") { %>
-                                    <p>
-                                        <form action="/unhide-review" method="POST" style="display: inline;">
-                                            <input type="hidden" name="ReviewID" value="<%= review.ReviewID %>">
-                                            <button type="submit">Unhide Review</button>
-                                        </form>
-                                    </p>
-                                <% } else { %>
-                                    <p>
-                                        <form action="/hide-review" method="POST" style="display: inline;">
-                                            <input type="hidden" name="ReviewID" value="<%= review.ReviewID %>">
-                                            <button type="submit">Hide Review</button>
-                                        </form>
-                                    </p>
-                                <% } %>
-                            <% } %>
+                            <p class="<%= user[0].UserID === review.ReceiverID && review.ReviewStatus === 'Rejected' ? 'hidden-review' : '' %>">
+                              <%= review.ReviewDescription %>
+                          </p>
+                          <% if (user[0].UserID === review.ReceiverID) { %>
+                              <% if (review.ReviewStatus === "Rejected") { %>
+                                  <p>
+                                      <form action="/unhide-review-home" method="POST" style="display: inline;">
+                                          <input type="hidden" name="ReviewID" value="<%= review.ReviewID %>">
+                                          <button type="submit">Unhide Review</button>
+                                      </form>
+                                  </p>
+                              <% } else { %>
+                                  <p>
+                                      <form action="/hide-review-home" method="POST" style="display: inline;">
+                                          <input type="hidden" name="ReviewID" value="<%= review.ReviewID %>">
+                                          <button type="submit">Hide Review</button>
+                                      </form>
+                                  </p>
+                              <% } %>
+                          <% } %>
                         </div>
+                        <hr>
                     <% }) %>
+                   
                 </div>
             <% } %>
-
-        <% const uniqueTeamMap = new Map(); %>
-<% const Team = feedback.filter(item => item.UserID && item.ProjectID === project.ProjectID); %>
-<% if (Team.length > 0) { %>
-    <div class="teamItem">
-      <p style="font-size:12px;">
-      <% const ProjectCreatedTime = Team[0].ProjectCreatedDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }); %>
-                        <%= new Date(Team[0].ProjectCreatedDate).toLocaleDateString() %> <%= ProjectCreatedTime %>
-                        </p>
-        New project <a href="/project/<%= Team[0].ProjectID %>"><%= Team[0].ProjectName %></a> created by <a href="/biography/<%= Team[0].UserID %>"><%= Team[0].SEUserName %></a>
-        <div class="bubble-container">
-            <% Team.forEach(Team => { %>
-                <% if (!uniqueTeamMap.has(Team.UserID)) { %>
-                    <% uniqueTeamMap.set(Team.UserID, Team); %>
-                <% } %>
             <% }) %>
-            <% const uniqueTeam = [...uniqueTeamMap.values()]; %>
-            <% uniqueTeam.forEach(Team => { %>
-                <div class="bubble">
-                    <a href="/biography/<%= Team.UserID %>"><%= Team.UserName %></a>
-                </div>
-                <!-- Add any additional information you want to display -->                 
-            <% }) %>
-        </div>
     </div>
-<% } %>
-<% }) %>
-  </body>
+    
+    <script>
+        function showProjectDetails(projectID) {
+            // Fetch project details based on projectID using AJAX
+            // Example: Fetch project details from server using AJAX call /${projectID}
+            fetch(`/reflection/${projectID}`)
+                .then(response => response.text())
+                .then(data => {
+                    // Display project details in the right container
+                    document.getElementById('projectDetailsContainer').innerHTML = data;
+                })
+                .catch(error => console.error('Error fetching project details:', error));
+                
+            // Prevent default link behavior
+            return false;
+        }
+    </script>
+    
+
+    </div>
+
+  </div>
+
+</body>
+
 </html>

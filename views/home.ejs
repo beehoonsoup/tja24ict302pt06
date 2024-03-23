@@ -20,8 +20,8 @@
     <!-- Navigation bar -->
     <nav class="nav-bar">
       <ul class="nav-links">
-        <li class="nav-item"><a href="/home" id="home-link">Home</a></li>
-        <li class="nav-item"><a href="/biography" id="biography-link">Biography</a></li>
+        <li class="nav-item" style="background-color: #777; border-radius: 4px; padding: 5px 0px;"><a href="/home" id="home-link">Home</a></li>
+        <li class="nav-item"><a href="/biography/<%= user[0].UserID %>" id="biography-link">Biography</a></li>
         <li class="nav-item"><a href="/project" id="project-link">Project</a></li>
         <li class="nav-item"><a href="/skill/1" id="skill-link">Skill</a></li>
         <li class="nav-item"><a href="/logout" id="logout-link">Logout</a></li>
@@ -169,7 +169,7 @@
       <div class="home-right-bottom">
         <h3>Feed</h3>
         <%
-        feedback.sort((a, b) => new Date(b.ReflectionCreatedDate || b.ReviewCreatedDate || b.ProjectCreatedDate) - new Date(a.ReflectionCreatedDate || a.ReviewCreatedDate || a.ProjectCreatedDate));
+        feedback.sort((a, b) => new Date(b.ReflectionCreatedDate || b.ReviewCreatedDate || b.ReviewCreatedDate || b.ProjectCreatedDate) - new Date(a.ReflectionCreatedDate || a.ReviewCreatedDate || a.ProjectCreatedDate));
 feedback = feedback.slice(0, 50);
 feedback.sort((a, b) => b.ProjectID - a.ProjectID); // Sorting projects by ProjectID in descending order
 %>
@@ -267,14 +267,14 @@ feedback.sort((a, b) => b.ProjectID - a.ProjectID); // Sorting projects by Proje
                           <% if (user[0].UserID === review.ReceiverID) { %>
                               <% if (review.ReviewStatus === "Rejected") { %>
                                   <p>
-                                      <form action="/unhide-review" method="POST" style="display: inline;">
+                                      <form action="/unhide-review-home" method="POST" style="display: inline;">
                                           <input type="hidden" name="ReviewID" value="<%= review.ReviewID %>">
                                           <button type="submit">Unhide Review</button>
                                       </form>
                                   </p>
                               <% } else { %>
                                   <p>
-                                      <form action="/hide-review" method="POST" style="display: inline;">
+                                      <form action="/hide-review-home" method="POST" style="display: inline;">
                                           <input type="hidden" name="ReviewID" value="<%= review.ReviewID %>">
                                           <button type="submit">Hide Review</button>
                                       </form>
@@ -307,8 +307,7 @@ feedback.sort((a, b) => b.ProjectID - a.ProjectID); // Sorting projects by Proje
             <% uniqueTeam.forEach(Team => { %>
                 <div class="bubble">
                     <a href="/biography/<%= Team.UserID %>"><span style="font-size:12px;"><%= Team.UserName %></span></a>
-                </div>
-                <!-- Add any additional information you want to display -->                 
+                </div>            
             <% }) %>
             <hr>
         </div>

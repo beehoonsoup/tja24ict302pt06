@@ -35,19 +35,43 @@
     </div>
     <div>
       <label for="projectDescription">Project Description:</label>
-      <textarea id="projectDescription" name="projectDescription" rows="4" cols="50" maxlength="1500" required><%= project.ProjectDescription %></textarea>
+      <textarea id="projectDescription" name="projectDescription" rows="4" cols="50" maxlength="1500"
+        required><%= project.ProjectDescription %></textarea>
       <p style="text-align: right; font-size: 12px;"><span id="charCount">0</span>/1500 characters</p>
     </div>
+    <%
+    const startDate = new Date(project.ProjectStartDate);
+    const startYear = startDate.getFullYear();
+    const startMonth = String(startDate.getMonth() + 1).padStart(2, '0'); // Adding 1 to month because JavaScript months are 0-indexed
+    const startDay = String(startDate.getDate()).padStart(2, '0');
+    const formattedStartDate = `${startYear}-${startMonth}-${startDay}`;
+  %>
     <div>
       <label for="projectStartDate">Start Date:</label>
       <input type="date" id="projectStartDate" name="projectStartDate"
-        value="<%= new Date(project.ProjectStartDate).toLocaleDateString('en-GL') %>" required>
+        value="<%= formattedStartDate %>" required>
     </div>
-    <div>
-      <label for="projectEndDate">End Date:</label>
-      <input type="date" id="projectEndDate" name="projectEndDate"
-        value="<%= new Date(project.ProjectEndDate).toLocaleDateString('en-GL') %>">
-    </div>
+
+    <%
+      const endDate = new Date(project.ProjectEndDate);
+      const year = endDate.getFullYear();
+      const month = String(endDate.getMonth() + 1).padStart(2, '0'); // Adding 1 to month because JavaScript months are 0-indexed
+      const day = String(endDate.getDate()).padStart(2, '0');
+      const formattedEndDate = `${year}-${month}-${day}`;
+    %>
+    <% if (formattedEndDate !== '1970-01-01') { %>
+      <div>
+        <label for="projectEndDate">End Date:</label>
+        <input type="date" id="projectEndDate" name="projectEndDate" value="<%= formattedEndDate %>" required>
+      </div>
+    <% } else { %>
+      <div>
+        <label for="projectEndDate">End Date:</label>
+        <input type="date" id="projectEndDate" name="projectEndDate"
+          value="<%= new Date(project.ProjectEndDate).toLocaleDateString('en-GL') %>">
+      </div>
+    <% } %>
+    
     <div>
       <label for="projectGrade">Grade:</label>
       <select id="projectGrade" name="projectGrade">
@@ -78,21 +102,23 @@
     const projectForm = document.getElementById('projectForm');
     const projectDescription = document.getElementById('projectDescription');
     const charCount = document.getElementById('charCount');
-  
+
     projectDescription.addEventListener('input', () => {
-        charCount.textContent = projectDescription.value.length;
+      charCount.textContent = projectDescription.value.length;
     });
+
+    function formatDate(datetime) {
+      // Assuming datetime is in the format of 'YYYY-MM-DDTHH:MM:SS'
+      const date = new Date(datetime);
+      // Extract year, month, and day parts from the date object
+      const year = date.getFullYear();
+      // JavaScript months are 0-indexed, so we need to add 1 to get the correct month
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      // Format the date as 'YYYY-MM-DD'
+      return `${year}-${month}-${day}`;
+    }
   </script>
-  <p>
-  <p>
-    <b>Troubleshooting below:</b><br>
-    Issue: Start Date / End Date not able to show when data exist
-  <p>
-    <!-- Output raw date values for debugging -->
-  <p>Start Date: <%= new Date(project.ProjectStartDate).toLocaleDateString('en-GL') %>
-  </p>
-  <p>End Date: <%= new Date(project.ProjectEndDate).toLocaleDateString('en-GL') %>
-  </p>
 </body>
 
 </html>

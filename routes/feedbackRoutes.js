@@ -16,6 +16,8 @@ const isLoggedIn = (req, res, next) => {
 router.get('/reflection-create', isLoggedIn, feedbackController.getCreateReflectionPage);
 router.post('/reflection-create', isLoggedIn, feedbackController.createReflection);
 router.post('/reflection-delete', isLoggedIn, feedbackController.deleteReflection);
+router.get('/reflection/:projectId', isLoggedIn, feedbackController.getReflectionPage);
+router.get('/reflection/:projectId/:reviewerID', isLoggedIn, feedbackController.viewReflectionPage);
 
 //review control
 router.get('/review-create', isLoggedIn, feedbackController.getCreateReviewPage);
@@ -26,6 +28,10 @@ router.post('/accept-review', isLoggedIn, feedbackController.acceptReview);
 router.post('/reject-review', isLoggedIn, feedbackController.rejectReview);
 router.post('/unhide-review', isLoggedIn, feedbackController.unhideReview);
 router.post('/hide-review', isLoggedIn, feedbackController.hideReview);
+router.post('/unhide-review-home', isLoggedIn, feedbackController.unhideReviewHome);
+router.post('/hide-review-home', isLoggedIn, feedbackController.hideReviewHome);
+router.post('/unhide-review-bio', isLoggedIn, feedbackController.unhideReviewBio);
+router.post('/hide-review-bio', isLoggedIn, feedbackController.hideReviewBio);
 
 //self evaluation control
 router.get('/selfEvaluation', isLoggedIn, feedbackController.handleSelfEvaluation);

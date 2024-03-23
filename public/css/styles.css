@@ -406,14 +406,11 @@ input[type="reset"]:hover {
     font-size: 14px;
     display: inline-block;
     padding: 5px 10px;
-}
-
-.bubble a {
     text-decoration: none;
     color: inherit;
 }
 
-.bubble a:hover {
+.bubble:hover {
     background-color: #aaa;
     border-radius: 20px;
     padding: 5px 10px;
@@ -536,7 +533,8 @@ input[type="reset"]:hover {
 /* WebKit scrollbar */
 .home-profile-container::-webkit-scrollbar,
 .home-right-top::-webkit-scrollbar,
-.home-right-bottom::-webkit-scrollbar {
+.home-right-bottom::-webkit-scrollbar,
+.project_border::-webkit-scrollbar {
     width: 10px;
     /* Set the width of the scrollbar */
 }
@@ -544,7 +542,8 @@ input[type="reset"]:hover {
 /* Track */
 .home-profile-container::-webkit-scrollbar-track,
 .home-right-top::-webkit-scrollbar-track,
-.home-right-bottom::-webkit-scrollbar-track {
+.home-right-bottom::-webkit-scrollbar-track,
+.project_border::-webkit-scrollbar-track {
     background: #e7e7e7;
     /* Set the background color of the scrollbar track */
 }
@@ -552,7 +551,8 @@ input[type="reset"]:hover {
 /* Handle */
 .home-profile-container::-webkit-scrollbar-thumb,
 .home-right-top::-webkit-scrollbar-thumb,
-.home-right-bottom::-webkit-scrollbar-thumb {
+.home-right-bottom::-webkit-scrollbar-thumb,
+.project_border::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.2);
     /* Set the background color of the scrollbar thumb */
     border-radius: 5px;
@@ -561,28 +561,23 @@ input[type="reset"]:hover {
 
 /* Handle on hover */
 .home-right-top::-webkit-scrollbar-thumb:hover,
-.home-right-bottom::-webkit-scrollbar-thumb:hover {
+.home-right-bottom::-webkit-scrollbar-thumb:hover,
+.project_border::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 0, 0, 0.4);
     /* Set the background color of the scrollbar thumb on hover */
 }
 
 .home-container a {
     color: #007bff;
-    /* Set the default color */
     text-decoration: none;
-    /* Remove underline by default */
 }
 
-/* Hover effect */
 .home-container a:hover {
     text-decoration: underline;
-    /* Add underline on hover */
 }
 
-/* Visited link style */
 .home-container a:visited {
     color: #000000;
-    /* Set the color for visited links */
 }
 
 hr {
@@ -616,7 +611,7 @@ hr {
 }
 
 /*search container styling*/
-.search_container{
+.search_container {
     background-color: #e7e7e7;
     padding: 20px;
     padding-bottom: 0%;
@@ -626,7 +621,7 @@ hr {
     max-height: 55px;
 }
 
-.suggestions{
+.suggestions {
     position: relative;
 }
 
@@ -669,7 +664,7 @@ hr {
     background-color: #cdcdcd;
 }
 
-.project_table{
+.project_table {
     padding: 20px;
     padding-top: 10px;
 }
@@ -680,7 +675,7 @@ hr {
     border: 1px solid;
 }
 
-.table_border tbody td a{
+.table_border tbody td a {
     display: block;
     width: 100%;
     height: 100%;
@@ -688,11 +683,13 @@ hr {
     color: inherit;
 }
 
-.project_border{
+.project_border {
     background-color: #e7e7e7;
     padding: 20px;
     margin: 20px;
     border-radius: 15px;
+    overflow: auto;
+    height: 590px;
 }
 
 .nav-links a.active {
@@ -715,60 +712,128 @@ hr {
 }
 
 /* Styling for biography containers */
-.biography-top-container,
-.biography-middle-container {
-    height: 250px;
+.biography-top-container {
+    height: 100px;
     margin: 20px;
     padding: 20px;
     background-color: #e7e7e7;
-    text-align: center; 
-    padding-left: 10px; 
-    flex: 10%;
+    text-align: center;
+    padding-left: 10px;
     border-radius: 20px;
+    position: relative;
     overflow: auto;
+}
+
+.biography-middle-container {
+    height: 100px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 20px;
+    background-color: #e7e7e7;
+    text-align: center;
+    padding-left: 10px;
+    border-radius: 20px;
+    position: relative;
+    overflow: auto;
+}
+
+.biography-top-container {
+    display: flex;
+    align-items: center;
+}
+
+.profile-image {
+    margin-right: 20px;
+}
+
+.profile-image img {
+    width: 100px;
+    height: auto;
+}
+
+.profile-details {
+    flex: 1;
+}
+
+.profile-details h1 {
+    margin: 0;
+}
+
+.profile-details p {
+    margin: 0;
 }
 
 /* Styling for the bottom container */
 .biography-bottom-container {
     display: flex;
-    justify-content: space-between; 
+    justify-content: space-between;
     margin: 20px;
 }
 
 /* Styling for bottom-left container */
 .biography-bottom-left {
-    flex-basis: 30%; 
+    height: 400px;
+    flex-basis: 20%;
     padding: 20px;
     background-color: #e7e7e7;
     border-radius: 20px;
     overflow: auto;
-    margin-right: 20px; 
+    margin-right: 20px;
 }
 
 /* Styling for bottom-right container */
 .biography-bottom-right {
-    flex-basis: 65%; 
+    height: 400px;
+    flex-basis: 75%;
     padding: 20px;
     background-color: #e7e7e7;
     border-radius: 20px;
     overflow: auto;
 }
 
+.biography-top-container::-webkit-scrollbar,
+.biography-middle-container::-webkit-scrollbar,
+.biography-bottom-left::-webkit-scrollbar,
+.biography-bottom-right::-webkit-scrollbar {
+    width: 10px;
+    /* Set width of the scrollbar */
+    background-color: transparent;
+    /* Set background color of the scrollbar track */
+}
+
+.biography-top-container::-webkit-scrollbar-thumb,
+.biography-middle-container::-webkit-scrollbar-thumb,
+.biography-bottom-left::-webkit-scrollbar-thumb,
+.biography-bottom-right::-webkit-scrollbar-thumb {
+    background-color:rgba(0, 0, 0, 0.2);
+    /* Set color of the scrollbar thumb */
+    border-radius: 5px;
+    /* Set border radius of the scrollbar thumb */
+}
+
+.biography-top-container::-webkit-scrollbar-thumb:hover,
+.biography-middle-container::-webkit-scrollbar-thumb:hover,
+.biography-bottom-left::-webkit-scrollbar-thumb:hover,
+.biography-bottom-right::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Set color of the scrollbar thumb on hover */
+}
+
 /*project detail page style*/
 
-.project_name{
+.project_name {
     margin-top: 10px;
 }
 
 /*container for project buttons*/
-.project_details_buttons{
+.project_details_buttons {
     background-color: #e7e7e7;
     padding: 20px;
     margin: 20px;
     border-radius: 8px;
 }
 
-.project_buttons{
+.project_buttons {
     background-color: #333;
     color: white;
     padding: 10px 20px;
@@ -779,11 +844,11 @@ hr {
     margin: 0 20px;
 }
 
-.project_buttons:hover{
+.project_buttons:hover {
     background-color: #aaa;
 }
 
-.review_button{
+.review_button {
     background-color: #333;
     color: white;
     padding: 8px 14px;
@@ -794,19 +859,18 @@ hr {
     margin: 0 10px;
 }
 
-.review_button:hover{
+.review_button:hover {
     background-color: #aaa;
 }
 
 /*container containing members and details*/
-.details_container
-{
+.details_container {
     display: flex;
     height: 100%;
 }
 
 /*container for displaying members*/
-.member_container{
+.member_container {
     background-color: #e7e7e7;
     padding: 20px;
     margin: 5px 10px 10px 20px;
@@ -817,7 +881,7 @@ hr {
 }
 
 /*container for displaying project details*/
-.project_detail_container{
+.project_detail_container {
     background-color: #e7e7e7;
     padding: 20px;
     margin: 5px 20px 10px 10px;
@@ -828,18 +892,18 @@ hr {
     height: auto;
 }
 
-.project_detail_container td{
+.project_detail_container td {
     padding: 5px;
 }
 
-.member_container td{
+.member_container td {
     padding: 1px;
 }
 
 /*skills page styling*/
 
 /*skills header*/
-.skills_header{
+.skills_header {
     background-color: #e7e7e7;
     padding: 20px;
     padding-bottom: 0%;
@@ -849,13 +913,13 @@ hr {
     max-height: 55px;
 }
 
-.skills_header h2{
+.skills_header h2 {
     text-align: left;
     margin: 0 0 0 20px;
     flex: 1;
 }
 
-.skills_search_container{
+.skills_search_container {
     margin: 20px;
     margin-bottom: 10px;
     margin-top: 0px;
@@ -865,26 +929,26 @@ hr {
 }
 
 /*skills container*/
-.skills_container{
-        padding-left: 20px; 
-        background-color: #e7e7e7;
-        text-align: left; 
-        margin-bottom: 20px;
-        overflow: auto;
-        border-radius: 20px;
-        margin-right: 20px;
-        margin-left: 20px;
+.skills_container {
+    padding-left: 20px;
+    background-color: #e7e7e7;
+    text-align: left;
+    margin-bottom: 20px;
+    overflow: auto;
+    border-radius: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
 }
 
-.project_skill_container{
+.project_skill_container {
     display: flex;
 }
 
-.project_skill_container b{
+.project_skill_container b {
     flex: 20%;
 }
 
-.project_bubble{
+.project_bubble {
     background-color: #ccc;
     padding: 5px 10px;
     border-radius: 20px;
@@ -898,12 +962,39 @@ hr {
 }
 
 .project_bubble:hover {
-    background-color: #aaa; 
-    border-radius: 20px; 
-    padding: 5px 10px; 
+    background-color: #aaa;
+    border-radius: 20px;
+    padding: 5px 10px;
     padding: 5px 10px;
 }
 
-.bubble_container{
+.bubble_container {
     flex: 80%;
+}
+
+.bubble_container a,
+.bubble a {
+    color: #000000;
+    /* Setting link color */
+    text-decoration: none;
+    /* Removing default underline */
+}
+
+.bubble_container a:hover,
+.bubble a:hover {
+    text-decoration: underline;
+    /* Adding underline on hover for links */
+}
+
+.reflection a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.reflection a:hover {
+    text-decoration: underline;
+}
+
+.reflection a:visited {
+    color: #000000;
 }

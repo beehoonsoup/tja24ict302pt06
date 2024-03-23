@@ -41,7 +41,9 @@
         <div class="skills_container">
         <div class="skills_name">
             <h3>
-                <%= user.UserName %>
+                <span class="bubble_container">
+                <a href="/biography/<%= user.UserID %>"><%= user.UserName %></a>
+            </span>
             </h3>
             <% user.projects.forEach(project=> { %>
             </div>
@@ -52,7 +54,7 @@
                     
                     <!-- Display skills for the project -->
                     <div class="bubble_container">
-                        <b>Skill: </b>
+                        Skill:
 
                     <% project.skills.forEach(skill=> { %>
                         <% if (skill.SkillID==selectedSkillId) { %>
