@@ -20,6 +20,8 @@ exports.viewProject = async (req, res) => {
     const [teamMember] = await db.query('SELECT COUNT(*) FROM Team WHERE ProjectID = ? AND UserID = ? AND TeamStatus = "Verified"', [projectId, currentUser]);
     const teamMemberCount = teamMember[0]['COUNT(*)'];
 
+    const [teamStatus] = await db.query('SELECT TeamStatus FROM Team WHERE ProjectID = ? AND UserID = ? AND TeamStatus = "Rejected"', [projectId, currentUser]);
+
     const [teamRequest] = await db.query('SELECT COUNT(*) FROM Team WHERE TeamStatus = "Requested" AND ProjectID = ? AND UserID = ?', [projectId, currentUser]);
     const teamRequestCount = teamRequest[0]['COUNT(*)'];
 
@@ -33,7 +35,7 @@ exports.viewProject = async (req, res) => {
     const evaluationCount = evaluation[0]['COUNT(*)'];
 
     // Log details to the console
-    //console.log('reflectionCount:', reflectionCount);
+    //console.log('teamStatus:', teamStatus);
     //console.log('evaluationCount:', evaluationCount);
 
     // Render the project view page with project details
@@ -47,7 +49,8 @@ exports.viewProject = async (req, res) => {
       teamRequestCount: teamRequestCount,
       teamLeaderCount: teamLeaderCount,
       reflectionCount: reflectionCount,
-      evaluationCount: evaluationCount
+      evaluationCount: evaluationCount,
+      teamStatus: teamStatus
     });
   } catch (error) {
     console.error(error);
