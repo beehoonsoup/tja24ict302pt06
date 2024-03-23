@@ -170,7 +170,7 @@ exports.getAddMemberPage = async (req, res) => {
     const teamMemberCount = teamMember[0]['COUNT(*)'];
     const [project] = await db.query('SELECT * FROM Project WHERE ProjectID = ?', [projectId]);
 
-    const users = await db.query('SELECT DISTINCT u.UserID, CONCAT(u.FirstName, " ", u.LastName) AS UserName FROM User u LEFT JOIN Team t ON t.UserID = u.UserID WHERE u.UserID NOT IN (SELECT u.UserID FROM User u LEFT JOIN Team t ON t.UserID = u.UserID WHERE t.ProjectID = ?) OR u.UserID IN (SELECT u.UserID FROM User u LEFT JOIN Team t ON t.UserID = u.UserID WHERE t.ProjectID = ? AND t.TeamStatus = "Rejected")', [projectId,projectId]);
+    const users = await db.query('SELECT DISTINCT u.UserID, CONCAT(u.FirstName, " ", u.LastName) AS UserName, u.EmailAddress FROM User u LEFT JOIN Team t ON t.UserID = u.UserID WHERE u.UserID NOT IN (SELECT u.UserID FROM User u LEFT JOIN Team t ON t.UserID = u.UserID WHERE t.ProjectID = ?) OR u.UserID IN (SELECT u.UserID FROM User u LEFT JOIN Team t ON t.UserID = u.UserID WHERE t.ProjectID = ? AND t.TeamStatus = "Rejected")', [projectId,projectId]);
 
     const [memberCount] = await db.execute('SELECT p.*, CASE WHEN t.MemberCount IS NULL THEN 0 ELSE t.MemberCount END AS MemberCount, u.FirstName AS CreatedByFirstName, u.LastName AS CreatedByLastName FROM Project p INNER JOIN User u on p.ProjectCreatedBy = u.UserID LEFT JOIN (SELECT ProjectID, COUNT(*) as MemberCount FROM Team GROUP BY ProjectID) t ON t.ProjectID = p.ProjectID WHERE p.ProjectID = ?', [projectId]);
 

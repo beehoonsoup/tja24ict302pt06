@@ -37,7 +37,7 @@
         <select id="user" name="user" required>
           <% users[0].forEach(users=> { %>
             <option value="<%= users.UserID %>">
-              <%= users.UserName %>
+              <%= users.UserName %> | <%= users.EmailAddress %>
             </option>
             <% }) %>
         </select>
