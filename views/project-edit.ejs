@@ -107,17 +107,39 @@
       charCount.textContent = projectDescription.value.length;
     });
 
-    function formatDate(datetime) {
-      // Assuming datetime is in the format of 'YYYY-MM-DDTHH:MM:SS'
-      const date = new Date(datetime);
-      // Extract year, month, and day parts from the date object
-      const year = date.getFullYear();
-      // JavaScript months are 0-indexed, so we need to add 1 to get the correct month
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const day = date.getDate().toString().padStart(2, '0');
-      // Format the date as 'YYYY-MM-DD'
-      return `${year}-${month}-${day}`;
-    }
+    // Get the input elements
+    const startDateInput = document.getElementById('projectStartDate');
+    const endDateInput = document.getElementById('projectEndDate');
+
+    // Add event listener to the start date input
+    startDateInput.addEventListener('change', function() {
+        const startDate = new Date(this.value);
+        const endDate = new Date(endDateInput.value);
+
+        // Check if the start date is a future date
+        if (startDate > new Date()) {
+            alert('Start date cannot be a future date');
+            this.value = ''; // Clear the input value
+        }
+
+        // Check if end date is earlier than start date
+        if (endDate < startDate) {
+            alert('End date cannot be earlier than the start date');
+            endDateInput.value = ''; // Clear the end date input value
+        }
+    });
+
+    // Add event listener to the end date input
+    endDateInput.addEventListener('change', function() {
+        const startDate = new Date(startDateInput.value);
+        const endDate = new Date(this.value);
+
+        // Check if end date is earlier than start date
+        if (endDate < startDate) {
+            alert('End date cannot be earlier than the start date');
+            this.value = ''; // Clear the input value
+        }
+    });
   </script>
 </body>
 
