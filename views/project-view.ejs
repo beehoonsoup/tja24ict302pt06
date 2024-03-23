@@ -124,7 +124,7 @@
     <% memberRows.forEach(member => { %>
       <tr>
           <td>
-            <a href="/biography/<%= member.UserID %>"><%= member.UserName %></a>
+            <span class="reflection"><a href="/biography/<%= member.UserID %>"><%= member.UserName %></a></span>
           </td>
           <td>
             <%= member.TeamRole %>
