@@ -9,14 +9,10 @@
 </head>
 
 <body>
-  <!-- Header section -->
   <div class="header">
-    <!-- Company logo -->
     <div class="company">
       <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
     </div>
-
-    <!-- Navigation bar -->
     <nav class="nav-bar">
       <ul class="nav-links">
         <li class="nav-item"><a href="/home">Home</a></li>
@@ -45,7 +41,7 @@
     const startMonth = String(startDate.getMonth() + 1).padStart(2, '0'); // Adding 1 to month because JavaScript months are 0-indexed
     const startDay = String(startDate.getDate()).padStart(2, '0');
     const formattedStartDate = `${startYear}-${startMonth}-${startDay}`;
-  %>
+    %>
     <div>
       <label for="projectStartDate">Start Date:</label>
       <input type="date" id="projectStartDate" name="projectStartDate"
@@ -59,6 +55,7 @@
       const day = String(endDate.getDate()).padStart(2, '0');
       const formattedEndDate = `${year}-${month}-${day}`;
     %>
+    
     <% if (formattedEndDate !== '1970-01-01') { %>
       <div>
         <label for="projectEndDate">End Date:</label>
@@ -107,7 +104,6 @@
       charCount.textContent = projectDescription.value.length;
     });
 
-    // Get the input elements
     const startDateInput = document.getElementById('projectStartDate');
     const endDateInput = document.getElementById('projectEndDate');
 
@@ -116,16 +112,14 @@
         const startDate = new Date(this.value);
         const endDate = new Date(endDateInput.value);
 
-        // Check if the start date is a future date
         if (startDate > new Date()) {
             alert('Start date cannot be a future date');
-            this.value = ''; // Clear the input value
+            this.value = ''; 
         }
 
-        // Check if end date is earlier than start date
         if (endDate < startDate) {
             alert('End date cannot be earlier than the start date');
-            endDateInput.value = ''; // Clear the end date input value
+            endDateInput.value = ''; 
         }
     });
 
@@ -134,10 +128,9 @@
         const startDate = new Date(startDateInput.value);
         const endDate = new Date(this.value);
 
-        // Check if end date is earlier than start date
         if (endDate < startDate) {
             alert('End date cannot be earlier than the start date');
-            this.value = ''; // Clear the input value
+            this.value = ''; 
         }
     });
   </script>
