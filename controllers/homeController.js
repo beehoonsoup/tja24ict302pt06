@@ -15,7 +15,7 @@ exports.getHomePage = async (req, res) => {
 
     const [bio] = await db.query('SELECT * FROM Biography WHERE UserID = ?', [userId]);
 
-    const [projectTotal] = await db.query('SELECT COUNT(*) FROM Project p INNER JOIN Team t ON t.ProjectID = p.ProjectID WHERE t.UserID = ? AND p.ProjectStatus = "Enabled"', [userId]);
+    const [projectTotal] = await db.query('SELECT COUNT(*) FROM Project p INNER JOIN Team t ON t.ProjectID = p.ProjectID WHERE t.UserID = ? AND p.ProjectStatus = "Enabled" AND t.TeamStatus = "Verified"', [userId]);
     const projectCount = projectTotal[0]['COUNT(*)'];
 
     const [reflectionTotal] = await db.query('SELECT COUNT(*) FROM Reflection WHERE UserID = ?', [userId]);

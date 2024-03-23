@@ -78,14 +78,14 @@
 
       <!-- Display list of projects -->
       <div class="biography-bottom-left">
-        <h4 style="text-align: left;">Involved Projects</h4>
+        <h4 style="text-align: left;">Involved Projects (<%= projectCount %>)</h4>
         <hr>
         <p style="text-align: left;">
             <% if (project && project.length > 0) { %>
                 <% project.forEach(project => { %>
                   <p class="reflection" style="text-align: left;">
                     <!-- <a href="#" onclick="showProjectDetails('<%= project.ProjectID %>')">-->
-                      <%= project.ProjectName %>
+                      <a href="/project/<%= project.ProjectID %>"><%= project.ProjectName %></a>
                     <!-- </a>-->
                   </p>
                 <% }) %>
