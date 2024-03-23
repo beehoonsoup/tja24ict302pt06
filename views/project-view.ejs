@@ -99,13 +99,13 @@
                 <i>Join Team Request Pending Approval</i>
             <% } else if (memberCount.ProjectSize === memberCount.MemberCount) { %>
                 <!-- Team is full, no options available -->
-            <% } else if (teamStatus[0].TeamStatus == "Rejected") { %>
-                <p><i>Request rejected. Please contact verified members in the project if you are part of the team.</i></p>
-            <% } else if (teamLeaderCount > 0) { %>  
+            <% } else if (teamLeaderCount > 0) { %>
                 <form action="/project-join-request/<%= project.ProjectID %>" method="POST" style="display: inline;">
-                  <input type="hidden" name="teamRole" value="Member">
-                  <button type="submit" class="project_buttons">Request to Join as Member</button>
-              </form>
+                    <input type="hidden" name="teamRole" value="Member">
+                    <button type="submit" class="project_buttons">Request to Join as Member</button>
+                </form>
+            <% } else if (teamStatus[0].TeamStatus === "Rejected") { %>
+                <p>Request rejected. Please contact verified members to add you in.</p>
             <% } else { %>
                 <form id="projectJoinForm" action="/project-join-request/<%= project.ProjectID %>" method="POST" style="display: inline;">
                     <input type="hidden" name="teamRole" id="teamRoleInput" value="">
@@ -127,7 +127,7 @@
     <% memberRows.forEach(member => { %>
       <tr>
           <td>
-            <span class="bubble"><a href="/biography/<%= member.UserID %>"><%= member.UserName %></a></span>
+            <a href="/biography/<%= member.UserID %>"><%= member.UserName %></a>
           </td>
           <td>
             <%= member.TeamRole %>
