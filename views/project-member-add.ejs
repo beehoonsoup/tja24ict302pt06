@@ -4,56 +4,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="/public/css/styles.css" rel="stylesheet" type="text/css"/>
+  <link href="/public/css/styles.css" rel="stylesheet" type="text/css" />
   <title>Add Member to Project</title>
 </head>
 
 <body>
 
   <!-- Header section -->
-<div class="header">
-  <!-- Company logo -->
-  <div class="company">
+  <div class="header">
+    <!-- Company logo -->
+    <div class="company">
       <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
+    </div>
+
+    <!-- Navigation bar -->
+    <nav class="nav-bar">
+      <ul class="nav-links">
+        <li class="nav-item"><a href="/home">Home</a></li>
+        <li class="nav-item"><a href="/biography">Biography</a></li>
+        <li class="nav-item"><a href="/project">Project</a></li>
+        <li class="nav-item"><a href="/skill/1">Skill</a></li>
+        <li class="nav-item"><a href="/logout">Logout</a></li>
+      </ul>
+    </nav>
   </div>
+  <h1>Add Member to Project</h1>
 
-  <!-- Navigation bar -->
-  <nav class="nav-bar">
-    <ul class="nav-links">
-      <li class="nav-item"><a href="/home">Home</a></li>
-      <li class="nav-item"><a href="/biography">Biography</a></li>
-      <li class="nav-item"><a href="/project">Project</a></li>
-      <li class="nav-item"><a href="/skill/1">Skill</a></li>
-      <li class="nav-item"><a href="/logout">Logout</a></li>
-    </ul>
-  </nav>
-</div>
-    <h1>Add Member to Project</h1>
+  Project Name: <b><span class="reflection"><a href="/project/<%= project.ProjectID %>">
+        <%= project.ProjectName %>
+      </a></span></b>
+  <p>
 
-    Project Name: <%= project.ProjectName %><p>
+  <form class="form-input" action="/project-member-add/<%= project.ProjectID %>" method="POST">
+    <label for="user">Search for User:</label>
+    <select id="user" name="user" required>
+      <% users[0].forEach(users=> { %>
+        <option value="<%= users.UserID %>">
+          <%= users.UserName %> | <%= users.EmailAddress %>
+        </option>
+        <% }) %>
+    </select>
 
-      <form class="form-input" action="/project-member-add/<%= project.ProjectID %>" method="POST">
-        <label for="user">Search for User:</label>
-        <select id="user" name="user" required>
-          <% users[0].forEach(users=> { %>
-            <option value="<%= users.UserID %>">
-              <%= users.UserName %> | <%= users.EmailAddress %>
-            </option>
-            <% }) %>
-        </select>
+    <br>
 
-        <br>
-
-        <label for="role">Select Role:</label>
-        <select id="role" name="role" required>
-          <option value="Member">Member</option>
+    <label for="role">Select Role:</label>
+    <select id="role" name="role" required>
+      <% if (teamRoleCount> 0) { %>
+        <option value="Member">Member</option>
+        <% } else { %>
           <option value="Leader">Leader</option>
-        </select>
+          <option value="Member">Member</option>
+          <% } %>
+    </select>
 
-        <br>
-        
-        <button type="submit">Add Member</button>
-      </form>
+    <br>
+
+    <button type="submit">Add Member</button>
+  </form>
 </body>
 
 </html>

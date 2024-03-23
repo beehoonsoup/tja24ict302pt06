@@ -117,7 +117,7 @@
         </thead>
         <tbody>
           <% projects
-              .sort((a, b) => new Date(b.ProjectCreatedDate) - new Date(a.ProjectCreatedDate))
+              .sort((a, b) => new Date(b.ProjectID) - new Date(a.ProjectID))
               .forEach(project => { %>
             <tr>
               <td><a href="/project/<%= project.ProjectID %>">

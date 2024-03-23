@@ -25,7 +25,7 @@ exports.viewProject = async (req, res) => {
     const [teamRequest] = await db.query('SELECT COUNT(*) FROM Team WHERE TeamStatus = "Requested" AND ProjectID = ? AND UserID = ?', [projectId, currentUser]);
     const teamRequestCount = teamRequest[0]['COUNT(*)'];
 
-    const [teamLeader] = await db.query('SELECT COUNT(*) FROM Team WHERE ProjectID = ? AND TeamRole = "Leader"', [projectId]);
+    const [teamLeader] = await db.query('SELECT COUNT(*) FROM Team WHERE ProjectID = ? AND TeamRole = "Leader" AND TeamStatus != "Rejected"', [projectId]);
     const teamLeaderCount = teamLeader[0]['COUNT(*)'];
 
     const [reflection] = await db.query('SELECT COUNT(*) FROM Reflection WHERE ProjectID = ? AND UserID = ?', [projectId, currentUser]);
@@ -177,10 +177,13 @@ exports.getAddMemberPage = async (req, res) => {
 
     const [memberCount] = await db.execute('SELECT p.*, CASE WHEN t.MemberCount IS NULL THEN 0 ELSE t.MemberCount END AS MemberCount, u.FirstName AS CreatedByFirstName, u.LastName AS CreatedByLastName FROM Project p INNER JOIN User u on p.ProjectCreatedBy = u.UserID LEFT JOIN (SELECT ProjectID, COUNT(*) as MemberCount FROM Team GROUP BY ProjectID) t ON t.ProjectID = p.ProjectID WHERE p.ProjectID = ?', [projectId]);
 
+    const [teamRole] = await db.execute('SELECT DISTINCT COUNT(*) FROM Project p INNER JOIN Team t ON t.ProjectID = p.ProjectID WHERE t.ProjectID = ? AND t.TeamRole = "Leader" AND t.TeamStatus = "Verified"', [projectId]);
+    const teamRoleCount = teamRole[0]['COUNT(*)'];
+
     // Console logs
     //console.log('users:', currentUser);
     //console.log('Project:', projectId);
-    //console.log('teamMember:', teamMemberCount);
+    //console.log('teamRoleCount:', teamRoleCount);
 
     // Check if member count equals project size
     if (memberCount[0].ProjectSize === memberCount[0].MemberCount && teamMemberCount == 0 && project[0].ProjectCreatedBy !== currentUser) {
@@ -188,7 +191,7 @@ exports.getAddMemberPage = async (req, res) => {
       res.redirect(`/project/${projectId}`);
     } else {
       // Render the project-member-add page
-      res.render('project-member-add', { project: project[0], users });
+      res.render('project-member-add', { project: project[0], users, teamRoleCount });
     }
   } catch (error) {
     console.error(error);
@@ -241,7 +244,14 @@ exports.requestToJoin = async (req, res) => {
     const userId = req.session.user.UserID;
 
     // Insert the request to join into the team table
-    await db.execute('INSERT INTO Team (UserID, ProjectID, TeamRole, TeamStatus, TeamCreatedDate, TeamModifiedDate) VALUES (?, ?, ?, "Requested", NOW(), NOW())', [userId, projectId, teamRole]);
+    await db.execute(`
+    INSERT INTO Team (UserID, ProjectID, TeamRole, TeamStatus, TeamCreatedDate, TeamModifiedDate) 
+    VALUES (?, ?, ?, "Requested", NOW(), NOW()) 
+    ON DUPLICATE KEY UPDATE 
+        TeamRole = VALUES(TeamRole), 
+        TeamModifiedDate = NOW(),
+        TeamStatus = "Requested"`, [userId, projectId, teamRole]);
+
 
     //console.log("teamRole", teamRole);
 

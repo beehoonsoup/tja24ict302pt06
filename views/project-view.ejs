@@ -95,24 +95,21 @@
                 <% } else { %>
                 <% } %>
               </form>
-              <% } else if (teamRequestCount > 0) { %>
+              <% } else if (teamRequestCount> 0) { %>
                 <i>Join Team Request Pending Approval</i>
-            <% } else if (memberCount.ProjectSize === memberCount.MemberCount) { %>
-                <!-- Team is full, no options available -->
-            <% } else if (teamLeaderCount > 0) { %>
-                <form action="/project-join-request/<%= project.ProjectID %>" method="POST" style="display: inline;">
-                    <input type="hidden" name="teamRole" value="Member">
-                    <button type="submit" class="project_buttons">Request to Join as Member</button>
-                </form>
-            <% } else if (teamStatus[0].TeamStatus === "Rejected") { %>
-                <p>Request rejected. Please contact verified members to add you in.</p>
-            <% } else { %>
-                <form id="projectJoinForm" action="/project-join-request/<%= project.ProjectID %>" method="POST" style="display: inline;">
-                    <input type="hidden" name="teamRole" id="teamRoleInput" value="">
-                    <button type="button" onclick="setTeamRole('Member')" class="project_buttons">Request to Join as Member</button>
-                    <button type="button" onclick="setTeamRole('Leader')" class="project_buttons">Request to Join as Leader</button>
-                </form>
-            <% } %>
+                <% } else if (memberCount.ProjectSize===memberCount.MemberCount) { %>
+                  <!-- Team is full, no options available -->
+                  <% } else if (teamLeaderCount> 0) { %>
+                    <form action="/project-join-request/<%= project.ProjectID %>" method="POST" style="display: inline;">
+                      <input type="hidden" name="teamRole" value="Member">
+                      <button type="submit" class="project_buttons">Request to Join as Member</button>
+                      <% } else { %>
+                        <form id="projectJoinForm" action="/project-join-request/<%= project.ProjectID %>" method="POST" style="display: inline;">
+                          <input type="hidden" name="teamRole" id="teamRoleInput" value="">
+                          <button type="button" onclick="setTeamRole('Member')" class="project_buttons">Request to Join as Member</button>
+                          <button type="button" onclick="setTeamRole('Leader')" class="project_buttons">Request to Join as Leader</button>
+                      </form>
+                          <% } %>
     </div>
   </div>
 
