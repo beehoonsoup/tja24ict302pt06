@@ -288,7 +288,7 @@ feedback.sort((a, b) => b.ProjectID - a.ProjectID); // Sorting projects by Proje
       <% const ProjectCreatedTime = Team[0].ProjectCreatedDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }); %>
                         <%= new Date(Team[0].ProjectCreatedDate).toLocaleDateString() %> <%= ProjectCreatedTime %>
                         </p>
-        New project <b><a href="/project/<%= Team[0].ProjectID %>"><%= Team[0].ProjectName %></a></b> created by <b><a href="/biography/<%= Team[0].UserID %>"><%= Team[0].SEUserName %></a></b>
+        New project <b><a href="/project/<%= Team[0].ProjectID %>"><%= Team[0].ProjectName %></a></b> created by <b><a href="/biography/<%= Team[0].UserID %>"><%= Team[0].UserName %></a></b>
         <div class="bubble-container">
             <% Team.forEach(Team => { %>
                 <% if (!uniqueTeamMap.has(Team.UserID)) { %>

@@ -982,19 +982,28 @@ hr {
 
 .bubble_container a:hover,
 .bubble a:hover {
-    text-decoration: underline;
+    text-decoration: none;
     /* Adding underline on hover for links */
 }
 
-.reflection a {
+.reflection a,
+.self-evaluation a,
+.review a,
+.project a {
     color: #007bff;
     text-decoration: none;
 }
 
-.reflection a:hover {
-    text-decoration: underline;
+.reflection a:hover,
+.self-evaluation a:hover,
+.review a:hover,
+.project a:hover {
+    text-decoration: none;
 }
 
-.reflection a:visited {
+.reflection a:visited,
+.self-evaluation a:visited,
+.review a:visited,
+.project a:visited {
     color: #000000;
 }

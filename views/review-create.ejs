@@ -45,16 +45,27 @@
                         <p><%= existingReview[0].ReviewDescription %></p>
             </form>
                 <% } else { %>
-                    <form class="form-input" action="/review-create" method="post" style="width:500px;">
+                    <form class="form-input" id="reviewForm" action="/review-create" method="post" style="width:500px;">
                         <input type="hidden" name="projectId" value="<%= projectId %>">
                         <input type="hidden" name="reviewerID" value="<%= reviewerID %>">
                         <input type="hidden" name="receiverID" value="<%= receiverID %>">
-                        <textarea name="reviewDescription" rows="10" cols="100"
+                        <textarea id="reviewDescription" name="reviewDescription" rows="10" cols="100"
                             placeholder="Enter your review"></textarea><br>
+                            <p style="text-align: right; font-size: 12px;"><span id="charCount">0</span>/1500 characters</p>
                         <button type="submit">Submit Review</button>
                     </form>
                     <% } %>
     </p>
+
+    <script>
+        const reviewForm = document.getElementById('reviewForm');
+        const reviewDescription = document.getElementById('reviewDescription');
+        const charCount = document.getElementById('charCount');
+      
+        reviewDescription.addEventListener('input', () => {
+            charCount.textContent = reviewDescription.value.length;
+        });
+      </script>
 </body>
 
 </html>
