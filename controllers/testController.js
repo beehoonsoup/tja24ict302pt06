@@ -65,8 +65,6 @@ exports.getTestPage = async (req, res) => {
             return new Date(getDate(b)) - new Date(getDate(a));
         });
 
-        // Now groupedSkills will contain the skills grouped by SEUserID, SEProjectID, and EvaluationCreatedDate
-
 
         //-------------------------------------------------------------------------------------------------
         

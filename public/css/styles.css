@@ -5,21 +5,15 @@
 /* Styling for the header */
 .header {
     background-color: #333;
-    /* Setting background color */
     color: #fff;
-    /* Setting text color */
     padding: 20px 0;
-    /* Adding padding */
     text-align: center;
-    /* Center aligning text */
 }
 
 /* Styling for company name */
 .company-name {
     font-size: 24px;
-    /* Setting font size */
     margin-bottom: 10px;
-    /* Adding margin bottom */
 }
 
 /*login page logo*/
@@ -30,79 +24,55 @@
 /* Styling for logo */
 .logo {
     width: 100px;
-    /* Setting width */
     height: auto;
-    /* Auto height */
 }
 
 /* Styling for navigation bar */
 .nav-bar {
     background-color: #555;
-    /* Setting background color */
     padding: 10px 0;
-    /* Adding padding */
 }
 
 /* Styling for navigation links */
 .nav-links {
     list-style-type: none;
-    /* Removing list style */
     margin: 0;
-    /* Removing default margin */
     padding: 0;
-    /* Removing default padding */
     text-align: center;
-    /* Center aligning text */
 }
 
 /* Styling for navigation items */
 .nav-item {
     display: inline;
-    /* Displaying inline */
     margin: 0 10px;
-    /* Setting margins */
 }
 
 /* Styling for navigation links */
 .nav-item a {
     color: #fff;
-    /* Setting text color */
     text-decoration: none;
-    /* Removing default underline */
     padding: 5px 10px;
-    /* Adding padding */
     border-radius: 4px;
-    /* Adding border radius */
 }
 
 /* Styling for navigation links hover state */
 .nav-item a:hover {
     background-color: #777;
-    /* Changing background color on hover */
 }
 
 /* Styling for the body */
 body {
     font-family: Arial, sans-serif;
-    /* Setting font family */
     background-color: #f4f4f4;
-    /* Setting background color */
     margin: 0;
-    /* Removing default margin */
     padding: 0;
-    /* Removing default padding */
     text-align: center;
-    /* Center aligning text */
-    /*padding-top: 50px;*/
-    /* Adding padding to the top of the body */
 }
 
 /* Styling for a container div */
 .container {
     width: 300px;
-    /* Setting width */
     margin: 0 auto;
-    /* Centering the container horizontally */
 }
 
 /* Styling for error message */
@@ -116,94 +86,64 @@ input[type="text"],
 input[type="password"],
 input[type="email"] {
     width: calc(100% - 12px);
-    /* Calculating width */
     padding: 8px;
-    /* Adding padding */
     margin-bottom: 15px;
-    /* Adding margin bottom */
     border: 1px solid #ccc;
-    /* Adding border */
     border-radius: 4px;
-    /* Adding border radius */
     box-sizing: border-box;
-    /* Including padding and border in the width */
     display: block;
-    /* Display as block */
 }
 
 /* Styling for a button */
 #button {
     background-color: #4CAF50;
-    /* Setting background color */
     color: white;
-    /* Setting text color */
     padding: 14px 20px;
-    /* Adding padding */
     margin: 8px 0;
-    /* Setting margins */
     border: none;
-    /* Removing border */
     cursor: pointer;
-    /* Setting cursor to pointer */
     border-radius: 4px;
-    /* Adding border radius */
     font-size: 16px;
-    /* Setting font size */
     width: 100%;
-    /* Making button take full width */
 }
 
 /* Styling for button hover state */
 #button:hover {
     background-color: #45a049;
-    /* Changing background color on hover */
 }
 
 /* Additional styling for the login form */
 .container h2 {
     color: #333;
-    /* Setting color for h2 element inside container */
 }
 
 .container p {
     margin-top: 20px;
-    /* Adding margin to paragraphs inside container */
     font-size: 14px;
-    /* Setting font size for paragraphs */
 }
 
 .container a {
     color: #007bff;
-    /* Setting link color */
     text-decoration: none;
-    /* Removing default underline */
 }
 
 .container a:hover {
     text-decoration: underline;
-    /* Adding underline on hover for links */
 }
 
 
 /* Styling for the form */
 .form-input {
     max-width: 400px;
-    /* Setting maximum width */
     margin: 20px auto;
-    /* Centering the form horizontally */
     padding: 20px;
-    /* Adding padding */
     background: #fff;
-    /* Setting background color */
     border-radius: 8px;
-    /* Adding border radius */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    /* Adding box shadow */
 }
 
 .form-input label {
     text-align: left;
-    /* Align labels to the left */
 }
 
 .form-input button {
@@ -223,23 +163,18 @@ input[type="email"] {
 /* Styling for heading */
 h2 {
     text-align: center;
-    /* Center aligning text */
     margin-bottom: 20px;
-    /* Adding margin bottom */
 }
 
 /* Styling for labels */
 label {
     display: block;
-    /* Displaying block */
     margin-bottom: 5px;
-    /* Adding margin bottom */
 }
 
 /* Styling for confirm password */
 input[type="password"][name="confirmPassword"] {
     margin-bottom: 5px;
-    /* Adjusting margin bottom for confirm password */
 }
 
 /* Styling for input fields and select */
@@ -247,79 +182,53 @@ input[type="text"],
 input[type="date"],
 select {
     width: calc(100% - 12px);
-    /* Calculating width */
     padding: 8px;
-    /* Adding padding */
     margin-bottom: 15px;
-    /* Adding margin bottom */
     border: 1px solid #ccc;
-    /* Adding border */
     border-radius: 4px;
-    /* Adding border radius */
     box-sizing: border-box;
-    /* Including padding and border in the width */
 }
 
 /* Styling for textarea */
 textarea {
     width: calc(100% - 12px);
-    /* Calculating width */
     margin-bottom: 5px;
-    /* Adding margin bottom */
     border: 1px solid #ccc;
-    /* Adding border */
     border-radius: 4px;
-    /* Adding border radius */
     resize: vertical;
-    /* Allowing vertical resizing */
 }
 
 /* Styling for counter text */
 .counter {
     color: #999;
-    /* Setting text color */
     font-size: 12px;
-    /* Setting font size */
     margin-top: 5px;
-    /* Adding margin top */
     text-align: right;
-    /* Right aligning text */
 }
 
 /* Styling for submit and reset buttons */
 input[type="submit"],
 input[type="reset"] {
     background-color: #4CAF50;
-    /* Setting background color */
     color: white;
-    /* Setting text color */
     padding: 10px 20px;
-    /* Adding padding */
     border: none;
-    /* Removing border */
     border-radius: 4px;
-    /* Adding border radius */
     cursor: pointer;
-    /* Setting cursor to pointer */
     width: 48%;
-    /* Setting width */
 }
 
 /* Styling for button hover state */
 input[type="submit"]:hover,
 input[type="reset"]:hover {
     background-color: #45a049;
-    /* Changing background color on hover */
 }
 
 /* Clearing float */
 .btn-group:after {
     content: "";
-    /* Adding content */
     display: table;
-    /* Displaying as table */
     clear: both;
-    /* Clearing float */
 }
 
 /* selfEvalutation-create search skills layout */
@@ -458,20 +367,15 @@ input[type="reset"]:hover {
 
 .rounded-image {
     border-radius: 50%;
-    /* Makes the border round */
     overflow: hidden;
-    /* Ensures the image stays within the rounded border */
     width: 200px;
-    /* Adjust width as needed */
     height: 200px;
-    /* Adjust height as needed */
 }
 
 .home-container {
     display: flex;
     flex-direction: row;
     height: 80vh;
-    /* Full height of the viewport */
 }
 
 .home-profile-container {
@@ -492,7 +396,6 @@ input[type="reset"]:hover {
     display: flex;
     flex-direction: column;
     flex: 75%;
-    /* Take up remaining space */
     padding-top: 20px;
 }
 
@@ -502,7 +405,6 @@ input[type="reset"]:hover {
     background-color: #e7e7e7;
     text-align: left;
     margin-bottom: 20px;
-    /* Space between top and bottom containers */
     overflow: auto;
     border-radius: 20px;
     margin-right: 20px;
@@ -536,7 +438,6 @@ input[type="reset"]:hover {
 .home-right-bottom::-webkit-scrollbar,
 .project_border::-webkit-scrollbar {
     width: 10px;
-    /* Set the width of the scrollbar */
 }
 
 /* Track */
@@ -545,7 +446,6 @@ input[type="reset"]:hover {
 .home-right-bottom::-webkit-scrollbar-track,
 .project_border::-webkit-scrollbar-track {
     background: #e7e7e7;
-    /* Set the background color of the scrollbar track */
 }
 
 /* Handle */
@@ -554,9 +454,7 @@ input[type="reset"]:hover {
 .home-right-bottom::-webkit-scrollbar-thumb,
 .project_border::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.2);
-    /* Set the background color of the scrollbar thumb */
     border-radius: 5px;
-    /* Set the border radius of the scrollbar thumb */
 }
 
 /* Handle on hover */
@@ -564,7 +462,6 @@ input[type="reset"]:hover {
 .home-right-bottom::-webkit-scrollbar-thumb:hover,
 .project_border::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 0, 0, 0.4);
-    /* Set the background color of the scrollbar thumb on hover */
 }
 
 .home-container a {
@@ -588,17 +485,11 @@ hr {
 
 .feedback-container {
     max-width: 600px;
-    /* Setting maximum width */
     margin: 20px auto;
-    /* Centering the form horizontally */
     padding: 20px;
-    /* Adding padding */
     background: #fff;
-    /* Setting background color */
     border-radius: 8px;
-    /* Adding border radius */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    /* Adding box shadow */
 }
 
 /*search bar styling*/
@@ -699,9 +590,7 @@ hr {
 
 .hidden-review {
     color: #949494;
-    /* Light grey color */
     font-style: italic;
-    /* Italic font style */
 }
 
 /* Biography container */
@@ -796,9 +685,7 @@ hr {
 .biography-bottom-left::-webkit-scrollbar,
 .biography-bottom-right::-webkit-scrollbar {
     width: 10px;
-    /* Set width of the scrollbar */
     background-color: transparent;
-    /* Set background color of the scrollbar track */
 }
 
 .biography-top-container::-webkit-scrollbar-thumb,
@@ -806,9 +693,7 @@ hr {
 .biography-bottom-left::-webkit-scrollbar-thumb,
 .biography-bottom-right::-webkit-scrollbar-thumb {
     background-color:rgba(0, 0, 0, 0.2);
-    /* Set color of the scrollbar thumb */
     border-radius: 5px;
-    /* Set border radius of the scrollbar thumb */
 }
 
 .biography-top-container::-webkit-scrollbar-thumb:hover,
@@ -816,11 +701,9 @@ hr {
 .biography-bottom-left::-webkit-scrollbar-thumb:hover,
 .biography-bottom-right::-webkit-scrollbar-thumb:hover {
     background-color: rgba(0, 0, 0, 0.4);
-    /* Set color of the scrollbar thumb on hover */
 }
 
 /*project detail page style*/
-
 .project_name {
     margin-top: 10px;
 }
@@ -975,15 +858,12 @@ hr {
 .bubble_container a,
 .bubble a {
     color: #000000;
-    /* Setting link color */
     text-decoration: none;
-    /* Removing default underline */
 }
 
 .bubble_container a:hover,
 .bubble a:hover {
     text-decoration: none;
-    /* Adding underline on hover for links */
 }
 
 .reflection a,

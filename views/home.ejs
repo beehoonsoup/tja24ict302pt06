@@ -261,7 +261,9 @@
                             <%= teamDate %>
                       </p>
                       <p>
-                        <b><a href="/biography/<%= entry.TeamMemberID %>"><%= entry.TeamMemberName %></a></b> is now a verified <b>
+                        <b><a href="/biography/<%= entry.TeamMemberID %>">
+                            <%= entry.TeamMemberName %>
+                          </a></b> is now a verified <b>
                           <%= entry.TeamRole %>
                         </b> of <b>
                           <a href="/project/<%= entry.ProjectID %>">

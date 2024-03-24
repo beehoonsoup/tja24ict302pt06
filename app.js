@@ -1,3 +1,5 @@
+process.env.TZ = 'Asia/Singapore';
+
 const express = require('express');
 const session = require('express-session');
 const db = require('./config/db');
