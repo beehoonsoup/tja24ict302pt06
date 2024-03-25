@@ -1,8 +1,9 @@
 const db = require('../config/db');
 
-exports.getCreateProjectPage = (req, res) => {
-  // Render the create project form
-  res.render('project-create');
+exports.getCreateProjectPage = async (req, res) => {
+  const currentUser = req.session.user.UserID;
+  const [user] = await db.query('SELECT * FROM User WHERE UserID = ?', [currentUser]);
+  res.render('project-create', { user });
 };
 
 exports.viewProject = async (req, res) => {
