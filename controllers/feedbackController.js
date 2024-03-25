@@ -563,6 +563,8 @@ exports.updateSkills = async (req, res) => {
         const projectId = req.body.projectId;
         const selectedNewSkillIds = req.body.selectedSkillIds.split(',').filter(id => id !== ''); 
 
+        const [user] = await db.query('SELECT * FROM User WHERE UserID = ?', [userId]);
+
         const project = await db.query('SELECT ProjectName FROM Project WHERE ProjectID = ?', [projectId]);
         const projectName = project[0][0].ProjectName;
 
@@ -585,6 +587,7 @@ exports.updateSkills = async (req, res) => {
         
 
         res.render('selfEvaluation-view', { 
+            user,
             projectId: projectId, 
             userId: userId,
             projectName: projectName,
