@@ -80,6 +80,7 @@ exports.getBiographyPage = async (req, res) => {
 
         res.render(`biography`, {
             user,
+            sessionUser: user,
             userId,
             bio,
             skills,
@@ -97,6 +98,8 @@ exports.viewBiography = async (req, res) => {
     try {
         const userId = req.session.user.UserID;
         const reviewerID = req.params.reviewerID;
+
+        const [sessionUser] = await db.query('SELECT * FROM User WHERE UserID = ?', [userId]);
 
         // Fetch user details from the database based on userId
         const [user] = await db.query('SELECT * FROM User WHERE UserID = ?', [reviewerID]);
@@ -176,6 +179,7 @@ exports.viewBiography = async (req, res) => {
 
         //res.render('biography', { user, feed, projectFeed, selfEvaluation });
         res.render('biography', {
+            sessionUser,
             user,
             userId,
             bio,

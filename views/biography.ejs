@@ -24,7 +24,7 @@
             <li class="nav-item" style="background-color: #777; border-radius: 4px; padding: 5px 0px;"><a href="/biography" id="biography-link">Biography</a></li>
             <li class="nav-item"><a href="/project" id="project-link">Project</a></li>
             <li class="nav-item"><a href="/skill/1" id="skill-link">Skill</a></li>
-            <% if (user[0].RoleID === 1) { %>
+            <% if (sessionUser[0].RoleID === 1) { %>
               <li class="nav-item settings-tab">
                   <a href="#" id="settings-link">Settings</a>
                   <ul class="user-options">
