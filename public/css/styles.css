@@ -608,7 +608,13 @@ hr {
     margin: 20px;
     border-radius: 15px;
     overflow: auto;
-    height: 590px;
+    height: 580px;
+}
+
+.skill_border {
+    background-color: #f4f4f4;
+    overflow: auto;
+    height: 620px;
 }
 
 .nav-links a.active {
@@ -711,7 +717,8 @@ hr {
 .biography-top-container::-webkit-scrollbar,
 .biography-middle-container::-webkit-scrollbar,
 .biography-bottom-left::-webkit-scrollbar,
-.biography-bottom-right::-webkit-scrollbar {
+.biography-bottom-right::-webkit-scrollbar,
+.skill_border::-webkit-scrollbar {
     width: 10px;
     background-color: transparent;
 }
@@ -719,7 +726,8 @@ hr {
 .biography-top-container::-webkit-scrollbar-thumb,
 .biography-middle-container::-webkit-scrollbar-thumb,
 .biography-bottom-left::-webkit-scrollbar-thumb,
-.biography-bottom-right::-webkit-scrollbar-thumb {
+.biography-bottom-right::-webkit-scrollbar-thumb,
+.skill_border::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 5px;
 }
@@ -727,7 +735,8 @@ hr {
 .biography-top-container::-webkit-scrollbar-thumb:hover,
 .biography-middle-container::-webkit-scrollbar-thumb:hover,
 .biography-bottom-left::-webkit-scrollbar-thumb:hover,
-.biography-bottom-right::-webkit-scrollbar-thumb:hover {
+.biography-bottom-right::-webkit-scrollbar-thumb:hover,
+.skill_border::-webkit-scrollbar-thumb:hover {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
