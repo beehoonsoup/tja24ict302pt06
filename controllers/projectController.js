@@ -10,6 +10,8 @@ exports.viewProject = async (req, res) => {
     const projectId = req.params.projectId;
     const currentUser = req.session.user.UserID;
 
+    const [user] = await db.query('SELECT * FROM User WHERE UserID = ?', [currentUser]);
+
     // Fetch project details from the database based on project ID
     const [project] = await db.query('SELECT p.*, u.FirstName AS CreatedByFirstName, u.LastName AS CreatedByLastName FROM Project p INNER JOIN User u on p.ProjectCreatedBy = u.UserID WHERE p.ProjectID = ? AND p.ProjectStatus = "Enabled"', [projectId]);
 
@@ -40,6 +42,7 @@ exports.viewProject = async (req, res) => {
 
     // Render the project view page with project details
     res.render('project-view', {
+      user,
       project: project[0],
       memberRows: memberRows,
       memberCount: memberCount[0],
@@ -151,12 +154,16 @@ exports.getEditProjectPage = async (req, res) => {
   try {
     const projectId = req.params.projectId;
 
+    const currentUser = req.session.user.UserID;
+    const [user] = await db.query('SELECT * FROM User WHERE UserID = ?', [currentUser]);
+
     // Fetch project details from the database based on project ID
     const [project] = await db.execute('SELECT * FROM Project WHERE ProjectID = ?', [projectId]);
 
     // Render the project-edit.ejs template with project details
     res.render('project-edit', {
-      project: project[0]
+      project: project[0],
+      user
     }); // Ensure project is an object
   } catch (error) {
     console.error(error);
@@ -168,6 +175,7 @@ exports.getAddMemberPage = async (req, res) => {
   try {
     const projectId = req.params.projectId;
     const currentUser = req.session.user.UserID;
+    const [user] = await db.query('SELECT * FROM User WHERE UserID = ?', [currentUser]);
 
     const [teamMember] = await db.query('SELECT COUNT(*) FROM Team WHERE ProjectID = ? AND UserID = ? AND TeamStatus = "Verified"', [projectId, currentUser]);
     const teamMemberCount = teamMember[0]['COUNT(*)'];
@@ -191,7 +199,7 @@ exports.getAddMemberPage = async (req, res) => {
       res.redirect(`/project/${projectId}`);
     } else {
       // Render the project-member-add page
-      res.render('project-member-add', { project: project[0], users, teamRoleCount });
+      res.render('project-member-add', { project: project[0], users, user, teamRoleCount });
     }
   } catch (error) {
     console.error(error);

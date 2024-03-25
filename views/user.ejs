@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/public/css/styles.css" rel="stylesheet" type="text/css" />
+  <script src="https://kit.fontawesome.com/df899a6e31.js" crossorigin="anonymous"></script>
+  <title>User</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      /*border: 1px solid black;*/
+      padding: 8px;
+      text-align: left;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header section -->
+  <div class="header">
+    <!-- Company logo -->
+    <div class="company">
+      <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
+    </div>
+
+    <!-- Navigation bar -->
+    <nav class="nav-bar">
+      <ul class="nav-links">
+        <li class="nav-item"><a href="/home" id="home-link">Home</a></li>
+        <li class="nav-item"><a href="/biography" id="biography-link">Biography</a></li>
+        <li class="nav-item"><a href="/project" id="project-link">Project</a></li>
+        <li class="nav-item"><a href="/skill/1" id="skill-link">Skill</a></li>
+        <% if (user.RoleID === 1) { %>
+          <li class="nav-item settings-tab">
+              <a href="#" id="settings-link" style="background-color: #777; border-radius: 4px; padding: 5px 0px;">Settings</a>
+              <ul class="user-options">
+                  <li><a href="/user" id="manage-user-link">Manage User</a></li>
+                  <li><a href="/project-adm" id="manage-project-link">Manage Project</a></li>
+                  <li><a href="/upload" id="upload-link">Upload</a></li>
+              </ul>
+          </li>
+      <% } %>
+            <li class="nav-item"><a href="/logout" id="logout-link">Logout</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="search_container">
+    <div class="search_bar">
+        <input type="text" id="searchInput" placeholder="Search user..." oninput="filterUsers(this.value)">
+    </div>
+  </div>
+
+  <div class="project_border" style="height: 650px;">
+    <div class="project_table">
+      <% if (userList && userList.length> 0) { %>
+        <table class="table_border" id="userTable">
+          <thead>
+            <tr style="background-color: black; color: white;">
+              <th>User ID</th>
+              <th>Full Name</th>
+              <th>Email Address</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% userList.forEach(user=> { %>
+              <tr>
+                <td>
+                  <%= user.UserID %>
+                </td>
+                <td>
+                  <%= user.FirstName %>
+                    <%= user.LastName %>
+                </td>
+                <td>
+                  <%= user.EmailAddress %>
+                </td>
+                <td>
+                  <% if (user.RoleID !== 1) { %>
+                  <form id="userRoleForm<%= user.UserID %>" action="/user/update-role/<%= user.UserID %>" method="POST">
+                    <select name="userRole" onchange="this.form.submit()">
+                      <option value="1" <%=user.RoleID=='1' ? 'selected' : '' %>>Admin</option>
+                      <option value="2" <%=user.RoleID=='2' ? 'selected' : '' %>>User</option>
+                    </select>
+                  </form>
+                  <% } else { %>
+                    <p>Admin</p>
+                <% } %>
+                </td>
+                <td>
+                  <form id="userStatusForm<%= user.UserID %>" action="/user/update-status/<%= user.UserID %>"
+                    method="POST">
+                    <select name="userStatus" onchange="this.form.submit()">
+                      <option value="enabled" <%=user.UserStatus=='enabled' ? 'selected' : '' %>>Account Enabled</option>
+                      <option value="disabled" <%=user.UserStatus=='disabled' ? 'selected' : '' %>>Account Disabled
+                      </option>
+                    </select>
+                  </form>
+                </td>
+                <td>
+                  <form action="/user-profile/<%= user.UserID %>" method="GET">
+                    <button type="submit" class="modify-button">Reset Password</button>
+                  </form>
+                </td>
+              </tr>
+              <% }) %>
+
+          </tbody>
+        </table>
+        <% } else { %>
+          <p>No users found.</p>
+          <% } %>
+            </table>
+    </div>
+  </div>
+
+  <script>
+    function filterUsers(value) {
+        const searchTerm = value.toLowerCase();
+        const rows = document.querySelectorAll("#userTable tbody tr");
+        rows.forEach(row => {
+            const userName = row.cells[1].textContent.toLowerCase();
+            if (userName.includes(searchTerm)) {
+                row.style.display = "table-row";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
+</script>
+</body>
+
+</html>

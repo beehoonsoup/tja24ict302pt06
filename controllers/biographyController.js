@@ -19,7 +19,7 @@ exports.getBiographyPage = async (req, res) => {
 
         const [review] = await db.query('SELECT DISTINCT r.ReviewID, r.ReviewDescription, r.ReviewCreatedDate, r.ReviewerID, CONCAT(u.FirstName, " ", u.LastName) as ReviewerName, r.ReceiverID, CONCAT(u1.FirstName, " ", u1.LastName) as ReceiverName, p.ProjectID as RProjectID, p.ProjectName as RProjectName, r.ReviewStatus FROM Review r INNER JOIN ProjectReview pr ON pr.ReviewID = r. ReviewID INNER JOIN User u ON u.UserID = r.ReviewerID INNER JOIN User u1 ON u1.UserID = r.ReceiverID INNER JOIN Project p ON p.ProjectID = pr.ProjectID INNER JOIN Team t ON t.UserID = u.UserID WHERE p.ProjectStatus = "Enabled" AND t.TeamStatus = "Verified" AND (r.ReviewStatus = "Approved" OR r.ReviewStatus = "Rejected") AND r.ReceiverID = ?', [userId]);
 
-        const [projects] = await db.query('SELECT p.ProjectID, p.ProjectName, p.ProjectCreatedDate, p.ProjectCreatedBy, CONCAT(u.FirstName, " ", u.LastName) as ProjectCreatedByName, t.TeamRole, t.TeamCreatedDate FROM Project p INNER JOIN Team t ON t.ProjectID = p.ProjectID INNER JOIN User u ON u.UserID = p.ProjectCreatedBy WHERE p.ProjectStatus = "Enabled" AND t.TeamStatus = "Verified" AND t.UserID = ?', [userId])
+        const [projects] = await db.query('SELECT p.ProjectID, p.ProjectName, p.ProjectCreatedDate, p.ProjectCreatedBy, CONCAT(u.FirstName, " ", u.LastName) as ProjectCreatedByName, t.TeamRole, t.TeamModifiedDate FROM Project p INNER JOIN Team t ON t.ProjectID = p.ProjectID INNER JOIN User u ON u.UserID = p.ProjectCreatedBy WHERE p.ProjectStatus = "Enabled" AND t.TeamStatus = "Verified" AND t.UserID = ?', [userId])
 
         // Initialize an empty object to store the grouped skills
         const groupedSkills = {};
@@ -58,7 +58,7 @@ exports.getBiographyPage = async (req, res) => {
         // Sort the combined feed based on creation dates
         combinedFeed.sort((a, b) => {
             // Determine the creation date for each entry
-            const getDate = entry => entry.EvaluationModifiedDate || entry.ReflectionCreatedDate || entry.ReviewCreatedDate || entry.TeamCreatedDate || entry.skills[0]?.EvaluationModifiedDate;
+            const getDate = entry => entry.EvaluationModifiedDate || entry.ReflectionCreatedDate || entry.ReviewCreatedDate || entry.TeamModifiedDate || entry.skills[0]?.EvaluationModifiedDate;
 
             // Compare the creation dates
             return new Date(getDate(b)) - new Date(getDate(a));
@@ -114,7 +114,7 @@ exports.viewBiography = async (req, res) => {
 
         const [review] = await db.query('SELECT DISTINCT r.ReviewDescription, r.ReviewCreatedDate, r.ReviewerID, CONCAT(u.FirstName, " ", u.LastName) as ReviewerName, r.ReceiverID, CONCAT(u1.FirstName, " ", u1.LastName) as ReceiverName, p.ProjectID as RProjectID, p.ProjectName as RProjectName, r.ReviewStatus FROM Review r INNER JOIN ProjectReview pr ON pr.ReviewID = r. ReviewID INNER JOIN User u ON u.UserID = r.ReviewerID INNER JOIN User u1 ON u1.UserID = r.ReceiverID INNER JOIN Project p ON p.ProjectID = pr.ProjectID INNER JOIN Team t ON t.UserID = u.UserID WHERE p.ProjectStatus = "Enabled" AND t.TeamStatus = "Verified" AND r.ReviewStatus = "Approved" AND r.ReceiverID = ?', [reviewerID]);
 
-        const [projects] = await db.query('SELECT p.ProjectID, p.ProjectName, p.ProjectCreatedDate, p.ProjectCreatedBy, CONCAT(u.FirstName, " ", u.LastName) as ProjectCreatedByName, t.TeamRole, t.TeamCreatedDate FROM Project p INNER JOIN Team t ON t.ProjectID = p.ProjectID INNER JOIN User u ON u.UserID = p.ProjectCreatedBy WHERE p.ProjectStatus = "Enabled" AND t.TeamStatus = "Verified" AND t.UserID = ?', [reviewerID])
+        const [projects] = await db.query('SELECT p.ProjectID, p.ProjectName, p.ProjectCreatedDate, p.ProjectCreatedBy, CONCAT(u.FirstName, " ", u.LastName) as ProjectCreatedByName, t.TeamRole, t.TeamModifiedDate FROM Project p INNER JOIN Team t ON t.ProjectID = p.ProjectID INNER JOIN User u ON u.UserID = p.ProjectCreatedBy WHERE p.ProjectStatus = "Enabled" AND t.TeamStatus = "Verified" AND t.UserID = ?', [reviewerID])
 
         // Initialize an empty object to store the grouped skills
         const groupedSkills = {};
@@ -153,7 +153,7 @@ exports.viewBiography = async (req, res) => {
         // Sort the combined feed based on creation dates
         combinedFeed.sort((a, b) => {
             // Determine the creation date for each entry
-            const getDate = entry => entry.EvaluationModifiedDate || entry.ReflectionCreatedDate || entry.ReviewCreatedDate || entry.TeamCreatedDate || entry.skills[0]?.EvaluationModifiedDate;
+            const getDate = entry => entry.EvaluationModifiedDate || entry.ReflectionCreatedDate || entry.ReviewCreatedDate || entry.TeamModifiedDate || entry.skills[0]?.EvaluationModifiedDate;
 
             // Compare the creation dates
             return new Date(getDate(b)) - new Date(getDate(a));
@@ -192,6 +192,9 @@ exports.viewBiography = async (req, res) => {
 
 exports.searchSkill = async (req, res) => {
     const skillId = req.params.skillId;
+    const currentUser = req.session.user.UserID;
+    const [user] = await db.query('SELECT * FROM User WHERE UserID = ?', [currentUser]);
+
     try {
         // Query to fetch projects related to the skill grouped by user
         const [rows] = await db.query('SELECT p.ProjectID, p.ProjectName, u.UserID, CONCAT(u.FirstName, " ", u.LastName) as UserName FROM SelfEvaluation se INNER JOIN User u ON se.UserID = u.UserID INNER JOIN Project p ON p.ProjectID = se.ProjectID WHERE se.SkillID = ? AND p.ProjectStatus = "Enabled"', [skillId]);
@@ -219,7 +222,7 @@ exports.searchSkill = async (req, res) => {
         const users = Array.from(usersMap.values());
 
         // Render the skill.ejs page with the fetched data
-        res.render('skill', { users, selectedSkillId: skillId });
+        res.render('skill', { user, users, selectedSkillId: skillId });
     } catch (error) {
         console.error('Error fetching projects by skill:', error);
         // Handle errors appropriately

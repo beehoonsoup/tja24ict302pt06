@@ -19,11 +19,21 @@
     <!-- Navigation bar -->
     <nav class="nav-bar">
         <ul class="nav-links">
-          <li class="nav-item"><a href="/home">Home</a></li>
-          <li class="nav-item"><a href="/biography">Biography</a></li>
-          <li class="nav-item"><a href="/project">Project</a></li>
-          <li class="nav-item"><a href="/skill/1">Skill</a></li>
-          <li class="nav-item"><a href="/logout">Logout</a></li>
+            <li class="nav-item"><a href="/home" id="home-link">Home</a></li>
+            <li class="nav-item"><a href="/biography" id="biography-link">Biography</a></li>
+            <li class="nav-item" style="background-color: #777; border-radius: 4px; padding: 5px 0px;"><a href="/project" id="project-link">Project</a></li>
+            <li class="nav-item"><a href="/skill/1" id="skill-link">Skill</a></li>
+            <% if (user[0].RoleID === 1) { %>
+                <li class="nav-item settings-tab">
+                    <a href="#" id="settings-link">Settings</a>
+                    <ul class="user-options">
+                        <li><a href="/user" id="manage-user-link">Manage User</a></li>
+                        <li><a href="/project-adm" id="manage-project-link">Manage Project</a></li>
+                        <li><a href="/upload" id="upload-link">Upload</a></li>
+                    </ul>
+                </li>
+            <% } %>
+            <li class="nav-item"><a href="/logout" id="logout-link">Logout</a></li>
         </ul>
     </nav>
   </div>

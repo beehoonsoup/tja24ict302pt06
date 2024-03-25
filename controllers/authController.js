@@ -61,29 +61,36 @@ exports.getLoginPage = (req, res) => {
 
 exports.loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const [rows] = await db.execute('SELECT * FROM User WHERE EmailAddress = ? OR UserName = ?', [email, email]);
-    const user = rows[0];
-    //console.log('Retrieved hashed password from database:', user.UserPassword);
-    if (!user) {
-      req.session.error = 'Invalid email/username or password';
-      res.redirect('/login');
-      return;
-    }
-    // Convert the Buffer object representing the hashed password to a string
-    const hashedPassword = user.UserPassword.toString('utf8');
+      const { email, password } = req.body;
+      const [rows] = await db.execute('SELECT * FROM User WHERE EmailAddress = ? OR UserName = ?', [email, email]);
+      const user = rows[0];
 
-    const passwordMatch = await bcrypt.compare(password, hashedPassword);
-    if (!passwordMatch) {
-      req.session.error = 'Invalid email/username or password';
-      res.redirect('/login');
-      return;
-    }
-    req.session.user = user;
-    res.redirect('/home');
+      if (!user) {
+          req.session.error = 'Invalid email/username or password';
+          res.redirect('/login');
+          return;
+      }
+
+      if (user.UserStatus.toLowerCase().trim() === 'disabled') {
+          req.session.error = 'Your account has been disabled. Please contact support for assistance.';
+          res.redirect('/login');
+          return;
+      }
+
+      const hashedPassword = user.UserPassword.toString('utf8');
+      const passwordMatch = await bcrypt.compare(password, hashedPassword);
+
+      if (!passwordMatch) {
+          req.session.error = 'Invalid email/username or password';
+          res.redirect('/login');
+          return;
+      }
+
+      req.session.user = user;
+      res.redirect('/home');
   } catch (error) {
-    console.error(error);
-    res.status(500).send('An error occurred');
+      console.error(error);
+      res.status(500).send('An error occurred');
   }
 };
 

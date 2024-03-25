@@ -4,6 +4,8 @@ exports.getCreateReflectionPage = async (req, res) => {
     try {
         const projectId = req.query.projectId;
         const userId = req.session.user.UserID;
+        const currentUser = req.session.user.UserID;
+        const [user] = await db.query('SELECT * FROM User WHERE UserID = ?', [currentUser]);
 
         // Fetch project name
         const [projectName] = await db.query('SELECT ProjectID, ProjectName FROM Project WHERE ProjectID = ?', [projectId]);
@@ -17,7 +19,7 @@ exports.getCreateReflectionPage = async (req, res) => {
         //console.log('projectName', projectName);
         //console.log('Userid', UserId);
 
-        res.render('reflection-create', { projectId, userId, projectName, existingReflection, reflectionCount: reflectionCount });
+        res.render('reflection-create', { user, projectId, userId, projectName, existingReflection, reflectionCount: reflectionCount });
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred');
@@ -29,6 +31,8 @@ exports.getReflectionPage = async (req, res) => {
         const projectId = req.params.projectId;
         const userId = req.session.user.UserID;
         const userURL = req.params.userId;
+        const currentUser = req.session.user.UserID;
+        const [user] = await db.query('SELECT * FROM User WHERE UserID = ?', [currentUser]);
 
         // Fetch project name
         const [projects] = await db.query('SELECT p.ProjectName, p.ProjectID, CONCAT(u.FirstName, " ", u.LastName) as TeamMember, u.UserID, CONCAT(u1.FirstName, " ", u1.LastName) as CreatedBy, p.ProjectCreatedDate, p.ProjectCreatedBy FROM Project p INNER JOIN Team t ON t.ProjectID = p.ProjectID INNER JOIN User u ON u.UserID = t.UserID INNER JOIN User u1 ON u1.UserID = p.ProjectCreatedBy WHERE t.TeamStatus = "Verified" AND p.ProjectStatus = "Enabled" AND p.ProjectID = ? ORDER BY p.ProjectCreatedDate DESC', [projectId]);
@@ -77,7 +81,7 @@ exports.getReflectionPage = async (req, res) => {
         console.log('userURL', userURL);
         //console.log('Userid', userId);
 
-        res.render('reflection', { projectId, userId, projects, existingReflection, reflectionCount: reflectionCount, existingReview, reviewCount, groupedTeamMembers });
+        res.render('reflection', { user, projectId, userId, projects, existingReflection, reflectionCount: reflectionCount, existingReview, reviewCount, groupedTeamMembers });
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred');
@@ -89,6 +93,9 @@ exports.viewReflectionPage = async (req, res) => {
         const projectId = req.params.projectId;
         const userId = req.session.user.UserID;
         const reviewerID = req.params.reviewerID;
+        const currentUser = req.session.user.UserID;
+        const [user] = await db.query('SELECT * FROM User WHERE UserID = ?', [currentUser]);
+
 
         // Fetch project name
         const [projects] = await db.query('SELECT p.ProjectName, p.ProjectID, CONCAT(u.FirstName, " ", u.LastName) as TeamMember, u.UserID, CONCAT(u1.FirstName, " ", u1.LastName) as CreatedBy, p.ProjectCreatedDate, p.ProjectCreatedBy FROM Project p INNER JOIN Team t ON t.ProjectID = p.ProjectID INNER JOIN User u ON u.UserID = t.UserID INNER JOIN User u1 ON u1.UserID = p.ProjectCreatedBy WHERE t.TeamStatus = "Verified" AND p.ProjectStatus = "Enabled" AND p.ProjectID = ? ORDER BY p.ProjectCreatedDate DESC', [projectId]);
@@ -137,7 +144,7 @@ exports.viewReflectionPage = async (req, res) => {
         //console.log('projectId', projectId);
         //console.log('Userid', userId);
 
-        res.render('/reflection', { reviewerID, projectId, userId, projects, existingReflection, reflectionCount: reflectionCount, existingReview, reviewCount, groupedTeamMembers });
+        res.render('/reflection', { user, reviewerID, projectId, userId, projects, existingReflection, reflectionCount: reflectionCount, existingReview, reviewCount, groupedTeamMembers });
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred');
@@ -198,6 +205,9 @@ exports.getCreateReviewPage = async (req, res) => {
         const projectId = req.query.projectId;
         const reviewerID = req.session.user.UserID;
         const receiverID = req.query.receiverID;
+        const currentUser = req.session.user.UserID;
+        const [user] = await db.query('SELECT * FROM User WHERE UserID = ?', [currentUser]);
+
 
         // Fetch project name
         const [projectName] = await db.query('SELECT ProjectID, ProjectName FROM Project WHERE ProjectID = ?', [projectId]);
@@ -209,7 +219,7 @@ exports.getCreateReviewPage = async (req, res) => {
         //console.log('reviewer', reviewer);
         //console.log('projectId', projectId);
 
-        res.render('review-create', { projectId, reviewerID, receiverID, receiverName, projectName, existingReview });
+        res.render('review-create', { user, projectId, reviewerID, receiverID, receiverName, projectName, existingReview });
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred');
@@ -244,6 +254,8 @@ exports.getViewReview = async (req, res) => {
     try {
         const { ReviewerID, ProjectID, ReceiverID, ReviewID } = req.body;
         const receiverName = req.query.receiverName;
+        const currentUser = req.session.user.UserID;
+        const [user] = await db.query('SELECT * FROM User WHERE UserID = ?', [currentUser]);
 
         //console.log('ReviewerID', ReviewerID);
         //console.log('ReceiverID', ReceiverID);
@@ -258,7 +270,7 @@ exports.getViewReview = async (req, res) => {
         // Fetch ReviewerName
         const [reviewerName] = await db.query('SELECT r.ReviewerID, r.ReviewDescription, r.ReviewStatus, CONCAT(u.FirstName, " ", u.LastName) as ReviewerName FROM Review r INNER JOIN User u ON u.UserID = r.ReviewerID WHERE r.ReviewID = ?', [ReviewID]);
 
-        res.render('review', { ReviewID, ProjectID, ReviewerID, ReceiverID, receiverName, projectName, existingReview, reviewerName });
+        res.render('review', { user, ReviewID, ProjectID, ReviewerID, ReceiverID, receiverName, projectName, existingReview, reviewerName });
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred');
@@ -467,13 +479,15 @@ exports.getSkills = async (req, res) => {
     try {
         const projectId = req.query.projectId;
         const userId = req.session.user.UserID;
+        const currentUser = req.session.user.UserID;
+        const [user] = await db.query('SELECT * FROM User WHERE UserID = ?', [currentUser]);
 
         const skills = await db.query('SELECT SkillID, SkillName FROM Skill');
 
         const project = await db.query('SELECT ProjectName FROM Project WHERE ProjectID = ?', [projectId]);
         const projectName = project[0][0].ProjectName;
 
-        res.render('selfEvaluation-create', { projectId, userId, skills, projectName });
+        res.render('selfEvaluation-create', { user, projectId, userId, skills, projectName });
     } catch (error) {
         console.error(error);
         res.status(500).send('Failed to fetch skills');
@@ -484,6 +498,9 @@ exports.getSelectedSkills = async (req, res) => {
     try {
         const projectId = req.query.projectId;
         const userId = req.session.user.UserID;
+        const currentUser = req.session.user.UserID;
+        const [user] = await db.query('SELECT * FROM User WHERE UserID = ?', [currentUser]);
+
 
         const project = await db.query('SELECT ProjectName FROM Project WHERE ProjectID = ?', [projectId]);
         const projectName = project[0][0].ProjectName;
@@ -499,6 +516,7 @@ exports.getSelectedSkills = async (req, res) => {
         //console.log('selectedSkills', selectedSkills);
 
         res.render('selfEvaluation-view', { 
+            user,
             projectId: projectId, 
             userId: userId,
             projectName: projectName,

@@ -1,12 +1,12 @@
-process.env.TZ = 'Asia/Singapore';
-
 const express = require('express');
 const session = require('express-session');
 const db = require('./config/db');
+const multer = require('multer');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const homeRoutes = require('./routes/homeRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 const projectRoutes = require('./routes/projectRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
 const biographyRoutes = require('./routes/biographyRoutes');
@@ -25,6 +25,7 @@ app.use('/public', express.static('public'));
 app.use('/', authRoutes);
 app.use('/', userRoutes);
 app.use('/', homeRoutes);
+app.use('/', adminRoutes);
 app.use('/', projectRoutes);
 app.use('/', feedbackRoutes);
 app.use('/', biographyRoutes);

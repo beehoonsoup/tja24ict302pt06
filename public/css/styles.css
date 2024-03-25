@@ -27,13 +27,11 @@
     height: auto;
 }
 
-/* Styling for navigation bar */
 .nav-bar {
     background-color: #555;
     padding: 10px 0;
 }
 
-/* Styling for navigation links */
 .nav-links {
     list-style-type: none;
     margin: 0;
@@ -41,13 +39,12 @@
     text-align: center;
 }
 
-/* Styling for navigation items */
 .nav-item {
-    display: inline;
+    display: inline-block;
+    /* Changed from 'inline' for proper positioning */
     margin: 0 10px;
 }
 
-/* Styling for navigation links */
 .nav-item a {
     color: #fff;
     text-decoration: none;
@@ -55,9 +52,40 @@
     border-radius: 4px;
 }
 
-/* Styling for navigation links hover state */
 .nav-item a:hover {
     background-color: #777;
+}
+
+.settings-tab {
+    position: relative;
+}
+
+.user-options {
+    display: none;
+    text-align: left;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #555;
+    padding: 10px;
+    border-radius: 4px;
+    width: 150px;
+    z-index: 9999;
+}
+
+.settings-tab:hover .user-options {
+    display: block;
+}
+
+.user-options li {
+    margin-bottom: 5px;
+}
+
+.user-options a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    white-space: nowrap;
 }
 
 /* Styling for the body */
@@ -692,7 +720,7 @@ hr {
 .biography-middle-container::-webkit-scrollbar-thumb,
 .biography-bottom-left::-webkit-scrollbar-thumb,
 .biography-bottom-right::-webkit-scrollbar-thumb {
-    background-color:rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.2);
     border-radius: 5px;
 }
 
@@ -886,4 +914,23 @@ hr {
 .review a:visited,
 .project a:visited {
     color: #000000;
+}
+
+.download a {
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+    text-decoration: none;
+    text-align: left; 
+    font-size: 12px; 
+    position: relative; 
+    /*left: -130px;*/
+}
+
+.download a:hover {
+    background-color: #aaa;
 }

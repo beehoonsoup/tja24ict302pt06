@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/public/css/styles.css" rel="stylesheet" type="text/css"/>
+  <script src="https://kit.fontawesome.com/df899a6e31.js" crossorigin="anonymous"></script>
+  <title>Projects</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      /*border: 1px solid black;*/
+      padding: 8px;
+      text-align: left;
+    }
+  </style>
+
+<script>
+  function positionSuggestionsContainer() {
+    const searchInput = document.getElementById('searchInput');
+    const projectSuggestionsContainer = document.getElementById('projectSuggestionsContainer');
+
+    // Get the position and dimensions of the search input
+    const inputRect = searchInput.getBoundingClientRect();
+
+    // Set the top position of the suggestions container
+    projectSuggestionsContainer.style.top = inputRect.bottom + 'px';
+  }
+
+  function getSuggestions(input) {
+    const projectSuggestionsContainer = document.getElementById('projectSuggestionsContainer');
+
+    if (input.trim() === '') {
+      // Clear input, hide suggestions container, and return
+      projectSuggestionsContainer.innerHTML = '';
+      return;
+    }
+
+    fetch(`/search-projects?query=${input}`)
+      .then(response => response.json())
+      .then(data => {
+        projectSuggestionsContainer.innerHTML = '';
+        data.forEach(project => {
+          const suggestion = document.createElement('div');
+          suggestion.textContent = project.ProjectName;
+          suggestion.classList.add('projectSuggestion');
+          suggestion.onclick = () => selectProject(project.ProjectID);
+          projectSuggestionsContainer.appendChild(suggestion);
+        });
+        // Show suggestions container
+        projectSuggestionsContainer.style.display = 'block';
+      })
+      .catch(error => console.error('Error fetching suggestions:', error));
+  }
+
+  function selectProject(projectID) {
+    window.location.href = `/project/${projectID}`;
+  }
+
+  // Call positionSuggestionsContainer initially and whenever window is resized
+  window.addEventListener('DOMContentLoaded', positionSuggestionsContainer);
+  window.addEventListener('resize', positionSuggestionsContainer);
+</script>
+</head>
+
+<body>
+
+  <!-- Header section -->
+<div class="header">
+  <!-- Company logo -->
+  <div class="company">
+      <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
+  </div>
+
+  <!-- Navigation bar -->
+  <nav class="nav-bar">
+    <ul class="nav-links">
+        <li class="nav-item"><a href="/home" id="home-link">Home</a></li>
+        <li class="nav-item"><a href="/biography" id="biography-link">Biography</a></li>
+        <li class="nav-item"><a href="/project" id="project-link">Project</a></li>
+        <li class="nav-item"><a href="/skill/1" id="skill-link">Skill</a></li>
+        <% if (user.RoleID === 1) { %>
+          <li class="nav-item settings-tab">
+              <a href="#" id="settings-link" style="background-color: #777; border-radius: 4px; padding: 5px 0px;">Settings</a>
+              <ul class="user-options">
+                  <li><a href="/user" id="manage-user-link">Manage User</a></li>
+                  <li><a href="/project-adm" id="manage-project-link">Manage Project</a></li>
+                  <li><a href="/upload" id="upload-link">Upload</a></li>
+              </ul>
+          </li>
+      <% } %>
+        <li class="nav-item"><a href="/logout" id="logout-link">Logout</a></li>
+    </ul>
+</nav>
+</div>
+
+<div class="search_container">
+  <div class="search_bar">
+      <input type="text" id="searchInput" placeholder="Search project..." oninput="filterProjects(this.value)">
+  </div>
+</div>
+<div class="project_border">
+  <div class="project_table">
+      <table class="table_border" id="projectTable">
+          <thead>
+              <tr class="table_head">
+                  <th>Project Name</th>
+                  <th>Created By</th>
+                  <th>Create Date</th>
+                  <th>Last Modified</th>
+                  <th></th>
+              </tr>
+          </thead>
+          <tbody>
+              <% projects
+                  .sort((a, b) => new Date(b.ProjectID) - new Date(a.ProjectID))
+                  .forEach(project => { %>
+              <tr>
+                  <td><%= project.ProjectName %></td>
+                  <td><%= project.CreatedByFirstName %> <%= project.CreatedByLastName %></td>
+                  <td><%= project.ProjectCreatedDate %></td>
+                  <td><%= project.ProjectModifiedDate %></td>
+                  <td>
+                      <form id="projectStatusForm<%= project.ProjectID %>"
+                          action="/project/update-status/<%= project.ProjectID %>" method="POST">
+                          <select name="projectStatus" onchange="this.form.submit()">
+                              <option value="Enabled"
+                                  <%=project.ProjectStatus.trim().toLowerCase()=='enabled' ? 'selected' : '' %>>Project
+                                  Enabled</option>
+                              <option value="Disabled"
+                                  <%=project.ProjectStatus.trim().toLowerCase()=='disabled' ? 'selected' : '' %>>Project
+                                  Disabled</option>
+                          </select>
+                      </form>
+                  </td>
+              </tr>
+              <% }) %>
+          </tbody>
+      </table>
+  </div>
+</div>
+  </div>
+  
+  <script>
+    function filterProjects(value) {
+        const searchTerm = value.toLowerCase();
+        const rows = document.querySelectorAll("#projectTable tbody tr");
+        rows.forEach(row => {
+            const projectName = row.cells[0].textContent.toLowerCase();
+            if (projectName.includes(searchTerm)) {
+                row.style.display = "table-row";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
+</script>
+</body>
+
+</html>

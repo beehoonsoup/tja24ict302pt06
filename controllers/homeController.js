@@ -53,7 +53,7 @@ exports.getHomePage = async (req, res) => {
 
     //----------------------------------------------------------------------------------
 
-    const [projects] = await db.query('SELECT p.ProjectID, p.ProjectName, p.ProjectCreatedDate, p.ProjectCreatedBy, CONCAT(u.FirstName, " ", u.LastName) as ProjectCreatedByName, CONCAT(u1.FirstName, " ", u1.LastName) as TeamMemberName, u1.UserID as TeamMemberID, t.TeamRole, t.TeamCreatedDate FROM Project p INNER JOIN Team t ON t.ProjectID = p.ProjectID INNER JOIN User u ON u.UserID = p.ProjectCreatedBy INNER JOIN User u1 ON u1.UserID = t.UserID WHERE p.ProjectStatus = "Enabled" AND t.TeamStatus = "Verified"')
+    const [projects] = await db.query('SELECT p.ProjectID, p.ProjectName, p.ProjectCreatedDate, p.ProjectCreatedBy, CONCAT(u.FirstName, " ", u.LastName) as ProjectCreatedByName, CONCAT(u1.FirstName, " ", u1.LastName) as TeamMemberName, u1.UserID as TeamMemberID, t.TeamRole, t.TeamModifiedDate FROM Project p INNER JOIN Team t ON t.ProjectID = p.ProjectID INNER JOIN User u ON u.UserID = p.ProjectCreatedBy INNER JOIN User u1 ON u1.UserID = t.UserID WHERE p.ProjectStatus = "Enabled" AND t.TeamStatus = "Verified"')
 
     const [selfEvaluation] = await db.query('SELECT DISTINCT se.EvaluationCreatedDate, se.UserID as SEUserID, CONCAT(u.FirstName, " ", u.LastName) as SEUserName, se.SkillID, s.SkillName, se.ProjectID as SEProjectID, p.ProjectName as SEProjectName, se.EvaluationModifiedDate FROM SelfEvaluation se INNER JOIN Skill s ON s.SkillID = se.SkillID INNER JOIN Project p ON p.ProjectID = se.ProjectID INNER JOIN User u ON u.UserID = se.UserID INNER JOIN Team t ON t.UserID = u.UserID WHERE p.ProjectStatus = "Enabled" AND t.TeamStatus = "Verified" ORDER BY se.EvaluationModifiedDate DESC');
 
@@ -103,7 +103,7 @@ exports.getHomePage = async (req, res) => {
     // Sort the combined feed based on creation dates
     combinedFeed.sort((a, b) => {
         // Determine the creation date for each entry
-        const getDate = entry => entry.EvaluationModifiedDate || entry.ReflectionCreatedDate || entry.ReviewCreatedDate || entry.TeamCreatedDate || entry.skills[0]?.EvaluationModifiedDate;
+        const getDate = entry => entry.EvaluationModifiedDate || entry.ReflectionCreatedDate || entry.ReviewCreatedDate || entry.TeamModifiedDate || entry.skills[0]?.EvaluationModifiedDate;
 
         // Compare the creation dates
         return new Date(getDate(b)) - new Date(getDate(a));

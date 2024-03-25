@@ -17,14 +17,15 @@ exports.getProfilePage = (req, res) => {
   res.render('profile', { user, message, fromProfileEditPage });
 };
 
-
 exports.getEditProfilePage = async (req, res) => {
-  const user = req.session.user;
+  //const user = req.session.user;
   const userId = req.session.user.UserID;
+  const user = req.session.user;
 
+  const [users] = await db.query('SELECT * FROM User u WHERE u.UserID = ?', [userId]);
   const [bio] = await db.query('SELECT * FROM Biography WHERE UserID = ?', [userId]);
 
-  res.render('profile-edit', { user, bio });
+  res.render('profile-edit', { user, users, bio });
 };
 
 exports.updateUserProfile = async (req, res) => {
@@ -63,7 +64,7 @@ exports.updateUserProfile = async (req, res) => {
 
     // Update the user object in the session with the new details
     req.session.user = { ...req.session.user, FirstName: firstName, LastName: lastName, EmailAddress: email };
-
+    
     // Redirect back to the profile page with a success message
     res.redirect('/home');
   } catch (error) {

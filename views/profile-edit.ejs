@@ -19,23 +19,33 @@
     <!-- Navigation bar -->
     <nav class="nav-bar">
       <ul class="nav-links">
-        <li class="nav-item"><a href="/home">Home</a></li>
-        <li class="nav-item"><a href="/biography">Biography</a></li>
-        <li class="nav-item"><a href="/project">Project</a></li>
-        <li class="nav-item"><a href="/skill/1">Skill</a></li>
-        <li class="nav-item"><a href="/logout">Logout</a></li>
+          <li class="nav-item"><a href="/home" id="home-link">Home</a></li>
+          <li class="nav-item"><a href="/biography" id="biography-link">Biography</a></li>
+          <li class="nav-item"><a href="/project" id="project-link">Project</a></li>
+          <li class="nav-item"><a href="/skill/1" id="skill-link">Skill</a></li>
+          <% if (user.RoleID === 1) { %>
+            <li class="nav-item settings-tab">
+                <a href="#" id="settings-link">Settings</a>
+                <ul class="user-options">
+                    <li><a href="/user" id="manage-user-link">Manage User</a></li>
+                    <li><a href="/project-adm" id="manage-project-link">Manage Project</a></li>
+                    <li><a href="/upload" id="upload-link">Upload</a></li>
+                </ul>
+            </li>
+        <% } %>
+          <li class="nav-item"><a href="/logout" id="logout-link">Logout</a></li>
       </ul>
-    </nav>
+  </nav>
   </div>
 
   <h1>Edit Profile</h1>
   <form class="form-input" id="profileForm" action="/profile-edit" method="POST">
     <label for="firstName">First Name:</label>
-    <input type="text" id="firstName" name="firstName" value="<%= user.FirstName %>" required>
+    <input type="text" id="firstName" name="firstName" value="<%= users[0].FirstName %>" required>
     <label for="lastName">Last Name:</label>
-    <input type="text" id="lastName" name="lastName" value="<%= user.LastName %>" required>
+    <input type="text" id="lastName" name="lastName" value="<%= users[0].LastName %>" required>
     <label for="email">Email:</label>
-    <input type="email" id="email" name="email" value="<%= user.EmailAddress %>" required>
+    <input type="email" id="email" name="email" value="<%= users[0].EmailAddress %>" required>
     <label for="password">Password:</label>
     <input type="password" id="password" name="password">
     <label for="bioDescription">Biography Description:</label>

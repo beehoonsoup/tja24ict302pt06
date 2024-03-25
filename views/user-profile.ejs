@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="/public/css/styles.css" rel="stylesheet" type="text/css"/>
-  <title>Profile</title>
+  <link href="/public/css/styles.css" rel="stylesheet" type="text/css" />
+  <title>Edit Profile</title>
 </head>
+
 <body>
   <!-- Header section -->
-<div class="header">
-  <!-- Company logo -->
-  <div class="company">
+  <div class="header">
+    <!-- Company logo -->
+    <div class="company">
       <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
-  </div>
+    </div>
 
-  <!-- Navigation bar -->
-  <nav class="nav-bar">
-    <ul class="nav-links">
+    <!-- Navigation bar -->
+    <nav class="nav-bar">
+      <ul class="nav-links">
         <li class="nav-item"><a href="/home" id="home-link">Home</a></li>
         <li class="nav-item"><a href="/biography" id="biography-link">Biography</a></li>
         <li class="nav-item"><a href="/project" id="project-link">Project</a></li>
         <li class="nav-item"><a href="/skill/1" id="skill-link">Skill</a></li>
-        <% if (user[0].RoleID === 1) { %>
+        <% if (user.RoleID === 1) { %>
           <li class="nav-item settings-tab">
               <a href="#" id="settings-link">Settings</a>
               <ul class="user-options">
@@ -31,23 +33,28 @@
               </ul>
           </li>
       <% } %>
-        <li class="nav-item"><a href="/logout" id="logout-link">Logout</a></li>
-    </ul>
-</nav>
-</div>
-<h1>User Profile</h1>
-<p><i>
-<% if (message && fromProfileEditPage) { %>
-  <div id="message">
-    <p><%= message %></p>
+            <li class="nav-item"><a href="/logout" id="logout-link">Logout</a></li>
+      </ul>
+    </nav>
   </div>
-<% } %></i>
 
-<p>First Name: <%= user.FirstName %></p>
-<p>Last Name: <%= user.LastName %></p>
-<p>Email Address: <%= user.EmailAddress %></p>
-
-<a href="/profile-edit">Modify</a>
+  <h1>Reset User Password</h1>
+  <form class="form-input" id="profileForm" action="/user-profile/<%= users[0].UserID %>" method="POST">
+    <span style="text-align: left;">
+    <p>Name: <%= users[0].FirstName %>
+        <%= users[0].LastName %>
+    </p>
+    <p>Username: <%= users[0].UserName %>
+    </p>
+    <p>Email: <%= users[0].EmailAddress %>
+    </p>
+  </span>
+    <br>
+    <label for="password">Reset Password:</label>
+    <input type="password" id="password" name="password">
+    <br><button type="submit">Save Changes</button>
+  </form>
 
 </body>
+
 </html>

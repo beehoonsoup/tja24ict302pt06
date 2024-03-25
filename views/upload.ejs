@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="/public/css/styles.css" rel="stylesheet" type="text/css"/>
+        <script src="https://kit.fontawesome.com/df899a6e31.js" crossorigin="anonymous"></script>
+        <title>Upload CSV</title>
+      </head>
+<body>
+<div class="header">
+    <div class="company">
+        <img src="/public/images/tw-logo.png" alt="Company Logo" class="logo">
+    </div>
+  
+    <nav class="nav-bar">
+      <ul class="nav-links">
+          <li class="nav-item"><a href="/home" id="home-link">Home</a></li>
+          <li class="nav-item"><a href="/biography" id="biography-link">Biography</a></li>
+          <li class="nav-item"><a href="/project" id="project-link">Project</a></li>
+          <li class="nav-item"><a href="/skill/1" id="skill-link">Skill</a></li>
+          <% if (user.RoleID === 1) { %>
+            <li class="nav-item settings-tab">
+                <a href="#" id="settings-link" style="background-color: #777; border-radius: 4px; padding: 5px 0px;">Settings</a>
+                <ul class="user-options">
+                    <li><a href="/user" id="manage-user-link">Manage User</a></li>
+                    <li><a href="/project-adm" id="manage-project-link">Manage Project</a></li>
+                    <li><a href="/upload" id="upload-link">Upload</a></li>
+                </ul>
+            </li>
+        <% } %>
+          <li class="nav-item"><a href="/logout" id="logout-link">Logout</a></li>
+      </ul>
+  </nav>
+  </div>
+  <h1>Upload Users</h1>
+  <div class="download-container">
+    <p class="download">
+      <a href="/download/upload_user.csv" download>Download user template</a>
+    </p>
+    <form class="form-input" action="/upload" method="POST" enctype="multipart/form-data">
+      <input type="file" name="csvfile" accept=".csv" required>
+      <button type="submit">Upload</button>
+    </form>
+  </div>
+
+    <% if (error) { %>
+        <p>
+          <%= error %>
+        </p>
+        <% } %>
+          <p>
+              <div id="message">
+                <p>
+                  <%= message %>
+                </p>
+              </div>
+</body>
+</html>
